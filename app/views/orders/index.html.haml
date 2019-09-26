@@ -1,0 +1,90 @@
+/ Navigation
+%nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  %a.navbar-brand{:href => "#"} China Trade System
+  #navbarSupportedContent.collapse.navbar-collapse
+    %ul.navbar-nav.mr-auto
+      %li.nav-item
+        %a.nav-link{:href => "#"} 注文一覧
+      %li.nav-item
+        %a.nav-link{:href => "#"} 買付先一覧
+
+    %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+      = current_user.name
+    / この下の行に dropdown-menu-right を追加するだけ。
+    %ul.dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
+      %li.dropdown-item
+        = link_to "別アカウントにログイン", destroy_user_session_path, method: :delete, class: "dropdown-item"
+      %li.dropdown-item
+        = link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item"
+      .dropdown-divider
+      %li.dropdown-item
+        = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
+
+.container
+  -# .col-md-4
+  -#   .input-group
+  -#     %label.input-group-btn
+  -#       %span.btn.btn-primary
+  -#         ファイル選択
+  -#         %input{:style => "display:none", :type => "file"}/
+  -#     %input.form-control{:readonly => "readonly", :type => "text"}/
+
+  .col-md-6
+  = form_tag import_orders_path, method: :post, multipart: true do |f|
+    .col-md-5.my-2.search_item.input-group
+      = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
+      = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
+      = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
+    .col-md-5.my-2
+      %button.btn.btn-success.btn-block{:type => "submit"} インポート
+  %table.table
+    %thead
+      %tr
+        %th 注文No
+        %th 商品写真
+        %th カラー・サイズ
+        %th 数量
+        %th お届け先
+        %th 購入予定料金
+        %th 手配状況
+        %th 追跡番号
+        %th 購入料金
+    %tbody
+      -@orders.each do |order|
+        %tr
+          %td
+            = order.trade_no
+          %td
+            = ""
+          %td
+            = ""
+          %td
+            = order.quantity
+          %td.h6.small{style: "max-width: 150px;"}
+            = order.postal
+            %br
+            = order.address
+            %br
+            = order.customer_name
+          %td
+            = ""
+          %td
+            = ""
+          %td
+            = ""
+
+
+:javascript
+  $(document).on('change', ':file', function() {
+      var input = $(this),
+      numFiles = input.get(0).files ? input.get(0).files.length : 1,
+      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+      input.parent().parent().next(':text').val(label);
+  });
+  function file_selected(file_field){
+    var filename = $(file_field)[0].files[0].name;
+    $("#filename").val(filename);
+  }
+
+
+
