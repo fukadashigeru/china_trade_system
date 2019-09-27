@@ -11,7 +11,7 @@ class Order < ApplicationRecord
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
-      obj = new
+      obj = find_by(trade_no: row["取引ID"]) || new
       temp = {
         quantity: row["受注数"],
         price: row["価格"],
