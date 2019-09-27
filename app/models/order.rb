@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   has_many :user_orders
   has_many :users, through: :user_orders
 
-  def self.import(file)
+  def self.import(file, current_user)
     csv_text = file.read
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
@@ -25,6 +25,7 @@ class Order < ApplicationRecord
       }
       obj.attributes = temp.slice(*updatable_attributes)
       obj.save!
+      obj.users << current_user
     end
   end
 
