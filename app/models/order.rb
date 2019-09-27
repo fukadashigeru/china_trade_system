@@ -2,6 +2,8 @@ require 'kconv'
 require 'csv'
 
 class Order < ApplicationRecord
+  has_many :user_orders
+  has_many :users, through: :user_orders
   def self.import(file)
     # binding.pry
     #<Encoding:ASCII-8BIT>
