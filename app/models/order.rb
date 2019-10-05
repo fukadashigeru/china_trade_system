@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   has_many :user_orders
   has_many :users, through: :user_orders
 
-  def self.import(file, current_user)
+  def self.import(file, user_id, current_user)
     csv_text = file.read
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
@@ -24,8 +24,10 @@ class Order < ApplicationRecord
         customer_remark: row["連絡事項"]
       }
       obj.attributes = temp.slice(*updatable_attributes)
+      obj.update(retailer_id: current_user.id, china_buyer_id: user_id)
       obj.save!
       obj.users << current_user
+      obj.users << User.find(user_id)
     end
   end
 
