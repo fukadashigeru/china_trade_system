@@ -21,13 +21,6 @@
         = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
 
 .container
-  -# .col-md-4
-  -#   .input-group
-  -#     %label.input-group-btn
-  -#       %span.btn.btn-primary
-  -#         ファイル選択
-  -#         %input{:style => "display:none", :type => "file"}/
-  -#     %input.form-control{:readonly => "readonly", :type => "text"}/
   - if current_user.account_type == "orderer"
     .col-md-6
     = form_tag import_orders_path, method: :post, multipart: true do |f|
@@ -76,6 +69,8 @@
             = ""
           %td
             = ""
+          %td
+            = ""
 
 
 :javascript
@@ -94,5 +89,5 @@
       $("#operations").submit();
     });
   });
-  $("#user_id").select2({width:300});
+  $("#user_id").select2({width:'auto'});
 

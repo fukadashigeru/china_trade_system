@@ -17,4 +17,4 @@
 //= require_tree .
 //= require bootstrap
 //= require bootstrap-sprockets
-//= require select2
+// = require select2
