@@ -24,9 +24,12 @@ class Order < ApplicationRecord
         customer_remark: row["連絡事項"]
       }
       obj.attributes = temp.slice(*updatable_attributes)
+      # 発注者（日本人）と買付担当（中国人）のidを保存
       obj.update(retailer_id: current_user.id, china_buyer_id: user_id)
       obj.save!
+      # 発注者（日本人）とのリレーションを保存
       obj.users << current_user
+      # 買付担当（中国人）とのリレーションを保存
       obj.users << User.find(user_id)
     end
   end
