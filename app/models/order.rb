@@ -13,7 +13,7 @@ class Order < ApplicationRecord
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
-      obj = find_by(trade_no: row["取引ID"]) || new
+      obj = find_or_initialize_by(trade_no: row["取引ID"])
       obj.assign_attributes(
         quantity: row["受注数"],
         price: row["価格"],
@@ -23,16 +23,18 @@ class Order < ApplicationRecord
         address: row["住所"],
         phone: row["電話番号"],
         color_size: row["色・サイズ"],
-        customer_remark: row["連絡事項"]
+        customer_remark: row["連絡事項"],
+        japanese_retailer_id: japanese_retailer.id,
+        chinese_buyer_id: chinese_buyer.id
       )
       # 発注者（日本人）と買付担当（中国人）のidを保存
-      obj.update(japanese_retailer_id: japanese_retailer.id, chinese_buyer_id: chinese_buyer.id)
+      # obj.update(, )
       obj.save!
       # 発注者（日本人）とのリレーションを保存
-      obj.users << japanese_retailer unless obj.users.include?(japanese_retailer)
+      # obj.users << japanese_retailer unless obj.users.include?(japanese_retailer)
       # 買付担当（中国人）とのリレーションを保存
-      chinese_buyer = User.find(chinese_buyer.id)
-      obj.users << chinese_buyer unless obj.users.include?(chinese_buyer)
+      # chinese_buyer = User.find(chinese_buyer.id)
+      # obj.users << chinese_buyer unless obj.users.include?(chinese_buyer)
     end
   end
 
