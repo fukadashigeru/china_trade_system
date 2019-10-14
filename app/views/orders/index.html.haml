@@ -30,7 +30,7 @@
         = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
       .col-md-5.my-2
         買付担当：
-        = select_tag(:china_buyer_id,
+        = select_tag(:chinese_buyer_id,
             options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
       .col-md-5.my-2
         %button.btn.btn-success.btn-block{:type => "submit"} インポート

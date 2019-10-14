@@ -5,8 +5,10 @@ require 'nkf'
 class Order < ApplicationRecord
   has_many :user_orders
   has_many :users, through: :user_orders
+  belongs_to :japanese_retailer, class_name: 'User'
+  belongs_to :chinese_buyer, class_name: 'User'
 
-  def self.import(file, china_buyer_id, current_user)
+  def self.import(file, chinese_buyer_id, current_user)
     csv_text = file.read
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
@@ -24,13 +26,13 @@ class Order < ApplicationRecord
         customer_remark: row["連絡事項"]
       )
       # 発注者（日本人）と買付担当（中国人）のidを保存
-      obj.update(retailer_id: current_user.id, china_buyer_id: china_buyer_id)
+      obj.update(japanese_retailer_id: current_user.id, chinese_buyer_id: chinese_buyer_id)
       obj.save!
       # 発注者（日本人）とのリレーションを保存
       obj.users << current_user unless obj.users.include?(current_user)
       # 買付担当（中国人）とのリレーションを保存
-      china_buyer = User.find(china_buyer_id)
-      obj.users << china_buyer unless obj.users.include?(china_buyer)
+      chinese_buyer = User.find(chinese_buyer_id)
+      obj.users << chinese_buyer unless obj.users.include?(chinese_buyer)
     end
   end
 
