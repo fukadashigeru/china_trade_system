@@ -63,7 +63,8 @@ class OrdersController < ApplicationController
   end
 
   def import
-    @orders = Order.import(params[:csv_file], params[:chinese_buyer_id], current_user)
+    chinese_buyer = User.find(params[:chinese_buyer_id])
+    @orders = Order.import(params[:csv_file], current_user, chinese_buyer)
     redirect_to "/"
   end
 
