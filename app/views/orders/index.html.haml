@@ -21,22 +21,19 @@
         = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
 
 .container
-  -# .col-md-4
-  -#   .input-group
-  -#     %label.input-group-btn
-  -#       %span.btn.btn-primary
-  -#         ファイル選択
-  -#         %input{:style => "display:none", :type => "file"}/
-  -#     %input.form-control{:readonly => "readonly", :type => "text"}/
-
-  .col-md-6
-  = form_tag import_orders_path, method: :post, multipart: true do |f|
-    .col-md-5.my-2.search_item.input-group
-      = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
-      = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
-      = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
-    .col-md-5.my-2
-      %button.btn.btn-success.btn-block{:type => "submit"} インポート
+  - if current_user.account_type == "orderer"
+    .col-md-6
+    = form_tag import_orders_path, method: :post, multipart: true do |f|
+      .col-md-5.my-2.search_item.input-group
+        = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
+        = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
+        = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
+      .col-md-5.my-2
+        買付担当：
+        = select_tag(:chinese_buyer_id,
+            options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
+      .col-md-5.my-2
+        %button.btn.btn-success.btn-block{:type => "submit"} インポート
   %table.table
     %thead
       %tr
@@ -72,6 +69,8 @@
             = ""
           %td
             = ""
+          %td
+            = ""
 
 
 :javascript
@@ -85,6 +84,10 @@
     var filename = $(file_field)[0].files[0].name;
     $("#filename").val(filename);
   }
-
-
+  $(function(){
+    $("#operations").change(function(){
+      $("#operations").submit();
+    });
+  });
+  $("#chinese_buyer_id").select2({width:'auto'});
 
