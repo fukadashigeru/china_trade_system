@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.orders
+    @orders = current_user.japanese_retailer_orders
   end
 
   # GET /orders/1
@@ -63,7 +63,8 @@ class OrdersController < ApplicationController
   end
 
   def import
-    Order.import(params[:csv_file])
+    chinese_buyer = User.find(params[:chinese_buyer_id])
+    @orders = Order.import(params[:csv_file], current_user, chinese_buyer)
     redirect_to "/"
   end
 
