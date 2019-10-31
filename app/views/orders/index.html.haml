@@ -20,7 +20,7 @@
       %li.dropdown-item
         = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
 
-.container
+.container#financial_highlight
   - if current_user.account_type == "orderer"
     .col-md-6
     = form_tag import_orders_path, method: :post, multipart: true do |f|
@@ -37,42 +37,47 @@
   %table.table
     %thead
       %tr
-        %th 注文No
-        %th 商品写真
-        %th 色・サイズ
-        %th 数量
-        %th お届け先
-        %th 購入予定料金
-        %th 手配状況
-        %th 追跡番号
-        %th 購入料金
+        %th.align-middle 注文No
+        %th.align-middle 商品写真
+        %th.align-middle 色・サイズ
+        %th.align-middle 数量
+        %th.align-middle お届け先
+        %th.align-middle 購入予定料金
+        %th.align-middle 手配状況
+        %th.align-middle 追跡番号
+        %th.align-middle 購入料金
     %tbody
       -@orders.each do |order|
         %tr
-          %td
+          %td.align-middle{rowspan:2}
             = order.trade_no
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle
             = order.color_size
-          %td
+          %td.align-middle.text-center{rowspan:2}
             = order.quantity
-          %td.h6.small{style: "max-width: 150px;"}
+          %td.align-middle.h6.small{rowspan:2, style: "max-width: 150px;"}
             = order.postal
             %br
             = order.address
             %br
             = order.customer_name
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-
-
+        %tr
+          %td.align-middle
+            %div{id: "taobao_color_size-#{order.id}"}
+              - if order.taobao_color_size.present?
+                = link_to "#{order.taobao_color_size}", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn"
+              - else
+                = link_to "中国語のカラー・サイズを入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray; font-size: 12px;"
 :javascript
   $(document).on('change', ':file', function() {
       var input = $(this),
@@ -90,4 +95,6 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
+  $("edit-btn").click(function(){
 
+  });
