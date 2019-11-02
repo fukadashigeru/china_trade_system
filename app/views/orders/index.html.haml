@@ -20,7 +20,7 @@
       %li.dropdown-item
         = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
 
-.container#financial_highlight
+.container
   - if current_user.account_type == "orderer"
     .col-md-6
     = form_tag import_orders_path, method: :post, multipart: true do |f|
@@ -95,6 +95,3 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
-  $("edit-btn").click(function(){
-
-  });
