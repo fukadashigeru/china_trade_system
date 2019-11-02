@@ -27,18 +27,6 @@ class Order < ApplicationRecord
         japanese_retailer_id: japanese_retailer.id,
         chinese_buyer_id: chinese_buyer.id
       )
-      # 発注者（日本人）と買付担当（中国人）のidを保存
-      # obj.update(, )
-      obj.save!
-      # 発注者（日本人）とのリレーションを保存
-      # obj.users << japanese_retailer unless obj.users.include?(japanese_retailer)
-      # 買付担当（中国人）とのリレーションを保存
-      # chinese_buyer = User.find(chinese_buyer.id)
-      # obj.users << chinese_buyer unless obj.users.include?(chinese_buyer)
     end
   end
-
-  # def self.updatable_attributes
-  #   [:quantity,:price,:trade_no,:customer_name,:postal,:address,:phone,:color_size,:customer_remark]
-  # end
 end
