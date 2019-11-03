@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_13_162010) do
+ActiveRecord::Schema.define(version: 2019_11_03_044436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,16 +56,26 @@ ActiveRecord::Schema.define(version: 2019_10_13_162010) do
     t.integer "trade_no"
     t.string "customer_name"
     t.string "postal"
-    t.text "address"
+    t.string "address"
     t.string "phone"
     t.string "color_size"
     t.string "customer_remark"
     t.string "item_name"
-    t.string "retailer_remark"
-    t.integer "processing_status"
+    t.string "japanese_retailer_remark"
+    t.integer "japanese_retailer_status"
     t.string "taobao_color_size"
     t.bigint "japanese_retailer_id"
     t.bigint "chinese_buyer_id"
+    t.integer "item_no"
+    t.integer "estimate_charge"
+    t.integer "chinese_buyer_status"
+    t.string "chinese_buyer_remark"
+    t.integer "actual_charge"
+    t.integer "commission_fee"
+    t.integer "domestic_shipping_fee"
+    t.integer "international_shipping_fee"
+    t.integer "other_fee"
+    t.integer "tracking_number"
     t.index ["chinese_buyer_id"], name: "index_orders_on_chinese_buyer_id"
     t.index ["japanese_retailer_id"], name: "index_orders_on_japanese_retailer_id"
   end
