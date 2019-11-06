@@ -15,8 +15,10 @@ class Order < ApplicationRecord
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
       obj = find_or_initialize_by(trade_no: row["取引ID"])
       obj.assign_attributes(
-        quantity: row["受注数"],
+        item_no: row["商品ID"],
+        item_name: row["商品名"],
         price: row["価格"],
+        quantity: row["受注数"],
         trade_no: row["取引ID"],
         customer_name: row["名前（本名）"],
         postal: row["郵便番号"],
@@ -24,9 +26,11 @@ class Order < ApplicationRecord
         phone: row["電話番号"],
         color_size: row["色・サイズ"],
         customer_remark: row["連絡事項"],
+        japanese_retailer_remark: row["受注メモ"],
         japanese_retailer_id: japanese_retailer.id,
         chinese_buyer_id: chinese_buyer.id
       )
+      obj.save!
     end
   end
 end
