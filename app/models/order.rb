@@ -17,8 +17,8 @@ class Order < ApplicationRecord
       obj.assign_attributes(
         item_no: row["商品ID"],
         item_name: row["商品名"],
-        price: row["価格"],
         quantity: row["受注数"],
+        price: row["価格"],
         trade_no: row["取引ID"],
         customer_name: row["名前（本名）"],
         postal: row["郵便番号"],
