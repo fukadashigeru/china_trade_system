@@ -77,7 +77,8 @@
               - if order.taobao_color_size.present?
                 = link_to "#{order.taobao_color_size}", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn"
               - else
-                = link_to "中国語のカラー・サイズを入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray; font-size: 12px;", title: 'クリックして入力', rel: 'tooltip'
+                = link_to "中国語のカラー・サイズを入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray; font-size: 12px;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+
 :javascript
   $(document).on('change', ':file', function() {
       var input = $(this),
@@ -95,3 +96,9 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').on('click',function(){
+      $(this).tooltip('hide');
+    })
+  });
