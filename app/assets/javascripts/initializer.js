@@ -1,4 +1,3 @@
-$("#taobao_color_size-<%= @order.id %>").html("<%= escape_javascript(render 'show') %>");
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="tooltip"]').on('click',function(){
