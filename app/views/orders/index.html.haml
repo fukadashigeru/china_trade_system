@@ -4,9 +4,9 @@
   #navbarSupportedContent.collapse.navbar-collapse
     %ul.navbar-nav.mr-auto
       %li.nav-item
-        %a.nav-link{:href => "#"} 注文一覧
+        %a.nav-link.h6{:href => "#"} 注文一覧
       %li.nav-item
-        %a.nav-link{:href => "#"} 買付先一覧
+        %a.nav-link.h6{:href => "#"} 買付先一覧
 
     %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
       = current_user.name
@@ -82,7 +82,7 @@
               - if order.taobao_color_size.present?
                 = link_to "#{order.taobao_color_size}", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn"
               - else
-                = link_to "中国語のカラー・サイズを入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray; font-size: 12px;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                = link_to "色・サイズを中国語で入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
 
 :javascript
   $(document).on('change', ':file', function() {
