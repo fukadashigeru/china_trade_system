@@ -1,0 +1,4 @@
+- @order.pictures.each do |picture|
+  %img{:src => picture.url, :style => "height: 150px;"}/
+%div{id: "picture-#{@order.id}"}
+  = link_to "+", new_picture_path(order_id: @order.id), remote: true, class: "btn btn-light pull-right edit-btn"
