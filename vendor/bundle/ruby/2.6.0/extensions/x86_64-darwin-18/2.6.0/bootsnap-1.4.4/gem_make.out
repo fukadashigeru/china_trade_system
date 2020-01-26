@@ -1,0 +1,15 @@
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/bootsnap-1.4.4/ext/bootsnap
+/Users/fukadashigeru/.rbenv/versions/2.6.3/bin/ruby -I /Users/fukadashigeru/.rbenv/versions/2.6.3/lib/ruby/2.6.0 -r ./siteconf20191230-17930-8vpa9w.rb extconf.rb
+creating Makefile
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/bootsnap-1.4.4/ext/bootsnap
+make "DESTDIR=" clean
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/bootsnap-1.4.4/ext/bootsnap
+make "DESTDIR="
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.bundle
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/bootsnap-1.4.4/ext/bootsnap
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 bootsnap.bundle ./.gem.20191230-17930-1cddgzl/bootsnap

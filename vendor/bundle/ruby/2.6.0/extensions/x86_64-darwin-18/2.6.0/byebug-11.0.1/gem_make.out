@@ -1,0 +1,19 @@
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/byebug-11.0.1/ext/byebug
+/Users/fukadashigeru/.rbenv/versions/2.6.3/bin/ruby -I /Users/fukadashigeru/.rbenv/versions/2.6.3/lib/ruby/2.6.0 -r ./siteconf20191230-17930-w0ookl.rb extconf.rb
+creating Makefile
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/byebug-11.0.1/ext/byebug
+make "DESTDIR=" clean
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/byebug-11.0.1/ext/byebug
+make "DESTDIR="
+compiling breakpoint.c
+compiling byebug.c
+compiling context.c
+compiling locker.c
+compiling threads.c
+linking shared-object byebug/byebug.bundle
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/byebug-11.0.1/ext/byebug
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 byebug.bundle ./.gem.20191230-17930-hjf5kt/byebug
