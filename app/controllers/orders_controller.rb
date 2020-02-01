@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :update_all]
   
 
   # GET /orders
@@ -20,6 +20,10 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    @order = current_user.japanese_retailer_orders.find(params[:id])
+  end
+
+  def edit_all
     @order = current_user.japanese_retailer_orders.find(params[:id])
   end
 
@@ -50,6 +54,15 @@ class OrdersController < ApplicationController
     end
   end
 
+  def update_all
+    if @order.update(order_params)
+    # if false
+      redirect_to orders_path
+    else
+      render "edit_all"
+    end
+  end
+
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
@@ -74,6 +87,16 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:taobao_color_size)
+      params.require(:order).permit(
+        :quantity,
+        :price,
+        :postal,
+        :address,
+        :customer_name,
+        :phone,
+        :color_size,
+        :taobao_color_size,
+        :estimate_charge
+        )
     end
 end
