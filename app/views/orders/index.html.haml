@@ -1,12 +1,12 @@
 / Navigation
-%nav.navbar.navbar-expand-lg.navbar-light.bg-light
+%nav.navbar.fixed-top.navbar-expand-lg.navbar-light.bg-light
   %a.navbar-brand{:href => "#"} China Trade System
   #navbarSupportedContent.collapse.navbar-collapse
     %ul.navbar-nav.mr-auto
       %li.nav-item
-        %a.nav-link{:href => "#"} 注文一覧
+        %a.nav-link.h6{:href => "#"} 注文一覧
       %li.nav-item
-        %a.nav-link{:href => "#"} 買付先一覧
+        %a.nav-link.h6{:href => "#"} 買付先一覧
 
     %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
       = current_user.name
@@ -37,41 +37,72 @@
   %table.table
     %thead
       %tr
-        %th 注文No
-        %th 商品写真
-        %th カラー・サイズ
-        %th 数量
-        %th お届け先
-        %th 購入予定料金
-        %th 手配状況
-        %th 追跡番号
-        %th 購入料金
+        %th.align-middle 注文No
+        %th.align-middle 商品写真
+        %th.align-middle{style: "min-width: 190px;"} 色・サイズ
+        %th.align-middle 数量
+        %th.align-middle お届け先
+        %th.align-middle 購入予定金額（元）
+        %th.align-middle 発注状況
+        %th.align-middle 直接編集
+        %th.align-middle 購入確定金額（元）
+        %th.align-middle 手数料（元）
+        %th.align-middle 国内送料（元）
+        %th.align-middle 国際送料（元）
+        %th.align-middle 手配状況
+        %th.align-middle 追跡番号
     %tbody
       -@orders.each do |order|
         %tr
-          %td
+          %td.align-middle{rowspan:2}
             = order.trade_no
-          %td
-            = ""
-          %td
-            = ""
-          %td
+          %td.align-middle{rowspan:2, id: "pictures-#{order.id}"}
+            - if order.pictures.empty?
+              %div{id: "picture-#{order.id}"}
+                = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+            - else
+              - order.pictures.each do |picture|
+                %img{:src => picture.url, :style => "height: 150px;"}/
+              %div{id: "picture-#{order.id}"}
+                = link_to "+", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn"
+          %td.align-middle
+            = order.color_size
+          %td.align-middle.text-center{rowspan:2}
             = order.quantity
-          %td.h6.small{style: "max-width: 150px;"}
+          %td.align-middle.h6.small{rowspan:2, style: "max-width: 150px;"}
             = order.postal
             %br
             = order.address
             %br
             = order.customer_name
-          %td
+            %br
+            = order.phone
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
+            = link_to edit_all_orders_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+              %i.far.fa-edit
+          %td.align-middle{rowspan:2}
             = ""
-          %td
+          %td.align-middle{rowspan:2}
             = ""
-
+          %td.align-middle{rowspan:2}
+            = ""
+          %td.align-middle{rowspan:2}
+            = ""
+          %td.align-middle{rowspan:2}
+            = ""
+          %td.align-middle{rowspan:2}
+            = ""
+        %tr
+          %td.align-middle
+            %div{id: "taobao_color_size-#{order.id}"}
+              - if order.taobao_color_size.present?
+                = link_to "#{order.taobao_color_size}", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn"
+              - else
+                = link_to "色・サイズを中国語で入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
 
 :javascript
   $(document).on('change', ':file', function() {
@@ -90,4 +121,3 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
-
