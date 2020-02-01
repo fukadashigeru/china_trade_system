@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_043336) do
+ActiveRecord::Schema.define(version: 2020_02_01_130015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,14 @@ ActiveRecord::Schema.define(version: 2019_12_14_043336) do
     t.index ["order_id"], name: "index_pictures_on_order_id"
   end
 
+  create_table "taobao_color_sizes", force: :cascade do |t|
+    t.string "name"
+    t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_taobao_color_sizes_on_order_id"
+  end
+
   create_table "taobao_urls", force: :cascade do |t|
     t.bigint "item_variety_id"
     t.string "url"
@@ -126,6 +134,7 @@ ActiveRecord::Schema.define(version: 2019_12_14_043336) do
   add_foreign_key "orders", "users", column: "chinese_buyer_id"
   add_foreign_key "orders", "users", column: "japanese_retailer_id"
   add_foreign_key "pictures", "orders"
+  add_foreign_key "taobao_color_sizes", "orders"
   add_foreign_key "taobao_urls", "item_varieties"
   add_foreign_key "user_orders", "orders"
   add_foreign_key "user_orders", "users"
