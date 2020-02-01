@@ -6,6 +6,7 @@ class Order < ApplicationRecord
   has_many :user_orders
   has_many :users, through: :user_orders
   has_many :pictures
+  has_one :taobao_color_size
   belongs_to :japanese_retailer, class_name: 'User'
   belongs_to :chinese_buyer, class_name: 'User'
 
