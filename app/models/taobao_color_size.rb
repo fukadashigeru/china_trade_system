@@ -1,0 +1,2 @@
+class TaobaoColorSize < ApplicationRecord
+end
