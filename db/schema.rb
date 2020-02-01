@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_13_162010) do
+ActiveRecord::Schema.define(version: 2019_12_14_043336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,26 +56,36 @@ ActiveRecord::Schema.define(version: 2019_10_13_162010) do
     t.integer "trade_no"
     t.string "customer_name"
     t.string "postal"
-    t.text "address"
+    t.string "address"
     t.string "phone"
     t.string "color_size"
     t.string "customer_remark"
     t.string "item_name"
-    t.string "retailer_remark"
-    t.integer "processing_status"
+    t.string "japanese_retailer_remark"
+    t.integer "japanese_retailer_status"
     t.string "taobao_color_size"
     t.bigint "japanese_retailer_id"
     t.bigint "chinese_buyer_id"
+    t.integer "item_no"
+    t.integer "estimate_charge"
+    t.integer "chinese_buyer_status"
+    t.string "chinese_buyer_remark"
+    t.integer "actual_charge"
+    t.integer "commission_fee"
+    t.integer "domestic_shipping_fee"
+    t.integer "international_shipping_fee"
+    t.integer "other_fee"
+    t.integer "tracking_number"
     t.index ["chinese_buyer_id"], name: "index_orders_on_chinese_buyer_id"
     t.index ["japanese_retailer_id"], name: "index_orders_on_japanese_retailer_id"
   end
 
   create_table "pictures", force: :cascade do |t|
-    t.bigint "actual_item_variety_id"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["actual_item_variety_id"], name: "index_pictures_on_actual_item_variety_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_pictures_on_order_id"
   end
 
   create_table "taobao_urls", force: :cascade do |t|
@@ -115,7 +125,7 @@ ActiveRecord::Schema.define(version: 2019_10_13_162010) do
   add_foreign_key "item_varieties", "item_nos"
   add_foreign_key "orders", "users", column: "chinese_buyer_id"
   add_foreign_key "orders", "users", column: "japanese_retailer_id"
-  add_foreign_key "pictures", "actual_item_varieties"
+  add_foreign_key "pictures", "orders"
   add_foreign_key "taobao_urls", "item_varieties"
   add_foreign_key "user_orders", "orders"
   add_foreign_key "user_orders", "users"

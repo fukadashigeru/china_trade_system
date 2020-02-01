@@ -1,0 +1,5 @@
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/childprocess-1.0.1/ext
+/Users/fukadashigeru/.rbenv/versions/2.6.3/bin/ruby mkrf_conf.rb
+
+current directory: /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/childprocess-1.0.1/ext
+/Users/fukadashigeru/.rbenv/versions/2.6.3/bin/ruby -rrubygems /Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/gems/rake-12.3.3/exe/rake RUBYARCHDIR\=/Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/extensions/x86_64-darwin-18/2.6.0/childprocess-1.0.1 RUBYLIBDIR\=/Users/fukadashigeru/projects/china_trade_system/vendor/bundle/ruby/2.6.0/extensions/x86_64-darwin-18/2.6.0/childprocess-1.0.1

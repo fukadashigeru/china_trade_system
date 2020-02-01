@@ -1,0 +1,18 @@
+= form_for(@picture, url: pictures_path(order_id: @order.id), remote: true) do |f|
+  .form-inline
+    = f.text_field :url, class: "form-control", style: "max-width: 120px"
+    = f.submit "保存", class: "btn btn-success save-btn ml-1"
+    %button.btn.btn-danger.btn-cancel{:type => "button"} キャンセル
+
+:javascript
+  $('.btn-cancel').click(function() {
+    var html = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?order_id=#{@order.id}">+</a>`
+    $('#picture-#{@order.id}').html(html);
+  })
+  $('form').submit(function(){
+    var input = $('input[name="picture[url]"]').val();
+    if (input == "") {
+      alert('画像リンクを入力してください');
+      return false;
+    }
+  });
