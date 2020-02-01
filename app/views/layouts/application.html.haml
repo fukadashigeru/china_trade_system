@@ -8,3 +8,9 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     = yield
+    -# 背面クリックで閉じれるモーダル
+    #modal.modal.fade{role: 'dialog', aria: {hidden: 'true'}, tabindex: '-1'}
+    -# 背面クリックで閉じれないモーダル
+    #modal-static.modal.fade{role: 'dialog', aria: {hidden: 'true'}, data: {backdrop: 'static'}}
+    -# 2重にモーダル開くとき用のモーダル
+    #modal-overlay.modal.fade{role: 'dialog', aria: {hidden: 'true'}, data: {backdrop: 'overlay'}}
