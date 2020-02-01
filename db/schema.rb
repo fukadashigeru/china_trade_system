@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_03_044436) do
+ActiveRecord::Schema.define(version: 2019_12_14_043336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,11 +81,11 @@ ActiveRecord::Schema.define(version: 2019_11_03_044436) do
   end
 
   create_table "pictures", force: :cascade do |t|
-    t.bigint "actual_item_variety_id"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["actual_item_variety_id"], name: "index_pictures_on_actual_item_variety_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_pictures_on_order_id"
   end
 
   create_table "taobao_urls", force: :cascade do |t|
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2019_11_03_044436) do
   add_foreign_key "item_varieties", "item_nos"
   add_foreign_key "orders", "users", column: "chinese_buyer_id"
   add_foreign_key "orders", "users", column: "japanese_retailer_id"
-  add_foreign_key "pictures", "actual_item_varieties"
+  add_foreign_key "pictures", "orders"
   add_foreign_key "taobao_urls", "item_varieties"
   add_foreign_key "user_orders", "orders"
   add_foreign_key "user_orders", "users"

@@ -1,0 +1,52 @@
+.modal-dialog{style: "width: 100%;"}  
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .modal-header
+      / モーダルのタイトル
+      %h5#exampleModalLabel.modal-title 注文編集
+      / 閉じるアイコン
+      %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+        %span{"aria-hidden" => "true"} ×
+    / モーダルの本文
+    .modal-body
+    -# = form_for(@order, url:update_all_orders_path(id: @order.id), method: :put) do |f|
+    = form_for(@order, url:update_all_orders_path(id: @order.id)) do |f|
+      .col-md-6
+        %h4 注文No: #{@order.trade_no}
+        %h4 商品名: #{@order.item_name}
+        %label 色・サイズ(日本語)
+        = f.text_field :color_size, class: "form-control"
+        %br/
+        %label 色・サイズ(中国語)
+        = f.text_field :taobao_color_size, class: "form-control"
+        %br/
+        %label 数量
+        = f.text_field :quantity, class: "form-control"
+        %br/
+        %label お届け先：郵便番号
+        = f.text_field :postal, class: "form-control"
+        %br/
+        %label お届け先：住所
+        = f.text_field :address, class: "form-control"
+        %br/
+        %label お届け先：氏名
+        = f.text_field :customer_name, class: "form-control"
+        %br/
+        %label お届け先：電話番号
+        = f.text_field :phone, class: "form-control"
+        %br/
+        %label 購入予定金額（元）
+        = f.text_field :estimate_charge, class: "form-control"
+        %br/
+        %label 発注状況
+        = f.text_field :japanese_retailer_status, class: "form-control"
+        %br/
+        %label 顧客からの連絡事項
+        = f.text_field :customer_remark, class: "form-control"
+        %br/
+        %label 私からの連絡事項
+        = f.text_field :japanese_retailer_remark, class: "form-control"
+        %br/
+      .modal-footer
+        = f.submit '登録', class: 'btn btn-primary'

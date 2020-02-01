@@ -11,8 +11,13 @@ Rails.application.routes.draw do
   #   get "sign_out", :to => "users/sessions#destroy" 
   # end
   resources :articles
+  resources :pictures
   resources :orders do
-    collection { post :import }
+    collection do
+      get :edit_all
+      patch :update_all
+      post :import
+    end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

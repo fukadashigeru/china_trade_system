@@ -56,8 +56,15 @@
         %tr
           %td.align-middle{rowspan:2}
             = order.trade_no
-          %td.align-middle{rowspan:2}
-            = ""
+          %td.align-middle{rowspan:2, id: "pictures-#{order.id}"}
+            - if order.pictures.empty?
+              %div{id: "picture-#{order.id}"}
+                = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+            - else
+              - order.pictures.each do |picture|
+                %img{:src => picture.url, :style => "height: 150px;"}/
+              %div{id: "picture-#{order.id}"}
+                = link_to "+", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn"
           %td.align-middle
             = order.color_size
           %td.align-middle.text-center{rowspan:2}
@@ -68,12 +75,15 @@
             = order.address
             %br
             = order.customer_name
+            %br
+            = order.phone
           %td.align-middle{rowspan:2}
             = ""
           %td.align-middle{rowspan:2}
             = ""
           %td.align-middle{rowspan:2}
-            = ""
+            = link_to edit_all_orders_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+              %i.far.fa-edit
           %td.align-middle{rowspan:2}
             = ""
           %td.align-middle{rowspan:2}
