@@ -34,7 +34,7 @@
             options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
       .col-md-5.my-2
         %button.btn.btn-success.btn-block{:type => "submit"} インポート
-  %table.table
+  %table.table.table-hover
     %thead
       %tr
         %th.align-middle 注文No
@@ -54,9 +54,9 @@
     %tbody
       -@orders.each do |order|
         %tr
-          %td.align-middle{rowspan:2}
+          %td.align-middle
             = order.trade_no
-          %td.align-middle{rowspan:2, id: "pictures-#{order.id}"}
+          %td.align-middle{id: "pictures-#{order.id}"}
             - if order.pictures.empty?
               %div{id: "picture-#{order.id}"}
                 = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
@@ -67,38 +67,7 @@
                 = link_to "+", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn"
           %td.align-middle
             = order.color_size
-          %td.align-middle.text-center{rowspan:2}
-            = order.quantity
-          %td.align-middle.h6.small{rowspan:2, style: "max-width: 150px;"}
-            = order.postal
-            %br
-            = order.address
-            %br
-            = order.customer_name
-            %br
-            = order.phone
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
-            = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml", remote: true do
-              %i.far.fa-edit
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-        %tr
-          %td.align-middle
+            %hr/
             %div{id: "taobao_color_size-#{order.id}"}
               - if order.taobao_color_size.present?
                 - if order.taobao_color_size.name.present?
@@ -107,6 +76,36 @@
                   = link_to "色・サイズを中国語で入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
                 = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+          %td.align-middle.text-center
+            = order.quantity
+          %td.align-middle.h6.small{style: "max-width: 150px;"}
+            = order.postal
+            %br
+            = order.address
+            %br
+            = order.customer_name
+            %br
+            = order.phone
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
+          %td.align-middle
+            -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+            = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml", remote: true do
+              %i.far.fa-edit
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
+          %td.align-middle
+            = ""
 
 :javascript
   $(document).on('change', ':file', function() {
