@@ -6,8 +6,14 @@
 
 :javascript
   $('.btn-cancel').click(function() {
-    var html = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?order_id=#{@order.id}">+</a>`
-    $('#picture-#{@order.id}').html(html);
+    const picture_length = $('#picture-#{@order.id}').parent().children().length
+    var html_first = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`
+    var html_else = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?order_id=#{@order.id}">+</a>`
+    if (picture_length == 1) {
+      $('#picture-#{@order.id}').html(html_first);
+    } else {
+      $('#picture-#{@order.id}').html(html_else);
+    }
   })
   $('form').submit(function(){
     var input = $('input[name="picture[url]"]').val();
