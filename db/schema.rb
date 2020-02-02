@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_01_130015) do
+ActiveRecord::Schema.define(version: 2020_02_02_081413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,6 @@ ActiveRecord::Schema.define(version: 2020_02_01_130015) do
     t.string "item_name"
     t.string "japanese_retailer_remark"
     t.integer "japanese_retailer_status"
-    t.string "taobao_color_size"
     t.bigint "japanese_retailer_id"
     t.bigint "chinese_buyer_id"
     t.integer "item_no"
