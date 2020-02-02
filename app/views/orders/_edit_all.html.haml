@@ -19,7 +19,8 @@
         = f.text_field :color_size, class: "form-control"
         %br/
         %label 色・サイズ(中国語)
-        = f.text_field :taobao_color_size, class: "form-control"
+        = f.fields_for :taobao_color_size, @order.taobao_color_size || @order.build_taobao_color_size do |ff|
+          = ff.text_field :name, class: "form-control"
         %br/
         %label 数量
         = f.text_field :quantity, class: "form-control"
