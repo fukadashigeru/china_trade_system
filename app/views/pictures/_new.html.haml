@@ -14,6 +14,10 @@
     } else {
       $('#picture-#{@order.id}').html(html_else);
     }
+    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').on('click',function(){
+      $(this).tooltip('hide');
+    })
   })
   $('form').submit(function(){
     var input = $('input[name="picture[url]"]').val();
