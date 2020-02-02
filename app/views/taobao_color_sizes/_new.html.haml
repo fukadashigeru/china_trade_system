@@ -1,0 +1,6 @@
+= form_for(@taobao_color_size, url: taobao_color_sizes_path, remote: true) do |f|
+  .form-inline
+    = f.hidden_field :order_id, value: @order.id
+    = f.text_field :name, class: "form-control", style: "max-width: 120px"
+    = f.submit "保存", class: "btn btn-success save-btn ml-1"
+  
