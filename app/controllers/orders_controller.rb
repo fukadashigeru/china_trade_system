@@ -95,8 +95,8 @@ class OrdersController < ApplicationController
         :customer_name,
         :phone,
         :color_size,
-        :taobao_color_size,
-        :estimate_charge
+        :estimate_charge,
+        taobao_color_size_attributes: [:id, :name]
         )
     end
 end
