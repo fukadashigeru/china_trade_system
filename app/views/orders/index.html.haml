@@ -82,7 +82,8 @@
           %td.align-middle{rowspan:2}
             = ""
           %td.align-middle{rowspan:2}
-            = link_to edit_all_orders_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+            -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+            = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml", remote: true do
               %i.far.fa-edit
           %td.align-middle{rowspan:2}
             = ""
