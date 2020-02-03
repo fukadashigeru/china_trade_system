@@ -11,12 +11,25 @@
           %span{"aria-hidden" => "true"} ×
       / モーダルの本文
       .modal-body
-      -# = form_for(@order, url:update_all_orders_path(id: @order.id), method: :put) do |f|
-      = form_for(@order, url: order_path(id: @order.id)) do |f|
         .row
           .col-md-6
             %h4 注文No: #{@order.trade_no}
             %h4 商品名: #{@order.item_name}
+        %h6 画像
+        .row{id: "pictures-2-#{@order.id}"}
+          - if @order.pictures.empty?
+            .col{id: "picture-2-#{@order.id}"}
+              = link_to "画像リンクを入力してください", new_picture_path(order_id: @order.id, button: 2), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}, button: "modal"
+          - else
+            - @order.pictures.each do |picture|
+              .col
+                %img{:src => picture.url, :style => "height: 150px;"}/
+            .col{id: "picture-2-#{@order.id}"}
+              = link_to "+", new_picture_path(order_id: @order.id, button: 2), remote: true, class: "btn btn-light pull-right edit-btn"
+      -# = form_for(@order, url:update_all_orders_path(id: @order.id), method: :put) do |f|
+      = form_for(@order, url: order_path(id: @order.id)) do |f|
+        .row
+          .col-md-6
             %label 色・サイズ(日本語)
             = f.text_field :color_size, class: "form-control"
             %br/

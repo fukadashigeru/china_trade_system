@@ -1,8 +1,8 @@
 - if @order.pictures.empty?
-  %div{id: "picture-#{order.id}"}
-    = link_to "画像リンクを入力してください", new_picture_path(order_id: @sorder.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+  %div{id: "picture-#{params[:button]}-#{order.id}"}
+    = link_to "画像リンクを入力してください", new_picture_path(order_id: @sorder.id, button: params[:button]), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
 - else
   - @order.pictures.each do |picture|
     %img{:src => picture.url, :style => "height: 150px;"}/
-  %div{id: "picture-#{@order.id}"}
-    = link_to "+", new_picture_path(order_id: @order.id), remote: true, class: "btn btn-light pull-right edit-btn"
+  %div{id: "picture-#{params[:button]}-#{@order.id}"}
+    = link_to "+", new_picture_path(order_id: @order.id, button: params[:button]), remote: true, class: "btn btn-light pull-right edit-btn"
