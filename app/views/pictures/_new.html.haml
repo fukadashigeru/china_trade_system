@@ -1,18 +1,17 @@
-= form_for(@picture, url: pictures_path(order_id: @order.id), remote: true) do |f|
+= form_for(@picture, url: pictures_path(order_id: @order.id, button: params[:button]), remote: true) do |f|
   .form-inline
     = f.text_field :url, class: "form-control", style: "max-width: 120px"
     = f.submit "保存", class: "btn btn-success save-btn ml-1"
     %button.btn.btn-danger.btn-cancel{:type => "button"} キャンセル
-
 :javascript
   $('.btn-cancel').click(function() {
-    const picture_length = $('#picture-#{@order.id}').parent().children().length
-    var html_first = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`
-    var html_else = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?order_id=#{@order.id}">+</a>`
+    const picture_length = $('#picture-#{params[:button]}-#{@order.id}').parent().children().length
+    var html_first = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`
+    var html_else = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?button=#{params[:button]}&order_id=#{@order.id}">+</a>`
     if (picture_length == 1) {
-      $('#picture-#{@order.id}').html(html_first);
+      $('#picture-#{params[:button]}-#{@order.id}').html(html_first);
     } else {
-      $('#picture-#{@order.id}').html(html_else);
+      $('#picture-#{params[:button]}-#{@order.id}').html(html_else);
     }
     $('[data-toggle="tooltip"]').tooltip()
     $('[data-toggle="tooltip"]').on('click',function(){

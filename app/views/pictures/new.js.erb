@@ -1,1 +1,1 @@
-$("#picture-<%= @order.id %>").html("<%= escape_javascript(render 'new') %>");
+$("#picture-<%= params[:button] %>-<%= @order.id %>").html("<%= escape_javascript(render 'new') %>");
