@@ -9,6 +9,7 @@ class Order < ApplicationRecord
   has_one :taobao_color_size
   # accepts_nested_attributes_for :taobao_color_size, update_only: true
   accepts_nested_attributes_for :taobao_color_size
+  accepts_nested_attributes_for :pictures
   belongs_to :japanese_retailer, class_name: 'User'
   belongs_to :chinese_buyer, class_name: 'User'
 
