@@ -24,6 +24,7 @@ class OrdersController < ApplicationController
 
   def edit
     @order = current_user.japanese_retailer_orders.find(params[:id])
+    # @order.pictures.new()
   end
 
   # POST /orders
@@ -96,7 +97,8 @@ class OrdersController < ApplicationController
         :phone,
         :color_size,
         :estimate_charge,
-        taobao_color_size_attributes: [:id, :name]
+        taobao_color_size_attributes: [:id, :name],
+        pictures_attributes: [:id, :url]
         )
     end
 end
