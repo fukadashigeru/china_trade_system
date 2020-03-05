@@ -1,4 +1,4 @@
-$("#taobao_color_size-<%= @order.id %>").html("<%= escape_javascript(render 'update') %>");
+$("#taobao_color_size-order_id-<%= @order.id %>").html("<%= escape_javascript(render 'update') %>");
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="tooltip"]').on('click',function(){

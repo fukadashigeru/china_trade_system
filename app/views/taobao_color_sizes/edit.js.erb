@@ -1,4 +1,5 @@
 var order_id = <%= @taobao_color_size.order_id %>;
 var taobao_color_size_id = <%= @taobao_color_size.id %>;
 var taobao_color_size_name = "<%= @taobao_color_size.name %>";
+var is_name_present = <%= @taobao_color_size.name.present? %>;
 $("#taobao_color_size-order_id-<%= @taobao_color_size.order_id %>").html("<%= escape_javascript(render 'edit') %>");
