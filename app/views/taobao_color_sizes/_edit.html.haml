@@ -1,5 +1,19 @@
 = form_for(@taobao_color_size, url: taobao_color_size_path, remote: true) do |f|
   .form-inline
     = f.hidden_field :order_id, value: @taobao_color_size.order_id
-    = f.text_field :name, class: "form-control", style: "max-width: 120px"
-    = f.submit "保存", class: "btn btn-success save-btn ml-1"
+    = f.text_field :name, class: "form-control w-100"
+    .d-inline-block.p-1{style: "width: 60%;"}
+      = f.submit "保存", class: "btn btn-primary save-btn btn-block btn-sm"
+    .d-inline-block.p-1{style: "width: 40%;"}
+      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} キャンセル
+
+:javascript
+  $('.btn-cancel').click(function() {
+    if (taobao_color_size_name != null){
+      var html_first = `<a class="btn btn-light text-left edit-btn" style="word-break: break-all;" data-remote="true" href="/taobao_color_sizes/${taobao_color_size_id}/edit">${taobao_color_size_name}</a>`;
+      $(`#taobao_color_size-order_id-${order_id}`).html(html_first);
+    } else{
+      var html_else = `<a class="btn btn-light text-left edit-btn btn-block" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/taobao_color_sizes/${taobao_color_size_id}/edit" data-original-title="クリックして入力">色・サイズを中国語で入力</a>`;
+      $(`#taobao_color_size-order_id-${order_id}`).html(html_else);
+    }
+  });
