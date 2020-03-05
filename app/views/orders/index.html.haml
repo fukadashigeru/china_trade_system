@@ -74,7 +74,7 @@
                     - if order.taobao_color_size.name.present?
                       = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn", style: "word-break: break-all;"
                     - else
-                      = link_to "空っぽ", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                      = link_to "色・サイズを中国語で入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
                   - else
                     = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               %hr/
