@@ -53,7 +53,7 @@
             %td.align-middle{id: "pictures-1-#{order.id}", style: "max-width: 180px;"}
               - if order.pictures.empty?
                 %div{id: "picture-1-#{order.id}"}
-                  = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                  = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
                 - order.pictures.each do |picture|
                   .mb-2
@@ -66,17 +66,17 @@
               .d-inline-block
                 = order.color_size
               %hr/
-              %div{id: "taobao_color_size-#{order.id}"}
+              %div
                 .d-inline-block
                   颜色・尺寸:
-                .d-inline-block 
+                .d-inline-block.pull-left{id: "taobao_color_size-order_id-#{order.id}"}
                   - if order.taobao_color_size.present?
                     - if order.taobao_color_size.name.present?
-                      = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light pull-right edit-btn btn-block", style: "word-break: break-all;"
+                      = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn", style: "word-break: break-all;"
                     - else
-                      = link_to "色・サイズを中国語で入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                      = link_to "空っぽ", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
                   - else
-                    = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                    = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               %hr/
               数量: 
               = order.quantity

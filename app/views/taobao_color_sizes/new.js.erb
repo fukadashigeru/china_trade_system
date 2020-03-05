@@ -1,1 +1,2 @@
-$("#taobao_color_size-<%= @order.id %>").html("<%= escape_javascript(render 'new') %>");
+var order_id = <%= @order.id %>
+$("#taobao_color_size-order_id-<%= @order.id %>").html("<%= escape_javascript(render 'new') %>");
