@@ -56,15 +56,15 @@
                   = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
                 - order.pictures.each do |picture|
-                  .d-inline-block.p-1.mb-2.bg-light
+                  .d-inline-block.p-1.mb-2.bg-light.picture-block
                     %img{:src => picture.url, :class => "w-100"}/
                     .d-block.text-right
                       = link_to "編集", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-primary mt-1"
                 -# %div{id: "picture-1-#{order.id}"}
                 -#   = link_to "+", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right edit-btn"
-                .d-block.bg-light.text-center.picture-addition-block{style: "min-height: 10px;"}
-                  = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1 d-none"
-                  = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1", style: "display: none;"
+                .d-block.bg-light.text-center.picture-addition-block
+                  = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1"
+                  -# = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1", style: "display: none;"
             %td{style: "max-width: 180px;"}
               .d-inline-block
                 色・サイズ：
@@ -131,6 +131,7 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
+  /*
   $(function() {
     $(".picture-addition-block").hover(function(e) {
       $(e.target).children(".btn").removeClass("d-none");
@@ -141,3 +142,13 @@
       // $(e.target).children(".btn").fadeOut(200);
     });
   });
+  */
+  /*
+  $(function() {
+    $('.picture-addition-block').mouseover(function(e) {
+      $(e.target).children(".btn").removeClass("d-none");
+    }).mouseout(function(e) {
+      $(e.target).children(".btn").addClass("d-none");
+    });
+  });
+  */
