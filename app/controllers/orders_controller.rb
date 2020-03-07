@@ -1,7 +1,6 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :update_all]
+  before_action :set_order, only: [:show, :edit, :update, :destroy]
   
-
   # GET /orders
   # GET /orders.json
   def index
@@ -19,12 +18,13 @@ class OrdersController < ApplicationController
   end
 
   # GET /orders/1/edit
+  # def edit
+  #   @order = current_user.japanese_retailer_orders.find(params[:id])
+  # end
+
   def edit
     @order = current_user.japanese_retailer_orders.find(params[:id])
-  end
-
-  def edit_all
-    @order = current_user.japanese_retailer_orders.find(params[:id])
+    # @order.pictures.new()
   end
 
   # POST /orders
@@ -45,21 +45,22 @@ class OrdersController < ApplicationController
 
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
-  def update
-    @order = Order.find(params[:id])
-    if @order.update(order_params)
-      render "update"
-    else
-      render "edit"
-    end
-  end
+  # def update
+  #   @order = Order.find(params[:id])
+  #   if @order.update(order_params)
+  #     render "update"
+  #   else
+  #     render "edit"
+  #   end
+  # end
 
-  def update_all
+  def update
     if @order.update(order_params)
     # if false
       redirect_to orders_path
     else
-      render "edit_all"
+      flash[:alert] = '保存できませんでした。'
+      redirect_to orders_path
     end
   end
 
@@ -95,8 +96,9 @@ class OrdersController < ApplicationController
         :customer_name,
         :phone,
         :color_size,
-        :taobao_color_size,
-        :estimate_charge
+        :estimate_charge,
+        taobao_color_size_attributes: [:id, :name],
+        pictures_attributes: [:id, :url]
         )
     end
 end

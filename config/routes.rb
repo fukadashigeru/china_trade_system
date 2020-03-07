@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   # end
   resources :articles
   resources :pictures
+  resources :taobao_color_sizes, only: %i[new create edit update]
   resources :orders do
     collection do
       get :edit_all

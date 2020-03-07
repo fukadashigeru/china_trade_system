@@ -34,82 +34,89 @@
             options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
       .col-md-5.my-2
         %button.btn.btn-success.btn-block{:type => "submit"} インポート
-  %table.table
-    %thead
-      %tr
-        %th.align-middle 注文No
-        %th.align-middle 商品写真
-        %th.align-middle{style: "min-width: 190px;"} 色・サイズ
-        %th.align-middle 数量
-        %th.align-middle お届け先
-        %th.align-middle 購入予定金額（元）
-        %th.align-middle 発注状況
-        %th.align-middle 直接編集
-        %th.align-middle 購入確定金額（元）
-        %th.align-middle 手数料（元）
-        %th.align-middle 国内送料（元）
-        %th.align-middle 国際送料（元）
-        %th.align-middle 手配状況
-        %th.align-middle 追跡番号
-    %tbody
-      -@orders.each do |order|
+  .table-responsive
+    %table.table.table-hover.table-bordered
+      %thead.thead-light
         %tr
-          %td.align-middle{rowspan:2}
-            = order.trade_no
-          %td.align-middle{rowspan:2, id: "pictures-#{order.id}"}
-            - if order.pictures.empty?
-              %div{id: "picture-#{order.id}"}
-                = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
-            - else
-              - order.pictures.each do |picture|
-                %img{:src => picture.url, :style => "height: 150px;"}/
-              %div{id: "picture-#{order.id}"}
-                = link_to "+", new_picture_path(order_id: order.id), remote: true, class: "btn btn-light pull-right edit-btn"
-          %td.align-middle
-            = order.color_size
-          %td.align-middle.text-center{rowspan:2}
-            = order.quantity
-          %td.align-middle.h6.small{rowspan:2, style: "max-width: 150px;"}
-            = order.postal
-            %br
-            = order.address
-            %br
-            = order.customer_name
-            %br
-            = order.phone
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = link_to edit_all_orders_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
-              %i.far.fa-edit
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-          %td.align-middle{rowspan:2}
-            = ""
-        %tr
-          %td.align-middle
-            %div{id: "taobao_color_size-#{order.id}"}
-              - if order.taobao_color_size.present?
-                = link_to "#{order.taobao_color_size}", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn"
+          %th.align-middle 注文No
+          %th.align-middle 商品写真
+          %th.align-middle 色・サイズ・数量
+          %th.align-middle お届け先
+          %th.align-middle 予定費用
+          %th.align-middle 実績費用
+          %th.align-middle 発注状況
+          %th.align-middle 直接編集
+        -@orders.each do |order|
+          %tr
+            %td.align-middle
+              = order.trade_no
+            %td.align-middle{id: "order-id-#{order.id}_pictures", style: "max-width: 180px;"}
+              - if order.pictures.empty?
+                %div{id: "order-id-#{order.id}_picture-1"}
+                  = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
-                = link_to "色・サイズを中国語で入力", edit_order_path(order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                - order.pictures.order(:id).each_with_index do |picture, i|
+                  .d-inline-block.p-1.mb-2.bg-light.picture-block{id: "order-id-#{order.id}_picture-#{i + 1}"}
+                    %img{:src => picture.url, :class => "w-100"}/
+                    .d-block.text-right
+                      = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
+                .d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
+                  = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1"
+            %td{style: "max-width: 180px;"}
+              .d-inline-block
+                色・サイズ：
+              .d-inline-block
+                = order.color_size
+              %hr/
+              %div
+                .d-inline-block
+                  颜色・尺寸:
+                .d-inline-block.pull-left{id: "taobao_color_size-order_id-#{order.id}"}
+                  - if order.taobao_color_size.present?
+                    - if order.taobao_color_size.name.present?
+                      = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn", style: "word-break: break-all;"
+                    - else
+                      = link_to "色・サイズを中国語で入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+                  - else
+                    = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+              %hr/
+              数量: 
+              = order.quantity
+            %td{style: "max-width: 150px;"}
+              = order.postal
+              %br
+              = order.address
+              %br
+              = order.customer_name
+              %br
+              = order.phone
+            %td.align-middle
+              = ""
+            %td.align-middle
+              = ""
+            %td.align-middle
+              = ""
+            %td.align-middle
+              -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
+              = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
+                %i.far.fa-edit
+            -# %td.align-middle
+            -#   = ""
+            -# %td.align-middle
+            -#   = ""
+            -# %td.align-middle
+            -#   = ""
+            -# %td.align-middle
+            -#   = ""
+            -# %td.align-middle
+            -#   = ""
 
 :javascript
   $(document).on('change', ':file', function() {
-      var input = $(this),
-      numFiles = input.get(0).files ? input.get(0).files.length : 1,
-      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-      input.parent().parent().next(':text').val(label);
+    var input = $(this),
+    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.parent().parent().next(':text').val(label);
   });
   function file_selected(file_field){
     var filename = $(file_field)[0].files[0].name;
