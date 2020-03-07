@@ -8,6 +8,8 @@
 
 :javascript
   $('.btn-cancel').click(function() {
+    $('.edit-btn').removeClass('disabled');
+    $('.add-btn').removeClass('disabled');
     const picture_length = $('#order-id-#{@order.id}_picture-#{params[:button]}').parent().children().length;
     var first_picture_html = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
     var second_or_later_picture_html = `<a class="btn btn-sm btn-success add-btn m-1" data-remote="true" href="/pictures/new?button=#{params[:button]}&amp;order_id=#{@order.id}">追加</a>`;
@@ -27,4 +29,8 @@
       alert('画像リンクを入力してください');
       return false;
     }
+  });
+  $(function(){
+    $('.edit-btn').addClass('disabled');
+    $('.add-btn').addClass('disabled');
   });
