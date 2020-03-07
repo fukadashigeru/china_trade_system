@@ -1,3 +1,38 @@
-// Place all the styles related to the pictures controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+@mixin display-none-btn($bottom: 5%, $right: 5%) {
+  position: absolute;
+  bottom: $bottom;
+  right: $right;
+  opacity: 0;
+  transition: all 0.8s;
+  // display: none;
+}
+
+@mixin display-none-add-btn($bottom: 5%, $right: 5%) {
+  opacity: 0;
+  transition: all 0.8s;
+}
+
+@mixin display-btn {
+  opacity: 1;
+}
+.picture-block {
+  position: relative;
+  .edit-btn {
+    @include display-none-btn;
+    z-index: 2;
+  }
+  &:hover .edit-btn {
+    @include display-btn;
+  }
+}
+
+.picture-addition-block {
+  .add-btn {
+    @include display-none-add-btn;
+    z-index: 2;
+  }
+  &:hover>.btn-sm {
+    @include display-btn;
+  }
+}
+

@@ -1,13 +1,25 @@
-= form_for(@picture, url: pictures_path(order_id: @order.id), remote: true) do |f|
+= form_for(@picture, url: pictures_path(order_id: @order.id, button: params[:button]), remote: true) do |f|
   .form-inline
-    = f.text_field :url, class: "form-control", style: "max-width: 120px"
-    = f.submit "保存", class: "btn btn-success save-btn ml-1"
-    %button.btn.btn-danger.btn-cancel{:type => "button"} キャンセル
+    = f.text_field :url, class: "form-control w-100"
+    .d-inline-block.p-1{style: "width: 60%;"}
+      = f.submit "保存", class: "btn btn-primary save-btn btn-block btn-sm"
+    .d-inline-block.p-1{style: "width: 40%;"}
+      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} キャンセル
 
 :javascript
   $('.btn-cancel').click(function() {
-    var html = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?order_id=#{@order.id}">+</a>`
-    $('#picture-#{@order.id}').html(html);
+    const picture_length = $('#order-id-#{@order.id}_picture-#{params[:button]}').parent().children().length;
+    var first_picture_html = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
+    var second_or_later_picture_html = `<a class="btn btn-sm btn-success add-btn m-1" data-remote="true" href="/pictures/new?button=#{params[:button]}&amp;order_id=#{@order.id}">追加</a>`;
+    if (picture_length == 1) {
+      $('#order-id-#{@order.id}_picture-#{params[:button]}').html(first_picture_html);
+    } else {
+      $('#order-id-#{@order.id}_picture-#{params[:button]}').html(second_or_later_picture_html);
+    }
+    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').on('click',function(){
+      $(this).tooltip('hide');
+    })
   })
   $('form').submit(function(){
     var input = $('input[name="picture[url]"]').val();

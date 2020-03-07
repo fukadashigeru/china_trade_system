@@ -1,4 +1,123 @@
-= form_for(@order, url: order_path(@order), remote: true) do |f|
-  .form-inline
-    = f.text_field :taobao_color_size, class: "form-control", style: "max-width: 120px"
-    = f.submit "保存", class: "btn btn-success save-btn ml-1"
+.modal-dialog{style: "width: 100%;"}  
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        %h5#exampleModalLabel.modal-title 注文編集
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      / モーダルの本文
+      .modal-body
+        .row
+          .col-md-6
+            %h4 注文No: #{@order.trade_no}
+            %h4 商品名: #{@order.item_name}
+        -# %h6 画像
+        -# .row{id: "pictures-2-#{@order.id}"}
+        -#   - if @order.pictures.empty?
+        -#     .col.picture-inputs{id: "picture-2-#{@order.id}"}
+        -#       .form-group
+        -#         %input#picture_url.form-control{:name => "picture[url]", :style => "max-width: 120px", :type => "text"}/
+        -#         %input.btn.btn-success.save-btn.ml-1#picture-btn{"data-disable-with" => "保存", :name => "commit", :type => "submit", :value => "保存"}/
+        -#         %button.btn.btn-danger.btn-cancel{:type => "button"} キャンセル
+        -#   - else
+        -#     - @order.pictures.each do |picture|
+        -#       .col
+        -#         %img{:src => picture.url, :style => "height: 150px;"}/
+        -#     .col{id: "picture-2-#{@order.id}"}
+              -# = link_to "+", new_picture_path(order_id: @order.id, button: 2), remote: true, class: "btn btn-light pull-right edit-btn"
+      -# = form_for(@order, url:update_all_orders_path(id: @order.id), method: :put) do |f|
+      = form_for(@order, url: order_path(id: @order.id)) do |f|
+        %h6 画像
+        .row{id: "picture-inputs"}
+          -# - @order.pictures.each do |picture|
+          -#   .col
+          -#     %img{:src => picture.url, :style => "height: 150px;"}/
+          = f.fields_for :pictures do |ff|
+            .col-2
+              -if ff.object.id.present?
+                %img{:src => ff.object.url, :style => "height: 100px;"}/
+                = ff.hidden_field :url, class: "form-control picture-input"
+              -else
+                -# = ff.text_field :url, class: "form-control", id: "picture-input"
+                -# .btn.btn-primary.picture-save-btn 保存
+                -# .btn キャンセル
+          .col-2
+            - pictures_length = f.object.pictures.length
+            .btn.btn-light#add_picture_field{data: {picture_no: pictures_length}} +
+        .row
+          .col-md-6
+            %label 色・サイズ(日本語)
+            = f.text_field :color_size, class: "form-control"
+            %br/
+            %label 色・サイズ(中国語)
+            = f.fields_for :taobao_color_size, @order.taobao_color_size || @order.build_taobao_color_size do |ff|
+              = ff.text_field :name, class: "form-control"
+            %br/
+            %label 数量
+            = f.text_field :quantity, class: "form-control"
+            %br/
+        .row
+          .col
+            %label お届け先：郵便番号
+            = f.text_field :postal, class: "form-control"
+          .col
+            %label お届け先：住所
+            = f.text_field :address, class: "form-control"
+        %br/
+        .row
+          .col
+            %label お届け先：氏名
+            = f.text_field :customer_name, class: "form-control"
+          .col
+            %label お届け先：電話番号
+            = f.text_field :phone, class: "form-control"
+        %br/
+        .row
+          .col-6
+            %label 購入予定金額（元）
+            = f.text_field :estimate_charge, class: "form-control"
+            %br/
+            %label 発注状況
+            = f.text_field :japanese_retailer_status, class: "form-control"
+            %br/
+            %label 顧客からの連絡事項
+            = f.text_field :customer_remark, class: "form-control"
+            %br/
+            %label 私からの連絡事項
+            = f.text_field :japanese_retailer_remark, class: "form-control"
+            %br/
+        .modal-footer
+          = f.submit '登録', class: 'btn btn-primary'
+
+:javascript
+  addPictureField()
+  function addPictureField() {
+    $("#add_picture_field").click(function(e){
+      var picture_no = $(e.target).attr("data-picture-no");
+      $(e.target).parent().append(`
+      <input class="form-control picture-input" type="text" name="order[pictures_attributes][${picture_no}][url]">
+      <div class="btn btn-primary picture-save-btn" data-picture-no="${picture_no}">保存</div>
+      <div class="btn">キャンセル</div>
+      `)
+      $(e.target).remove();
+      $(".picture-save-btn").click(function(e){
+        var img_src =$(e.target).parent().children(".picture-input").val();
+        var picture_no = $(e.target).attr("data-picture-no");
+        var picture_no_next = parseInt(picture_no) + 1
+        $(e.target).parent().children().hide();
+        $("#picture-inputs").append(`
+        <div class="col">
+          <img src="${img_src}" style="height: 100px;">
+        </div>
+        <div class="col-2">
+          <div class="btn btn-light" data-picture-no="${picture_no_next}" id="add_picture_field">+</div>
+        </div>
+        `)
+        return addPictureField()
+      })
+    })
+  }
