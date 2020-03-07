@@ -17,11 +17,11 @@
 }
 .picture-block {
   position: relative;
-  .btn {
+  .edit-btn {
     @include display-none-btn;
     z-index: 2;
   }
-  &:hover .btn {
+  &:hover .edit-btn {
     @include display-btn;
   }
 }
