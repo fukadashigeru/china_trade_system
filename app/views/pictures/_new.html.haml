@@ -9,12 +9,12 @@
 :javascript
   $('.btn-cancel').click(function() {
     const picture_length = $('#picture-#{params[:button]}-#{@order.id}').parent().children().length;
-    var html_first = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
-    var html_else = `<a class="btn btn-light pull-right edit-btn" data-remote="true" href= "/pictures/new?button=#{params[:button]}&order_id=#{@order.id}">+</a>`;
+    var first_picture_html = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
+    var second_or_later_picture_html = `<a class="btn btn-sm btn-success add-btn m-1" data-remote="true" href="/pictures/new?button=#{params[:button]}&amp;order_id=#{@order.id}">追加</a>`;
     if (picture_length == 1) {
-      $('#picture-#{params[:button]}-#{@order.id}').html(html_first);
+      $('#picture-#{params[:button]}-#{@order.id}').html(first_picture_html);
     } else {
-      $('#picture-#{params[:button]}-#{@order.id}').html(html_else);
+      $('#picture-#{params[:button]}-#{@order.id}').html(second_or_later_picture_html);
     }
     $('[data-toggle="tooltip"]').tooltip()
     $('[data-toggle="tooltip"]').on('click',function(){
