@@ -1,4 +1,4 @@
-$("#pictures-<%= params[:button] %>-<%= @order.id %>").html("<%= escape_javascript(render 'create') %>");
+$("#order-id-<%= @order.id %>_pictures").html("<%= escape_javascript(render 'create') %>");
 (function () {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="tooltip"]').on('click',function(){
