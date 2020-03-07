@@ -60,11 +60,8 @@
                     %img{:src => picture.url, :class => "w-100"}/
                     .d-block.text-right
                       = link_to "編集", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-primary mt-1"
-                -# %div{id: "picture-1-#{order.id}"}
-                -#   = link_to "+", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right edit-btn"
-                .d-block.bg-light.text-center.picture-addition-block
-                  = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1"
-                  -# = link_to "追加", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-sm btn-success m-1", style: "display: none;"
+                .d-block.bg-light.text-center.picture-addition-block{id: "picture-1-#{order.id}"}
+                  = link_to "追加", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-sm btn-success add-btn m-1"
             %td{style: "max-width: 180px;"}
               .d-inline-block
                 色・サイズ：
@@ -131,24 +128,3 @@
     });
   });
   $("#chinese_buyer_id").select2({width:'auto'});
-  /*
-  $(function() {
-    $(".picture-addition-block").hover(function(e) {
-      $(e.target).children(".btn").removeClass("d-none");
-      // $(e.target).children(".btn").fadeIn(200);
-    },
-    function(e) {
-      $(e.target).children(".btn").addClass("d-none");
-      // $(e.target).children(".btn").fadeOut(200);
-    });
-  });
-  */
-  /*
-  $(function() {
-    $('.picture-addition-block').mouseover(function(e) {
-      $(e.target).children(".btn").removeClass("d-none");
-    }).mouseout(function(e) {
-      $(e.target).children(".btn").addClass("d-none");
-    });
-  });
-  */
