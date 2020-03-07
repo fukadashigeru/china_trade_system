@@ -1,6 +1,6 @@
 = form_for(@picture, url: picture_path(@picture.id, order_id: @order.id, button: params[:button]), remote: true) do |f|
   .form-inline
-    = f.text_field :url, class: "form-control w-100"
+    = f.text_field :url, class: "form-control w-100", onfocus: "this.select();"
     .d-inline-block.p-1{style: "width: 60%;"}
       = f.submit "保存", class: "btn btn-primary save-btn btn-block btn-sm"
     .d-inline-block.p-1{style: "width: 40%;"}
