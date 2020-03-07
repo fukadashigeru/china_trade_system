@@ -55,7 +55,7 @@
                 %div{id: "order-id-#{order.id}_picture-1"}
                   = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
-                - order.pictures.each_with_index do |picture, i|
+                - order.pictures.order(:id).each_with_index do |picture, i|
                   .d-inline-block.p-1.mb-2.bg-light.picture-block{id: "order-id-#{order.id}_picture-#{i + 1}"}
                     %img{:src => picture.url, :class => "w-100"}/
                     .d-block.text-right
@@ -98,7 +98,7 @@
               = ""
             %td.align-middle
               -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
-              = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml", remote: true do
+              = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
                 %i.far.fa-edit
             -# %td.align-middle
             -#   = ""
