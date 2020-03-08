@@ -8,6 +8,7 @@
 
 :javascript
   $('.btn-cancel').click(function() {
+    $('.delete-btn').removeClass('disabled');
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
     const picture_length = $('#order-id-#{@order.id}_picture-#{params[:button]}').parent().children().length;
@@ -31,6 +32,7 @@
     }
   });
   $(function(){
+    $('.delete-btn').addClass('disabled');
     $('.edit-btn').addClass('disabled');
     $('.add-btn').addClass('disabled');
   });

@@ -56,8 +56,11 @@
                   = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
               - else
                 - order.pictures.order(:id).each_with_index do |picture, i|
-                  .d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 50px;"}
+                  .d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 70px;"}
                     %img{:src => picture.url, :class => "w-100"}/
+                    .d-block.text-right
+                      = link_to picture_path(picture.id, order_id: order.id), class: "btn delete-btn", remote: true, method: :delete,data: { confirm: '本当に削除しますか？' } do
+                        %i.far.fa-trash-alt
                     .d-block.text-right
                       = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
                 .d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}

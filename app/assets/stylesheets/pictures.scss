@@ -1,4 +1,13 @@
-@mixin display-none-btn($bottom: 5%, $right: 5%) {
+@mixin display-none-delete-btn($top: 2%, $right: 2%) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  opacity: 0;
+  transition: all 0.8s;
+  // display: none;
+}
+
+@mixin display-none-edit-btn($bottom: 5%, $right: 5%) {
   position: absolute;
   bottom: $bottom;
   right: $right;
@@ -17,8 +26,14 @@
 }
 .picture-block {
   position: relative;
+  .delete-btn {
+    @include display-none-delete-btn;
+  }
+  &:hover .delete-btn {
+    @include display-btn;
+  }
   .edit-btn {
-    @include display-none-btn;
+    @include display-none-edit-btn;
     z-index: 2;
   }
   &:hover .edit-btn {
