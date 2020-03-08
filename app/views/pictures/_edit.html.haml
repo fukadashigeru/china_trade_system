@@ -8,16 +8,25 @@
 
 :javascript
   $('.btn-cancel').click(function() {
+    $('.delete-btn').removeClass('disabled');
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
-    var img_html = `<img class="w-100" src="#{@picture.url}"><div class="d-block text-right"><a class="btn btn-primary edit-btn mt-1" data-remote="true" href="/pictures/#{@picture.id}/edit?button=#{params[:button]}&amp;order_id=#{@order.id}">編集</a></div>`;
+    var img_html = `<img class="w-100" src="#{@picture.url}"><div class="d-block text-right"><a class="btn delete-btn" data-confirm="本当に削除しますか？" data-remote="true" rel="nofollow" data-method="delete" href="/pictures/#{@picture.id}?order_id=#{@order.id}"><i class="far fa-trash-alt"></i></a></div><div class="d-block text-right"><a class="btn btn-primary edit-btn mt-1" data-remote="true" href="/pictures/#{@picture.id}/edit?button=#{params[:button]}&amp;order_id=#{@order.id}">編集</a></div>`;
     $('#order-id-#{@order.id}_picture-#{params[:button]}').html(img_html);
     $('[data-toggle="tooltip"]').tooltip()
     $('[data-toggle="tooltip"]').on('click',function(){
       $(this).tooltip('hide');
     })
   })
+  $('form').submit(function(){
+    var input = $('input[name="picture[url]"]').val();
+    if (input == "") {
+      alert('画像リンクを入力してください');
+      return false;
+    }
+  });
   $(function(){
+    $('.delete-btn').addClass('disabled');
     $('.edit-btn').addClass('disabled');
     $('.add-btn').addClass('disabled');
   });

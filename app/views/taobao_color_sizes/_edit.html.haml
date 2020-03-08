@@ -10,6 +10,7 @@
 :javascript
   
   $('.btn-cancel').click(function() {
+    $('.delete-btn').removeClass('disabled');
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
     if (is_name_present){
@@ -29,6 +30,7 @@
     }
   });
   $(function(){
+    $('.delete-btn').addClass('disabled');
     $('.edit-btn').addClass('disabled');
     $('.add-btn').addClass('disabled');
   });
