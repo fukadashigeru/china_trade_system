@@ -5,3 +5,10 @@
     = link_to "色・サイズを中国語で入力", edit_taobao_color_size_path(@order.taobao_color_size.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
 - else
   = link_to "色・サイズを中国語で入力", new_taobao_color_size_path(order_id: @order.id), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+
+:javascript
+  $(function(){
+    $('.delete-btn').removeClass('disabled');
+    $('.edit-btn').removeClass('disabled');
+    $('.add-btn').removeClass('disabled');
+  });

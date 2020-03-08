@@ -10,7 +10,9 @@
 :javascript
   
   $('.btn-cancel').click(function() {
-    console.log(is_name_present);
+    $('.delete-btn').removeClass('disabled');
+    $('.edit-btn').removeClass('disabled');
+    $('.add-btn').removeClass('disabled');
     if (is_name_present){
       var a_tag_of_name_present = `<a class="btn btn-light text-left edit-btn" style="word-break: break-all;" data-remote="true" href="/taobao_color_sizes/${taobao_color_size_id}/edit">${taobao_color_size_name}</a>`;
       $(`#taobao_color_size-order_id-${order_id}`).html(a_tag_of_name_present);
@@ -26,4 +28,9 @@
         $(this).tooltip('hide');
       })
     }
+  });
+  $(function(){
+    $('.delete-btn').addClass('disabled');
+    $('.edit-btn').addClass('disabled');
+    $('.add-btn').addClass('disabled');
   });
