@@ -1,4 +1,4 @@
-.modal-dialog{style: "width: 100%;"}  
+.modal-dialog.modal-lg{style: "width: 100%;"}  
   / モーダルのコンテンツ部分
   .modal-content
     / モーダルのヘッダー
@@ -12,112 +12,148 @@
       / モーダルの本文
       .modal-body
         .row
-          .col-md-6
+          .col
             %h4 注文No: #{@order.trade_no}
             %h4 商品名: #{@order.item_name}
-        -# %h6 画像
-        -# .row{id: "pictures-2-#{@order.id}"}
-        -#   - if @order.pictures.empty?
-        -#     .col.picture-inputs{id: "picture-2-#{@order.id}"}
-        -#       .form-group
-        -#         %input#picture_url.form-control{:name => "picture[url]", :style => "max-width: 120px", :type => "text"}/
-        -#         %input.btn.btn-success.save-btn.ml-1#picture-btn{"data-disable-with" => "保存", :name => "commit", :type => "submit", :value => "保存"}/
-        -#         %button.btn.btn-danger.btn-cancel{:type => "button"} キャンセル
-        -#   - else
-        -#     - @order.pictures.each do |picture|
-        -#       .col
-        -#         %img{:src => picture.url, :style => "height: 150px;"}/
-        -#     .col{id: "picture-2-#{@order.id}"}
-              -# = link_to "+", new_picture_path(order_id: @order.id, button: 2), remote: true, class: "btn btn-light pull-right edit-btn"
-      -# = form_for(@order, url:update_all_orders_path(id: @order.id), method: :put) do |f|
-      = form_for(@order, url: order_path(id: @order.id)) do |f|
-        %h6 画像
-        .row{id: "picture-inputs"}
-          -# - @order.pictures.each do |picture|
-          -#   .col
-          -#     %img{:src => picture.url, :style => "height: 150px;"}/
-          = f.fields_for :pictures do |ff|
-            .col-2
-              -if ff.object.id.present?
-                %img{:src => ff.object.url, :style => "height: 100px;"}/
-                = ff.hidden_field :url, class: "form-control picture-input"
-              -else
-                -# = ff.text_field :url, class: "form-control", id: "picture-input"
-                -# .btn.btn-primary.picture-save-btn 保存
-                -# .btn キャンセル
-          .col-2
-            - pictures_length = f.object.pictures.length
-            .btn.btn-light#add_picture_field{data: {picture_no: pictures_length}} +
-        .row
-          .col-md-6
-            %label 色・サイズ(日本語)
-            = f.text_field :color_size, class: "form-control"
-            %br/
-            %label 色・サイズ(中国語)
-            = f.fields_for :taobao_color_size, @order.taobao_color_size || @order.build_taobao_color_size do |ff|
-              = ff.text_field :name, class: "form-control"
-            %br/
-            %label 数量
-            = f.text_field :quantity, class: "form-control"
-            %br/
-        .row
-          .col
-            %label お届け先：郵便番号
-            = f.text_field :postal, class: "form-control"
-          .col
-            %label お届け先：住所
-            = f.text_field :address, class: "form-control"
-        %br/
-        .row
-          .col
-            %label お届け先：氏名
-            = f.text_field :customer_name, class: "form-control"
-          .col
-            %label お届け先：電話番号
-            = f.text_field :phone, class: "form-control"
-        %br/
-        .row
-          .col-6
-            %label 購入予定金額（元）
-            = f.text_field :estimate_charge, class: "form-control"
-            %br/
-            %label 発注状況
-            = f.text_field :japanese_retailer_status, class: "form-control"
-            %br/
-            %label 顧客からの連絡事項
-            = f.text_field :customer_remark, class: "form-control"
-            %br/
-            %label 私からの連絡事項
-            = f.text_field :japanese_retailer_remark, class: "form-control"
-            %br/
-        .modal-footer
-          = f.submit '登録', class: 'btn btn-primary'
+        = form_for(@order, url: order_path(id: @order.id)) do |f|
+          .row
+            .col-auto
+              %h6 商品写真
+              .ks-1.d-block{style: "width: 250px;"}
+                - if @order.pictures.empty?
+                  .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "modal-order-id-#{@order.id}_picture-1"}
+                    %button.ks-3.btn.btn-success.modal-add-btn.m-1.btn-block 商品写真追加
+                - else
+                  = f.fields_for :pictures do |ff|
+                    .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{style: "min-height: 70px;"}
+                      %img.ks-3{:src => ff.object.url, :class => "w-100"}/
+                      = ff.hidden_field :url, class: "form-control picture-input ks-3"
+                      .ks-3.d-block.text-right
+                        %button.ks-4.btn.delete-btn.btn-danger 削除
+                  .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "modal-order-id-#{@order.id}_picture-#{@order.pictures.length + 1}"}
+                    %button.ks-3.btn.btn-success.modal-add-btn.m-1.btn-block 商品写真追加
+                    -# = link_to "追加", new_picture_path(order_id: @order.id, button: @order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success modal-add-btn m-1"
+                  -# = text_field_tag("order[pictures_attributes][1][url]", "ccc")
+                  -# = text_field_tag("order[pictures_attributes][1][id]", nil)
+              -# %div{id: "picture-inputs", style: "max-width: 180px;"}
+              -#   = f.fields_for :pictures do |ff|
+              -#     .col
+              -#       -if ff.object.id.present?
+              -#         -# %img{:src => ff.object.url, :style => "height: 100px;"}/
+              -#         %img{:src => ff.object.url}/
+              -#         = ff.hidden_field :url, class: "form-control picture-input"
+              -#   .col
+              -#     - pictures_length = f.object.pictures.length
+              -#     .btn.btn-light#add_picture_field{data: {picture_no: pictures_length}} +
+            .col
+              .row
+                .col-md-6
+                  %label 色・サイズ(日本語)
+                  = f.text_field :color_size, class: "form-control"
+                  %br/
+                  %label 色・サイズ(中国語)
+                  = f.fields_for :taobao_color_size, @order.taobao_color_size || @order.build_taobao_color_size do |ff|
+                    = ff.text_field :name, class: "form-control"
+                  %br/
+                  %label 数量
+                  = f.text_field :quantity, class: "form-control"
+                  %br/
+              .row
+                .col
+                  %label お届け先：郵便番号
+                  = f.text_field :postal, class: "form-control"
+                .col
+                  %label お届け先：住所
+                  = f.text_field :address, class: "form-control"
+              %br/
+              .row
+                .col
+                  %label お届け先：氏名
+                  = f.text_field :customer_name, class: "form-control"
+                .col
+                  %label お届け先：電話番号
+                  = f.text_field :phone, class: "form-control"
+              %br/
+              .row
+                .col-6
+                  %label 購入予定金額（元）
+                  = f.text_field :estimate_charge, class: "form-control"
+                  %br/
+                  %label 発注状況
+                  = f.text_field :japanese_retailer_status, class: "form-control"
+                  %br/
+                  %label 顧客からの連絡事項
+                  = f.text_field :customer_remark, class: "form-control"
+                  %br/
+                  %label 私からの連絡事項
+                  = f.text_field :japanese_retailer_remark, class: "form-control"
+                  %br/
+          .modal-footer
+            = f.submit '登録', class: 'btn btn-primary'
 
 :javascript
-  addPictureField()
-  function addPictureField() {
-    $("#add_picture_field").click(function(e){
-      var picture_no = $(e.target).attr("data-picture-no");
-      $(e.target).parent().append(`
-      <input class="form-control picture-input" type="text" name="order[pictures_attributes][${picture_no}][url]">
-      <div class="btn btn-primary picture-save-btn" data-picture-no="${picture_no}">保存</div>
-      <div class="btn">キャンセル</div>
-      `)
-      $(e.target).remove();
-      $(".picture-save-btn").click(function(e){
-        var img_src =$(e.target).parent().children(".picture-input").val();
-        var picture_no = $(e.target).attr("data-picture-no");
-        var picture_no_next = parseInt(picture_no) + 1
-        $(e.target).parent().children().hide();
-        $("#picture-inputs").append(`
-        <div class="col">
-          <img src="${img_src}" style="height: 100px;">
+  var picture_length = #{@order.pictures.length - 1};
+  addNewPictureField(picture_length);
+  removePictureField();
+  function addNewPictureField(picture_length) {
+    $(".modal-add-btn").click(function(e){
+      var form_html = `
+      <div class="form-inline ks-3">
+        <input class="form-control w-100 ks-4" onfocus="this.select();" type="text" name="picture[url]" id="picture_url">
+        <div class="d-inline-block p-1 ks-4" style="width: 60%;">
+          <button class="btn btn-primary save-btn btn-block btn-sm ks-5" type="button">保存</button>
         </div>
-        <div class="col-2">
-          <div class="btn btn-light" data-picture-no="${picture_no_next}" id="add_picture_field">+</div>
+        <div class="d-inline-block p-1 ks-4" style="width: 40%;">
+          <button class="btn btn-default border-primary text-primary btn-cancel btn-block btn-sm ks-5" type="button">キャンセル</button>
         </div>
-        `)
-        return addPictureField()
+      </div>`;
+      $(e.target).parent().html(form_html);
+      $(".btn-cancel").click(function(e){
+        var add_btn_html = `
+        <button class="ks-3 btn btn-success modal-add-btn m-1 btn-block">
+          商品写真追加
+        </button>
+        `;
+        $(e.target).parent().parent().parent().html(add_btn_html);
+        return addNewPictureField(picture_length);
       })
-    })
+      $(".save-btn").click(function(e){
+        picture_length += 1;
+        var img_src = $(e.target).parent().prev("input").val();
+        console.log(img_src);
+        var img_html = `
+        <div class="d-inline-block p-1 mb-2 bg-light picture-block w-100 ks-2" style="min-height: 70px;">
+          <img class="w-100 ks-3" src=${img_src}>
+          <input class="form-control picture-input ks-3" type="hidden" value=${img_src} name="order[pictures_attributes][${picture_length}][url]">
+          <div class="d-block text-right ks-3">
+            <button class="ks-4 btn delete-btn btn-danger">
+              削除
+            </button>
+          </div>
+        </div>
+        <input class="ks-2" type="hidden" value="" name="order[pictures_attributes][${picture_length}][id]">
+        <div class="ks-2 d-block bg-light text-center picture-addition-block">
+          <button class="ks-3 btn btn-success modal-add-btn m-1 btn-block">商品写真追加</button>
+        </div>`;
+        var add_btn_html = `
+        `;
+        var ks_1 = $(e.target).parent().parent().parent().parent();
+        var ks_2_all = ks_1.children();
+        var ks_2_last = ks_2_all.last();
+        console.log($(ks_1));
+        console.log(ks_2_all);
+        console.log(ks_2_last);
+        ks_2_last.remove();
+        ks_1.append(img_html);
+        removePictureField();
+        return addNewPictureField(picture_length);
+      })
+    });
+  }
+  function removePictureField() {
+    $(".delete-btn").click(function(e){
+      var img_block = $(e.target).parent().parent();
+      img_block.next().remove();
+      img_block.remove();
+    });
   }
