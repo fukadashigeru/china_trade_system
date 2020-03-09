@@ -55,8 +55,20 @@ class OrdersController < ApplicationController
   # end
 
   def update
+    already_saved_pictures_array = @order.pictures
+    pictures_attributes_ids = if params[:order][:pictures_attributes].nil?
+      Array.new
+    else
+      params[:order][:pictures_attributes].values.map do |picture_attributes|
+        picture_attributes[:id].to_i
+      end
+    end
+    already_saved_pictures_array.each do |picture|
+      if !pictures_attributes_ids.include?(picture.id)
+        picture.destroy
+      end
+    end
     if @order.update(order_params)
-    # if false
       redirect_to orders_path
     else
       flash[:alert] = '保存できませんでした。'
