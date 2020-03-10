@@ -25,7 +25,7 @@
                   .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "modal-order-id-#{@order.id}_picture-1"}
                     %button.ks-3.btn.btn-success.modal-add-btn.btn-block 商品写真追加
                 - else
-                  = f.fields_for :pictures do |ff|
+                  = f.fields_for :pictures, @order.pictures.order(:id) do |ff|
                     .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{style: "min-height: 70px;"}
                       %img.ks-3{:src => ff.object.url, :class => "w-100"}/
                       = ff.hidden_field :url, class: "form-control picture-input ks-3"

@@ -56,8 +56,8 @@ class OrdersController < ApplicationController
 
   def update
     #モーダルページで、保存済みのpictureのidがparamsに乗ってこなかったら、削除する
+    @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
-      @order.remove_pictures_of_not_included_in_params(order_params)
       redirect_to orders_path
     else
       flash[:alert] = '保存できませんでした。'
