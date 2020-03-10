@@ -1,4 +1,4 @@
-@mixin display-none-delete-btn($top: 2%, $right: 2%) {
+@mixin display-none-delete-btn($top: 5%, $right: 5%) {
   position: absolute;
   top: $top;
   right: $right;
