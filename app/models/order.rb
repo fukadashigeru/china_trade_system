@@ -38,4 +38,24 @@ class Order < ApplicationRecord
       obj.save!
     end
   end
+
+  # モーダルページで、保存済みのpictureのidがparamsに乗ってこなかったら、削除するメソッド
+  def remove_pictures_of_not_included_in_params(order_params)
+    # {"0"=><ActionController::Parameters {"id"=>"211", "url"=>"https://static-buyma-com.akamaized.net/imgdata/item/180428/0035698545/145425227/428.jpg"} permitted: true>, "2"=><ActionController::Parameters {"id"=>"224", "url"=>"https://static-buyma-com.akamaized.net/imgdata/item/180428/0035698545/159579735/428.jpg"} permitted: true>}
+    already_saved_pictures_array = pictures
+    pictures_params = order_params[:pictures_attributes]
+    pictures_attributes_ids = if pictures_params.nil?
+      Array.new
+    else
+      pictures_params.values.map do |picture_params|
+        picture_params[:id].to_i
+      end
+    end
+    already_saved_pictures_array.each do |picture|
+      if !pictures_attributes_ids.include?(picture.id)
+        picture.destroy
+      end
+    end
+  end
+
 end
