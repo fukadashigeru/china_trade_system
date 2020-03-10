@@ -23,19 +23,17 @@
 #wrapper.d-flex
   / Sidebar
   #sidebar-wrapper.bg-light.border-right
-    .sidebar-heading Start Bootstrap
-    .list-group.list-group-flush
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Dashboard
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Shortcuts
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Overview
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Events
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Profile
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} Status
+    .sidebar-heading.font-weight-bold.text-muted China Trade System
+    .list-group.list-group-flush.border-bottom
+      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} 注文一覧
+      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} 買付先一覧
   / /#sidebar-wrapper
   / Page Content
   #page-content-wrapper{style: "margin-left: 160px;"}
     %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom{style:"width:calc(100% - 160px); position: fixed; z-index: 1;"}
       -# %button#menu-toggle.btn.btn-primary Toggle Menu
+      %button.btn.btn-success.mr-3 インポート
+      %button.btn.btn-light.border-secondary 手入力
       %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
@@ -54,20 +52,21 @@
               %a.dropdown-item{:href => "#"} Another action
               .dropdown-divider
               %a.dropdown-item{:href => "#"} Something else here
-    .container-fluid.pt-1{style: "margin-top: 43px;"}
-      - if current_user.account_type == "orderer"
-        .col-md-6
-        = form_tag import_orders_path, method: :post, multipart: true do |f|
-          .col-md-5.my-2.search_item.input-group
-            = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
-            = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
-            = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
-          .col-md-5.my-2
-            買付担当：
-            = select_tag(:chinese_buyer_id,
-                options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
-          .col-md-5.my-2
-            %button.btn.btn-success.btn-block{:type => "submit"} インポート
+    .container-fluid.pt-3{style: "margin-top: 43px;"}
+      -# # インポート周り
+      -# - if current_user.account_type == "orderer"
+      -#   .col-md-6
+      -#   = form_tag import_orders_path, method: :post, multipart: true do |f|
+      -#     .col-md-5.my-2.search_item.input-group
+      -#       = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
+      -#       = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
+      -#       = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
+      -#     .col-md-5.my-2
+      -#       買付担当：
+      -#       = select_tag(:chinese_buyer_id,
+      -#           options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
+      -#     .col-md-5.my-2
+      -#       %button.btn.btn-success.btn-block{:type => "submit"} インポート
       .table-responsive
         %table.table.table-hover.table-bordered
           %thead.thead-light
