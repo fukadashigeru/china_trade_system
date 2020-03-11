@@ -32,8 +32,9 @@
   #page-content-wrapper{style: "margin-left: 160px;"}
     %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom{style:"width:calc(100% - 160px); position: fixed; z-index: 1;"}
       -# %button#menu-toggle.btn.btn-primary Toggle Menu
-      = link_to "インポート", order_csv_imports_path, class: "btn btn-success mr-3", remote: true
-      %button.btn.btn-light.border-secondary 手入力
+      - if current_user.account_type == "orderer"
+        = link_to "インポート", order_csv_imports_path, class: "btn btn-success mr-3", remote: true
+        %button.btn.btn-light.border-secondary 手入力
       %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse

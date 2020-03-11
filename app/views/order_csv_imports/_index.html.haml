@@ -1,1 +1,34 @@
-.modal-dialog.modal-lg
+.modal-dialog
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        %h5#exampleModalLabel.modal-title 注文CSVインポート
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      / モーダルの本文
+      .modal-body
+        = form_tag import_orders_path, method: :post, multipart: true do |f|
+          .row
+            .col-4
+              CSVファイル選択：
+            .col.search_item.input-group
+              = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
+              = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
+              = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
+          %br/
+          .row
+            .col-4
+              買付担当：
+            .col
+              = select_tag(:chinese_buyer_id,
+                  options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
+          %br/
+          .modal-footer
+            %button.btn.btn-success.btn-block{:type => "submit"} インポート
+
+:javascript
+  $("#chinese_buyer_id").select2({width:'100%'});
