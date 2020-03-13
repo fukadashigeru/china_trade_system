@@ -5,30 +5,41 @@
     .container
       .modal-header
         / モーダルのタイトル
-        %h5#exampleModalLabel.modal-title 注文CSVインポート
+        #exampleModalLabel.modal-title 注文CSVインポート
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
       / モーダルの本文
-      .modal-body
-        = form_tag import_orders_path, method: :post, multipart: true do |f|
-          .row
-            .col-4
+      = form_tag import_orders_path, method: :post, multipart: true do |f|
+        .modal-body
+          .row.mb-5
+            .col-4.d-flex.align-items-center
+              CSVファイルの種類：
+            - file_types = [["Buyma", 0],["サイト専用", 1]]
+            .col
+              = select_tag(:file_type, options_for_select(file_types))
+          -# %br/ 
+          .row.mb-5
+            .col-4.d-flex.align-items-center
               CSVファイル選択：
             .col.search_item.input-group
               = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
               = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
               = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
-          %br/
-          .row
-            .col-4
+          -# %br/
+          .row.mb-5
+            .col-4.d-flex.align-items-center
               買付担当：
             .col
-              = select_tag(:chinese_buyer_id,
-                  options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
-          %br/
-          .modal-footer
-            %button.btn.btn-success.btn-block{:type => "submit"} インポート
+              -# - china_buyers = [["全 様", 2], ["王 様", 3], ["陽 様", 4]]
+              - china_buyers = User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }
+              = select_tag(:chinese_buyer_id, options_for_select(china_buyers))
+          -# %br/
+        .modal-footer
+          .row
+            .col
+              %button.btn.btn-success{:type => "submit"} インポート
 
 :javascript
   $("#chinese_buyer_id").select2({width:'100%'});
+  $("#file_type").select2({width:'100%'});

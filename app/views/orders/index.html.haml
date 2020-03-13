@@ -1,73 +1,49 @@
-/ Navigation
--# %nav.navbar.fixed-top.navbar-expand-lg.navbar-light.bg-light
--#   %a.navbar-brand{:href => "#"} China Trade System
--#   #navbarSupportedContent.collapse.navbar-collapse
--#     %ul.navbar-nav.mr-auto
--#       %li.nav-item
--#         %a.nav-link.h6{:href => "#"} 注文一覧
--#       %li.nav-item
--#         %a.nav-link.h6{:href => "#"} 買付先一覧
-
--#     %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
--#       = current_user.name
--#     / この下の行に dropdown-menu-right を追加するだけ。
--#     %ul.dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
--#       %li.dropdown-item
--#         = link_to "別アカウントにログイン", destroy_user_session_path, method: :delete, class: "dropdown-item"
--#       %li.dropdown-item
--#         = link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item"
--#       .dropdown-divider
--#       %li.dropdown-item
--#         = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
-
 #wrapper.d-flex{style: "overflow-x: scroll;"}
   / Sidebar
   #sidebar-wrapper.bg-light.border-right
-    .sidebar-heading.font-weight-bold.text-muted China Trade System
+    %div
+      .d-inline-block
+        .sidebar-heading.font-weight-bold.text-muted
+          %h1 ChinaTradeSystem
+          %strong CTS
     .list-group.list-group-flush.border-bottom
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} 注文一覧
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"} 買付先一覧
-  / /#sidebar-wrapper
+      %a.list-group-item.list-group-item-action.bg-light{:href => "#"}
+        %i.fas.far.fa-list-alt.fa-lg.active.list-fontawsome.ml-1
+        .active.list-item 注文一覧
+      %a.list-group-item.list-group-item-action.bg-light{:href => "#"}
+        %i.fa.fa-store-alt.fa-lg.active.list-fontawsome.ml-1
+        .active.list-item 買付先一覧
+    %div
+      .d-inline-block.float-right#arrow-toggle
+        %button.btn.btn-light#sidebarCollapse
+          %i.fas.fa-arrow-left.fa-lg
+          %i.active.fas.fa-arrow-right.fa-lg
   / Page Content
-  #page-content-wrapper{style: "margin-left: 160px;"}
-    %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom{style:"width:calc(100% - 160px); position: fixed; z-index: 1;"}
-      -# %button#menu-toggle.btn.btn-primary Toggle Menu
-      - if current_user.account_type == "orderer"
-        = link_to "インポート", order_csv_imports_path, class: "btn btn-success mr-3", remote: true
-        %button.btn.btn-light.border-secondary 手入力
+  #page-content-wrapper
+    / Header
+    %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom{style:" position: fixed; z-index: 1;"}
+      %div
+        .d-inline-block.mr-2
+          = link_to "インポート", order_csv_imports_path, class: "btn btn-success", remote: true
+        .d-inline-block
+          %button.btn.btn-light.border-secondary 手入力
       %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
         %ul.navbar-nav.ml-auto.mt-2.mt-lg-0
-          %li.nav-item.active
-            %a.nav-link{:href => "#"}
-              Home
-              %span.sr-only (current)
-          %li.nav-item
-            %a.nav-link{:href => "#"} Link
           %li.nav-item.dropdown
             %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
-              Dropdown
-            .dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
-              %a.dropdown-item{:href => "#"} Action
-              %a.dropdown-item{:href => "#"} Another action
+              = current_user.name
+            %ul.dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
+              %li.dropdown-item
+                = link_to "別アカウントにログイン", destroy_user_session_path, method: :delete, class: "dropdown-item"
+              %li.dropdown-item
+                = link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item"
               .dropdown-divider
-              %a.dropdown-item{:href => "#"} Something else here
+              %li.dropdown-item
+                = link_to "設定", destroy_user_session_path, method: :delete, class: "dropdown-item"
+    / Container
     .container-fluid.pt-3{style: "margin-top: 43px;"}
-      -# # インポート周り
-      -# - if current_user.account_type == "orderer"
-      -#   .col-md-6
-      -#   = form_tag import_orders_path, method: :post, multipart: true do |f|
-      -#     .col-md-5.my-2.search_item.input-group
-      -#       = text_field_tag 'filename',"", id: "filename", disabled: true, class: "form-control"
-      -#       = file_field_tag 'csv_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));", class: "form-control"
-      -#       = button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();", class: "form-control btn btn-primary"
-      -#     .col-md-5.my-2
-      -#       買付担当：
-      -#       = select_tag(:chinese_buyer_id,
-      -#           options_for_select(User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }))
-      -#     .col-md-5.my-2
-      -#       %button.btn.btn-success.btn-block{:type => "submit"} インポート
       .table-responsive
         %table.table.table-hover.table-bordered
           %thead.thead-light
@@ -133,15 +109,10 @@
                   = ""
                 %td.align-middle
                   = ""
-                %td.align-middle
+                %td.align-middle.text-center
                   -# = link_to edit_order_path(id: order.id), class: "btn btn-blue btn-ml", remote: true do
                   = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
                     %i.far.fa-edit
-
-
-
-
-
 
 :javascript
   $(document).on('change', ':file', function() {
@@ -154,6 +125,18 @@
     var filename = $(file_field)[0].files[0].name;
     $("#filename").val(filename);
   }
+  $(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+      $('#sidebar-wrapper').toggleClass('active');
+      $('#page-content-wrapper').toggleClass('active');
+      var toggle_status = $.cookie('toggle');
+      if (toggle_status == 'active') {
+        $.cookie('toggle','');
+      } else if( toggle_status == '' ) {
+        $.cookie('toggle','active');
+      }
+    });
+  });
   $(function(){
     $("#operations").change(function(){
       $("#operations").submit();
@@ -163,4 +146,20 @@
   $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
+  });
+  $(function(){
+    var toggle_status = $.cookie('toggle');
+    if (toggle_status === 'active') {
+      $('#sidebar-wrapper').css('transition','all 0.0s');
+      $('#page-content-wrapper').css('transition','all 0.0s');
+      $('#sidebar-wrapper').toggleClass('active');
+      $('#page-content-wrapper').toggleClass('active');
+      setTimeout(function(){
+        $('#sidebar-wrapper').css('transition','all 0.6s');
+        $('#page-content-wrapper').css('transition','all 0.6s');
+      }, 0);
+    } else {
+      $('#sidebar-wrapper').css('transition','all 0.6s');
+      $('#page-content-wrapper').css('transition','all 0.6s'); 
+    }
   });
