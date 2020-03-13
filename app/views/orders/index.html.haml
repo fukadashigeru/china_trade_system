@@ -7,7 +7,7 @@
           %h1 ChinaTradeSystem
           %strong CTS
     .list-group.list-group-flush.border-bottom
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"}
+      = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
         %i.fas.far.fa-list-alt.fa-lg.active.list-fontawsome.ml-1
         .active.list-item 注文一覧
       %a.list-group-item.list-group-item-action.bg-light{:href => "#"}
