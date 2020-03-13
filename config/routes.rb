@@ -20,5 +20,7 @@ Rails.application.routes.draw do
       post :import
     end
   end
+  resources :order_csv_imports, only: %i[index]
+  # resources :order_csv_import
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
