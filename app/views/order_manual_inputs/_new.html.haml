@@ -1,0 +1,17 @@
+.modal-dialog.modal-xl
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        %h5#exampleModalLabel.modal-title 注文手入力
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      / モーダルの本文
+      .modal-body
+        = form_for @order, remote: true do |f|
+          = f.text_field :quantity
+          .modal-footer
+            = f.submit
