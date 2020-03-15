@@ -1,10 +1,25 @@
 #order_manual_inputs {
-  .addres_tr {
+  .postal_tc {
     @media screen and (min-width:1200px) {
-      width: 220px;
+      width: 100px;
     }
   }
-  .quantity_tr {
+  .addres_tc {
+    @media screen and (min-width:1200px) {
+      width: 300px;
+    }
+  }
+  .cutomer_name_tc {
+    @media screen and (min-width:1200px) {
+      width: 100px;
+    }    
+  }
+  .phone_tc {
+    @media screen and (min-width:1200px) {
+      width: 140px;
+    }  
+  }
+  .quantity_tc {
     width: 60px;
   }
 }
