@@ -23,16 +23,16 @@
               .ks-1.d-block
                 - if @order.pictures.empty?
                   .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "modal-order-id-#{@order.id}_picture-1"}
-                    %button.ks-3.btn.btn-success.modal-add-btn.btn-block 商品写真追加
+                    .ks-3.btn.btn-success.modal-add-btn.btn-block 商品写真追加
                 - else
                   = f.fields_for :pictures, @order.pictures.order(:id) do |ff|
                     .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{style: "min-height: 70px;"}
                       %img.ks-3{:src => ff.object.url, :class => "w-100"}/
                       = ff.hidden_field :url, class: "form-control picture-input ks-3"
                       .ks-3.d-block.text-right
-                        %button.ks-4.btn.delete-btn.btn-danger 削除
+                        .ks-4.btn.delete-btn.btn-danger 削除
                   .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "modal-order-id-#{@order.id}_picture-#{@order.pictures.length + 1}"}
-                    %button.ks-3.btn.btn-success.modal-add-btn.btn-block 商品写真追加
+                    .ks-3.btn.btn-success.modal-add-btn.btn-block 商品写真追加
             .col-4.border-right
               %label 色・サイズ(日本語)
               = f.text_field :color_size, class: "form-control"
@@ -93,9 +93,9 @@
       $(e.target).parent().html(form_html);
       $(".btn-cancel").click(function(e){
         var add_btn_html = `
-        <button class="ks-3 btn btn-success modal-add-btn btn-block">
+        <div class="ks-3 btn btn-success modal-add-btn btn-block">
           商品写真追加
-        </button>
+        </div>
         `;
         $(e.target).parent().parent().parent().html(add_btn_html);
         return addNewPictureField(picture_length);
@@ -103,7 +103,6 @@
       $(".save-btn").click(function(e){
         picture_length += 1;
         var img_src = $(e.target).parent().prev("input").val();
-        console.log(img_src);
         var img_html = `
         <div class="d-inline-block p-1 mb-2 bg-light picture-block w-100 ks-2" style="min-height: 70px;">
           <img class="w-100 ks-3" src=${img_src}>
@@ -116,16 +115,13 @@
         </div>
         <input class="ks-2" type="hidden" value="" name="order[pictures_attributes][${picture_length}][id]">
         <div class="ks-2 d-block bg-light text-center picture-addition-block">
-          <button class="ks-3 btn btn-success modal-add-btn btn-block">商品写真追加</button>
+          <div class="ks-3 btn btn-success modal-add-btn btn-block">商品写真追加</div>
         </div>`;
         var add_btn_html = `
         `;
         var ks_1 = $(e.target).parent().parent().parent().parent();
         var ks_2_all = ks_1.children();
         var ks_2_last = ks_2_all.last();
-        console.log($(ks_1));
-        console.log(ks_2_all);
-        console.log(ks_2_last);
         ks_2_last.remove();
         ks_1.append(img_html);
         removePictureField();

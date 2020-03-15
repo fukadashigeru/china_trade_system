@@ -1,4 +1,4 @@
 - if @order.taobao_color_size.present?
   = link_to "#{@order.taobao_color_size}", edit_order_path(@order), remote: true, class: "btn btn-light pull-right edit-btn"
 - else
-  = link_to "色・サイズを中国語で入力", edit_order_path(@order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right"}
+  = link_to "色・サイズを中国語で入力", edit_order_path(@order), remote: true, class: "btn btn-light pull-right edit-btn", style: "color: gray", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
