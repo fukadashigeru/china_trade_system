@@ -1,21 +1,21 @@
 #wrapper.d-flex{style: "overflow-x: scroll;"}
   / Sidebar
   #sidebar-wrapper.bg-light.border-right
-    %div
-      .d-inline-block
-        .sidebar-heading.font-weight-bold.text-muted
-          %h1 ChinaTradeSystem
-          %strong CTS
-    .list-group.list-group-flush.border-bottom
-      = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
-        %i.fas.far.fa-list-alt.fa-lg.active.list-fontawsome.ml-1
-        .active.list-item 注文一覧
-      %a.list-group-item.list-group-item-action.bg-light{:href => "#"}
-        %i.fa.fa-store-alt.fa-lg.active.list-fontawsome.ml-1
-        .active.list-item 買付先一覧
-    %div
+    .d-block
+      .sidebar-heading.text-muted
+        .h5 ChinaTradeSystem
+    %ul.list-group
+      %li
+        = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
+          %i.fas.far.fa-list-alt.fa-lg.active.list-fontawsome.mt-1
+          .active.list-item 注文一覧
+      %li
+        = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
+          %i.fa.fa-store-alt.fa-lg.active.list-fontawsome.mt-1
+          .active.list-item 買付先一覧
+    .d-block.mt-2
       .d-inline-block.float-right#arrow-toggle
-        %button.btn.btn-light#sidebarCollapse
+        .btn.btn-light#sidebarCollapse
           %i.fas.fa-arrow-left.fa-lg
           %i.active.fas.fa-arrow-right.fa-lg
   / Page Content
