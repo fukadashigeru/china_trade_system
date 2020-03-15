@@ -24,9 +24,9 @@
     %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom{style:" position: fixed; z-index: 1;"}
       %div
         .d-inline-block.mr-2
-          = link_to "インポート", order_csv_imports_path, class: "btn btn-success", remote: true
+          = link_to "注文インポート", order_csv_imports_path, class: "btn btn-success", remote: true
         .d-inline-block
-          = link_to "手入力", new_order_manual_input_path, class: "btn btn-light border-secondary", remote: true
+          = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary", remote: true
       %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
