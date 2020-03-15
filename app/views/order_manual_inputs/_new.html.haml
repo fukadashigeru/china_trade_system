@@ -9,7 +9,7 @@
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      = form_tag order_manual_inputs_path, remote: true do
+      = form_tag order_manual_inputs_path, remote: true, autocomplete: "off" do
         -# / モーダルの本文
         .modal-body
           .row.border-secondary
@@ -22,23 +22,23 @@
             %thead.thead-light
               %tr
                 %th.align-middle
-                %th.align-middle 郵便番号
-                %th.align-middle.addres_tr 住所
-                %th.align-middle 宛先
-                %th.align-middle 電話番号
+                %th.align-middle.postal_tc  郵便番号
+                %th.align-middle.addres_tc 住所
+                %th.align-middle.cutomer_name_tc 宛先
+                %th.align-middle.phone_tc 電話番号
                 %th.align-middle 色・サイズ
-                %th.align-middle.quantity_tr 数量
+                %th.align-middle.quantity_tc 数量
                 %th.align-middle 顧客の連絡事項
                 %th.align-middle あなたの連絡事項
             %tbody#order_manual_inputs_tbody
               - @orders.each_with_index do |order, i|
                 %tr
-                  %td.align-middle= check_box_tag "[submit_true][#{i}]",true, false, {disabled: true, class: "form-check submit_check_box"}
-                  %td= text_field_tag "[#{i}][postal]", nil, class: "form-control"
-                  %td= text_field_tag "[#{i}][address]", nil, class: "form-control"
-                  %td= text_field_tag "[#{i}][customer_name]", nil, class: "form-control"
-                  %td= text_field_tag "[#{i}][phone]", nil, class: "form-control"
-                  %td= text_field_tag "[#{i}][color_size]", nil, class: "form-control"
+                  %td.align-middle= check_box_tag "[submit_true][#{i}]",true, false, disabled: true, class: "form-check submit_check_box"
+                  %td= text_field_tag "[#{i}][postal]", nil, class: "form-control", placeholder: "XXX-XXXX", autocomplete: "off"
+                  %td= text_field_tag "[#{i}][address]", nil, class: "form-control", placeholder: "東京都 ○○市 △△町 ○○マンション△△号室", autocomplete: "off"
+                  %td= text_field_tag "[#{i}][customer_name]", nil, class: "form-control", placeholder: "山田　太郎", autocomplete: "off"
+                  %td= text_field_tag "[#{i}][phone]", nil, class: "form-control", placeholder: "090-XXXX-XXXX", autocomplete: "off"
+                  %td= text_field_tag "[#{i}][color_size]", nil, class: "form-control", placeholder: "ブラック・L"
                   %td= select_tag "[#{i}][quantity]", options_for_select([[1, 1], [2, 2], [3, 3]]), class: "custom-select"
                   %td= text_field_tag "[#{i}][customer_remark]", nil, class: "form-control"
                   %td= text_field_tag "[#{i}][japanese_retailer_remark]", nil, class: "form-control"
@@ -69,18 +69,18 @@
     var tr_html = `
       <tr>
       <td class="align-middle"><input type="checkbox" name="[submit_true][]" id="_submit_true_0" value="true" disabled="disabled" class="form-check submit_check_box"></td>
-      <td><input type="text" name="[][postal]" id="__postal" class="form-control"></td>
-      <td><input type="text" name="[][address]" id="__address" class="form-control"></td>
-      <td><input type="text" name="[][customer_name]" id="__customer_name" class="form-control"></td>
-      <td><input type="text" name="[][phone]" id="__phone" class="form-control"></td>
-      <td><input type="text" name="[][color_size]" id="__color_size" class="form-control"></td>
-      <td><select name="[][quantity]" id="__quantity" class="custom-select"><option value="1">1</option>
+      <td><input type="text" name="[][postal]" id="_0_postal" class="form-control" placeholder="XXX-XXXX" autocomplete="off"></td>
+      <td><input type="text" name="[][address]" id="_0_address" class="form-control" placeholder="東京都 ○○市 △△町 ○○マンション△△号室" autocomplete="off"></td>
+      <td><input type="text" name="[][customer_name]" id="_0_customer_name" class="form-control" placeholder="山田　太郎" autocomplete="off"></td>
+      <td><input type="text" name="[][phone]" id="_0_phone" class="form-control" placeholder="090-XXXX-XXXX" autocomplete="off"></td>
+      <td><input type="text" name="[][color_size]" id="_0_color_size" class="form-control" placeholder="ブラック・L"></td>
+      <td><select name="[][quantity]" id="_0_quantity" class="custom-select"><option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option></select></td>
-      <td><input type="text" name="[][customer_remark]" id="__customer_remark" class="form-control"></td>
-      <td><input type="text" name="[][japanese_retailer_remark]" id="__japanese_retailer_remark" class="form-control"></td>
-      </tr>`
-    ;
+      <td><input type="text" name="[][customer_remark]" id="_0_customer_remark" class="form-control"></td>
+      <td><input type="text" name="[][japanese_retailer_remark]" id="_0_japanese_retailer_remark" class="form-control"></td>
+      </tr>
+      `;
     $('#order_manual_inputs_tbody').append(tr_html);
   }
   // TbodyのそれぞれのTrの指定したtdにnameを指定する
@@ -131,3 +131,6 @@
       input_submit_true.prop('disabled', true);
     }
   }
+
+
+

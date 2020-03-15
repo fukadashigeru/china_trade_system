@@ -1,6 +1,6 @@
 class OrderManualInputsController < ApplicationController
   def new
-    @orders = 3.times.map { current_user.japanese_retailer_orders.build }
+    @orders = 5.times.map { current_user.japanese_retailer_orders.build }
   end
 
   def create
