@@ -21,6 +21,6 @@ Rails.application.routes.draw do
     end
   end
   resources :order_csv_imports, only: %i[index]
-  # resources :order_csv_import
+  resources :order_manual_inputs, only: %i[new create]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

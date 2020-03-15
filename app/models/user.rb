@@ -9,4 +9,5 @@ class User < ApplicationRecord
   has_many :user_orders
   has_many :japanese_retailer_orders, class_name: 'Order', :foreign_key => 'japanese_retailer_id'
   has_many :chinese_buyer_orders, class_name: 'Order', :foreign_key => 'chinese_buyer_id'
+  accepts_nested_attributes_for :japanese_retailer_orders
 end

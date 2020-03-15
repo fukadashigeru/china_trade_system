@@ -26,7 +26,7 @@
         .d-inline-block.mr-2
           = link_to "インポート", order_csv_imports_path, class: "btn btn-success", remote: true
         .d-inline-block
-          %button.btn.btn-light.border-secondary 手入力
+          = link_to "手入力", new_order_manual_input_path, class: "btn btn-light border-secondary", remote: true
       %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #navbarSupportedContent.collapse.navbar-collapse
@@ -56,6 +56,7 @@
               %th.align-middle 実績費用
               %th.align-middle 発注状況
               %th.align-middle 直接編集
+          %tbody
             -@orders.each do |order|
               %tr
                 %td.align-middle
