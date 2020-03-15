@@ -78,6 +78,10 @@
   min-width: 100vw;
 }
 
+#page-content-wrapper #container {
+  margin-top: 43px;
+}
+
 #wrapper.toggled #sidebar-wrapper {
   margin-left: 0;
 }
