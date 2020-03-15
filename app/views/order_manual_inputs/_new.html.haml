@@ -1,17 +1,133 @@
-.modal-dialog.modal-xl
+.modal-dialog.modal-xl#order_manual_inputs
   / モーダルのコンテンツ部分
   .modal-content
     / モーダルのヘッダー
     .container
       .modal-header
         / モーダルのタイトル
-        %h5#exampleModalLabel.modal-title 注文手入力
+        .h4#exampleModalLabel.modal-title 注文手入力
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      / モーダルの本文
-      .modal-body
-        = form_for @order, remote: true do |f|
-          = f.text_field :quantity
+      = form_tag order_manual_inputs_path, remote: true do
+        -# / モーダルの本文
+        .modal-body
+          .row.border-secondary
+            .col-4.d-flex.align-items-center
+              .h5.mr-3 買付担当
+              - china_buyers = User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }
+              = select_tag :chinese_buyer_id, options_for_select(china_buyers)
+          %br
+          %table.table.table-bordered
+            %thead.thead-light
+              %tr
+                %th.align-middle
+                %th.align-middle 郵便番号
+                %th.align-middle.addres_tr 住所
+                %th.align-middle 宛先
+                %th.align-middle 電話番号
+                %th.align-middle 色・サイズ
+                %th.align-middle.quantity_tr 数量
+                %th.align-middle 顧客の連絡事項
+                %th.align-middle あなたの連絡事項
+            %tbody#order_manual_inputs_tbody
+              - @orders.each_with_index do |order, i|
+                %tr
+                  %td.align-middle= check_box_tag "[submit_true][#{i}]",true, false, {disabled: true, class: "form-check submit_check_box"}
+                  %td= text_field_tag "[#{i}][postal]", nil, class: "form-control"
+                  %td= text_field_tag "[#{i}][address]", nil, class: "form-control"
+                  %td= text_field_tag "[#{i}][customer_name]", nil, class: "form-control"
+                  %td= text_field_tag "[#{i}][phone]", nil, class: "form-control"
+                  %td= text_field_tag "[#{i}][color_size]", nil, class: "form-control"
+                  %td= select_tag "[#{i}][quantity]", options_for_select([[1, 1], [2, 2], [3, 3]]), class: "custom-select"
+                  %td= text_field_tag "[#{i}][customer_remark]", nil, class: "form-control"
+                  %td= text_field_tag "[#{i}][japanese_retailer_remark]", nil, class: "form-control"
+          %br
+          .row
+            .col-4
+              .btn.btn-info#add_tr_html_btn 5件追加
+          %br
           .modal-footer
-            = f.submit
+            = submit_tag "保存", class: "btn btn-primary pull-right"
+
+
+:javascript
+  judgeCheckbox();
+  $("#chinese_buyer_id").select2({width:'150'});
+  // 5行追加
+  $('#add_tr_html_btn').click(function() {
+    for (let i=0; i<5; i++) {
+      appendTrHTML();
+      adjustmentTbody();
+      judgeCheckbox();
+    }
+  });
+  // 関数群
+  // 1行のtrを追加する
+  function appendTrHTML() {
+    // 1行のHTML
+    var tr_html = `
+      <tr>
+      <td class="align-middle"><input type="checkbox" name="[submit_true][]" id="_submit_true_0" value="true" disabled="disabled" class="form-check submit_check_box"></td>
+      <td><input type="text" name="[][postal]" id="__postal" class="form-control"></td>
+      <td><input type="text" name="[][address]" id="__address" class="form-control"></td>
+      <td><input type="text" name="[][customer_name]" id="__customer_name" class="form-control"></td>
+      <td><input type="text" name="[][phone]" id="__phone" class="form-control"></td>
+      <td><input type="text" name="[][color_size]" id="__color_size" class="form-control"></td>
+      <td><select name="[][quantity]" id="__quantity" class="custom-select"><option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option></select></td>
+      <td><input type="text" name="[][customer_remark]" id="__customer_remark" class="form-control"></td>
+      <td><input type="text" name="[][japanese_retailer_remark]" id="__japanese_retailer_remark" class="form-control"></td>
+      </tr>`
+    ;
+    $('#order_manual_inputs_tbody').append(tr_html);
+  }
+  // TbodyのそれぞれのTrの指定したtdにnameを指定する
+  function adjustmentTbody() {
+    $('#order_manual_inputs_tbody tr').each(function(index, tr_element) {
+      attrTrEachName(index, tr_element);
+    })
+  }
+  // 任意のsTrの指定したtdにnameを指定する
+  function attrTrEachName(index, tr_element) {
+    $(tr_element).children("td:nth-child(1)").children().attr("name", `[submit_true][${index}]`);
+    $(tr_element).children("td:nth-child(2)").children().attr("name", `[${index}][postal]`);
+    $(tr_element).children("td:nth-child(3)").children().attr("name", `[${index}][address]`);
+    $(tr_element).children("td:nth-child(4)").children().attr("name", `[${index}][customer_name]`);
+    $(tr_element).children("td:nth-child(5)").children().attr("name", `[${index}][phone]`);
+    $(tr_element).children("td:nth-child(6)").children().attr("name", `[${index}][color_size]`);
+    $(tr_element).children("td:nth-child(7)").children().attr("name", `[${index}][quantity]`);
+    $(tr_element).children("td:nth-child(8)").children().attr("name", `[${index}][customer_remark]`);
+    $(tr_element).children("td:nth-child(9)").children().attr("name", `[${index}][japanese_retailer_remark]`);
+  }
+  function judgeCheckbox(){
+    $("#order_manual_inputs input,select").not(".submit_check_box").change(function(){
+      judgeTbodyInputCheckbox();
+    })
+  }
+  // TbodyのそれぞれのTrの必須項目が入力されたら、チェックボックスにチェックを入れる
+  function judgeTbodyInputCheckbox() {
+    $('#order_manual_inputs_tbody tr').each(function(index, tr_element) {
+      judgeTrInput(tr_element);
+    })
+  }
+  // 任意のTrの必須項目が入力されたら、チェックボックスにチェックを入れる
+  function judgeTrInput(tr_element) {
+    var input_postal = $(tr_element).children("td:nth-child(2)").children().val();
+    var input_address = $(tr_element).children("td:nth-child(3)").children().val();
+    var input_customer_name = $(tr_element).children("td:nth-child(4)").children().val();
+    var input_phone = $(tr_element).children("td:nth-child(5)").children().val();
+    var input_color_size = $(tr_element).children("td:nth-child(6)").children().val();
+    var input_quantity = $(tr_element).children("td:nth-child(7)").children().val();
+    var input_completer_true_or_false = (input_postal != "" && input_address != "" && input_customer_name != "" && input_phone != "" && input_color_size != "" && input_quantity != "");
+    var input_submit_true = $(tr_element).children("td:nth-child(1)").children();
+    if (input_completer_true_or_false) {
+      input_submit_true.prop('checked', true);
+      input_submit_true.prop("disabled", false);
+    }
+    else {
+      input_submit_true.prop('checked', false);
+      input_submit_true.prop('disabled', true);
+    }
+  }
