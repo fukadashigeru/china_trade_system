@@ -27,13 +27,8 @@
   line-height: 42px;
 }
 
-#sidebar-wrapper.active h1 {
+#sidebar-wrapper.active .h5 {
   display: none;
-}
-
-#sidebar-wrapper strong {
-  display: none;
-  transition-delay: 1s;
 }
 
 #sidebar-wrapper .list-fontawsome {
@@ -50,10 +45,6 @@
 
 #sidebar-wrapper.active .list-item {
   display: none;
-}
-
-#sidebar-wrapper.active strong {
-  display: block;
 }
 
 #sidebar-wrapper.active .fa-arrow-left {
@@ -85,6 +76,10 @@
 
 #page-content-wrapper {
   min-width: 100vw;
+}
+
+#page-content-wrapper #container {
+  margin-top: 43px;
 }
 
 #wrapper.toggled #sidebar-wrapper {

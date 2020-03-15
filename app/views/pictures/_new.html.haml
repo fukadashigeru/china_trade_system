@@ -12,7 +12,7 @@
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
     const picture_length = $('#order-id-#{@order.id}_picture-#{params[:button]}').parent().children().length;
-    var first_picture_html = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
+    var first_picture_html = `<a class="btn btn-light pull-right edit-btn" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-delay="{&quot;show&quot;:200,&quot;hide&quot;:100}" data-remote="true" href="/pictures/new?button=#{params[:button]}&order_id=#{@order.id}" data-original-title="クリックして入力">画像リンクを入力してください</a>`;
     var second_or_later_picture_html = `<a class="btn btn-sm btn-success add-btn m-1" data-remote="true" href="/pictures/new?button=#{params[:button]}&amp;order_id=#{@order.id}">追加</a>`;
     if (picture_length == 1) {
       $('#order-id-#{@order.id}_picture-#{params[:button]}').html(first_picture_html);
