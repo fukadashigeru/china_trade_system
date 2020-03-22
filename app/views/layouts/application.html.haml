@@ -7,6 +7,14 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
+    - flash.each do |key, value|
+      - key = "info" if key == "notice"
+      - key = "danger"  if key == "alert"
+      .fixed-top
+        %div{class: "alert alert-#{key} alert-dismissible text-center", role: 'alert'}
+          = value
+          %button.close{aria: {label: 'Close'}, data: {dismiss: 'alert'}, type: 'button'}
+            %span{aria: {hidden: 'true'}} ×
     #wrapper.d-flex{style: "overflow-x: scroll;"}
       / Sidebar
       = render 'shared/sidebar'
@@ -23,3 +31,4 @@
     #modal-static.modal.fade{role: 'dialog', aria: {hidden: 'true'}, data: {backdrop: 'static'}}
     -# 2重にモーダル開くとき用のモーダル
     #modal-overlay.modal.fade{role: 'dialog', aria: {hidden: 'true'}, data: {backdrop: 'overlay'}}
+

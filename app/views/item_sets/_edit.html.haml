@@ -1,0 +1,67 @@
+.modal-dialog.modal-lg#item_sets_modal
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h4#exampleModalLabel.modal-title 買付先情報（マスター）
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      = form_tag item_set_path(@item_set), method: :put do 
+        / モーダルの本文
+        .modal-body
+          .d-table
+            .d-table-row
+              .d-table-cell.border.border-secondary.bg-info.text-white.px-2.pt-1
+                .h5
+                  カテゴリー - 商品ID
+              .d-table-cell.border.border-secondary.px-2.pt-1
+                .h5
+                  = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
+                  = "-"
+                  = @item_set.item_no
+          .row
+            .col.my-2
+              = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
+          %br
+          .h4 買付先URL
+          .row
+            .col
+              %table.table.table-bordered
+                %thead.thead-light
+                  %tr
+                    %th.first_canditate_select 第一候補
+                    %th URL
+                    %th 在庫
+                %tbody#item_sets_table
+                  - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
+                    - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, j|
+                      %tr
+                        %td.pl-5.pt-4= check_box_tag "to_do", true, false, class: "form-check submit_check_box"
+                        %td
+                          .input-group
+                            = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{j}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
+                            .input-group-append
+                              %span#basic-addon2.input-group-text
+                                = link_to taobao_url.url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
+                                  %i.fas.fa-external-link-alt
+                        %td
+        %br
+        .modal-footer
+          = submit_tag "保存", class: "btn btn-primary pull-right"
+
+
+:javascript
+  $(function() {
+    $('.taobao_url_input').change(function(){
+      resetTaobaoUrlLink();
+    })
+  });
+  function resetTaobaoUrlLink() {
+    $('#item_sets_table tr').each(function(index, tr_element) {
+      var taobao_url = $(tr_element).find('.taobao_url_input').val();
+      $(tr_element).find('.fontawsome_taobao_url_link').attr('href', taobao_url);
+    })
+  }
