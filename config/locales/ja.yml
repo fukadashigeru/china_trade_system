@@ -12,3 +12,7 @@ ja:
           unspecified: "指定無し"
           buyma: "BUYMA"
           amazon: "AMAZON"
+      taobao_url:
+        is_have_stock:
+          have_stock: "在庫有り"
+          not_have_stock: "在庫無し"

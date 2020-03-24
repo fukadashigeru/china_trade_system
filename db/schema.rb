@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_21_071847) do
+ActiveRecord::Schema.define(version: 2020_03_23_021556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2020_03_21_071847) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_set_id"
+    t.bigint "first_candidate_id"
+    t.index ["first_candidate_id"], name: "index_item_units_on_first_candidate_id"
     t.index ["item_set_id"], name: "index_item_units_on_item_set_id"
   end
 
@@ -111,6 +113,7 @@ ActiveRecord::Schema.define(version: 2020_03_21_071847) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.integer "is_have_stock", default: 0, null: false
     t.index ["user_id"], name: "index_taobao_urls_on_user_id"
   end
 
@@ -143,6 +146,7 @@ ActiveRecord::Schema.define(version: 2020_03_21_071847) do
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"
   add_foreign_key "item_units", "item_sets"
+  add_foreign_key "item_units", "taobao_urls", column: "first_candidate_id"
   add_foreign_key "orders", "item_sets"
   add_foreign_key "orders", "users", column: "chinese_buyer_id"
   add_foreign_key "orders", "users", column: "japanese_retailer_id"
