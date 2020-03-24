@@ -33,6 +33,11 @@ class ItemSetsController < ApplicationController
                     taobao_url.update(url: taobao_url_url)
                   end
                 end
+                if k == first_candidate_params
+                  item_unit.update(first_candidate_id: taobao_url.id)
+                end
+                # binding.pry
+                taobao_url.update(is_have_stock: have_stock_params[k].to_i)
               end
             end
           end
@@ -53,5 +58,15 @@ class ItemSetsController < ApplicationController
   private
     def taobao_url_params
       params.require(:"taobao_url")
+    end
+
+    def first_candidate_params
+      ## チェックボックスが必ずどれか入れる仕様になったら、下記のコードに変更
+      # params.require(:"first_candidate_select").keys.first
+      params[:"first_candidate_select"].keys.first
+    end
+
+    def have_stock_params
+      params.require(:"have_stock")
     end
 end
