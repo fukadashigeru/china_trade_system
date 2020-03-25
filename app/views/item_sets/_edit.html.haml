@@ -19,44 +19,50 @@
                   カテゴリー - 商品ID
               .d-table-cell.border.border-secondary.px-2.pt-1
                 .h5
-                  = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
-                  = "-"
-                  = @item_set.item_no
-          .row
-            .col.my-2
-              = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
+                  = link_to @item_set.shop_url, :target=>["_blank"] do
+                    = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
+                    = "-"
+                    = @item_set.item_no
+              
           %br
           .h4 買付先URL
           - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
-            .row
-              .col
-                %table.table.table-bordered
-                  %thead.thead-light
-                    %tr
-                      %th.first_candidate_select 第一候補
-                      %th URL
-                      %th 在庫
-                  %tbody.item_unit_tbody
-                    - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, k|
+            .row.mx-2
+              .col.mb-5
+                .h5
+                  = "商品 #{i + 1}"
+                .d-block.ml-2
+                  %table.table.table-bordered
+                    %thead.thead-light
                       %tr
-                        - check_box_true_or_false = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
-                        %td.pl-5.pt-4= check_box_tag "first_candidate_select[#{k}]", true, check_box_true_or_false, class: "form-check submit_check_box"
-                        %td
-                          .input-group
-                            = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
-                            .input-group-append
-                              %span#basic-addon2.input-group-text
-                                - taobao_url_url = taobao_url.url.nil? ? '' : taobao_url.url
-                                = link_to taobao_url_url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
-                                  %i.fas.fa-external-link-alt
-                        %td
-                          - have_stock_options = TaobaoUrl.is_have_stocks.map {|key, value| [ I18n.t("activerecord.attributes.taobao_url.is_have_stock.#{key}", locale: :ja), value]}
-                          - have_stock_class = taobao_url.is_have_stock == "have_stock" ? "have_stock form-control" : "have_stock form-control bg-secondary text-white"
-                          = select_tag "have_stock[#{k}]", options_for_select(have_stock_options, selected: taobao_url.is_have_stock_before_type_cast), class: have_stock_class
-                -# .d-inline
-                .btn.btn-sm.btn-success.text-center.add-input-btn
-                  %i.far.fa-arrow-alt-circle-up
-                  買付先URL追加
+                        %th.first_candidate_select 第1候補
+                        %th URL
+                        %th 在庫
+                    %tbody.item_unit_tbody
+                      - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, k|
+                        %tr
+                          - check_box_true_or_false = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
+                          %td.pl-5.pt-4= check_box_tag "first_candidate_select[#{k}]", true, check_box_true_or_false, class: "form-check submit_check_box"
+                          %td
+                            .input-group
+                              = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
+                              .input-group-append
+                                %span#basic-addon2.input-group-text
+                                  - taobao_url_url = taobao_url.url.nil? ? '' : taobao_url.url
+                                  = link_to taobao_url_url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
+                                    %i.fas.fa-external-link-alt
+                          %td
+                            - have_stock_options = TaobaoUrl.is_have_stocks.map {|key, value| [ I18n.t("activerecord.attributes.taobao_url.is_have_stock.#{key}", locale: :ja), value]}
+                            - have_stock_class = taobao_url.is_have_stock == "have_stock" ? "have_stock form-control" : "have_stock form-control bg-secondary text-white"
+                            = select_tag "have_stock[#{k}]", options_for_select(have_stock_options, selected: taobao_url.is_have_stock_before_type_cast), class: have_stock_class
+                  .d-block{style: 'margin-left: 80px; margin-right: 197px;'}
+                    .btn.btn-sm.btn-outline-success.btn-block.text-center.add-input-btn
+                      %i.fas.fa-arrow-alt-circle-up.fa-lg
+                      買付先URL追加
+          .d-block
+            .btn.btn-sm.btn-outline-warning.text-center.add-input-btn{title: 'セット商品の場合などで登録したい場合は、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+              商品追加
+              %i.fas.fa-long-arrow-alt-right
 
         %br
         .modal-footer
@@ -64,6 +70,7 @@
 
 :javascript
   $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
     addTrFunction();
     recursiveAllFunction();
   });
@@ -105,7 +112,7 @@
   function addTrFunction() {
     $('.add-input-btn').on('click', function(e){
       $add_btn = $(e.target);
-      $this_table = $add_btn.prev('.table');
+      $this_table = $add_btn.parent('.d-block').prev('.table');
       $this_tbody = $this_table.children('.item_unit_tbody');
       console.log($this_tbody);
       $this_table_last_tr = $this_table.find('tr:last');
