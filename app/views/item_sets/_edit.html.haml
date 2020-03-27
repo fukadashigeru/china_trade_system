@@ -30,7 +30,7 @@
             - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
               .row.mx-2.item-row
                 .col.mb-5
-                  .h5
+                  .h5.item_uint_and_trash
                     .d-inline.item_unit_title
                       = ""
                     -# - if i != 0
@@ -76,7 +76,7 @@
 
         %br
         .modal-footer
-          = submit_tag "保存", class: "btn btn-primary pull-right"
+          = submit_tag "保存", class: "btn btn-primary pull-right w-25"
 
 :javascript
   $(function() {
@@ -97,8 +97,11 @@
   });
   // 再起をする必要がある関数群
   function recursiveAllFunction() {
-    $('.taobao_url_input').change(function(){
+    $('.taobao_url_input').change(function(e){
       resetTaobaoUrlLink();
+      var $this_taobao_url_input = $(e.target);
+      arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
+      applyAlwaysOneCheckInAllItemRowFunction()
     })
     $('.submit_check_box').on('click', function(e){
       var $this_form_check = $(e.target);
@@ -111,15 +114,7 @@
     })
     $('.have_stock').change(function(e) {
       var $this_select_tag = $(e.target);
-      var n = $this_select_tag.children('option:selected').val();
-      switch (n) {
-        case '0':
-          $this_select_tag.removeClass('bg-secondary text-white');
-          break;
-        case '1':
-          $this_select_tag.addClass('bg-secondary text-white');
-          break;
-      }
+      arrangeCheckBoxByHavingStockSelectTag($this_select_tag);
     })
     $('.tr_remove_btn').on('click', function(e){
       var $this_tr_remove_btn = $(e.target);
@@ -147,14 +142,27 @@
         $item_unit_title = $(item_row).find('.item_unit_title');
         $item_unit_title.html(`商品 ${index + 1}`)
       })
+      var item_rows_length = $item_rows.length;
+      if (item_rows_length > 1) {
+        $('.item_uint_and_trash').removeClass('d-none');
+      } else {
+        $('.item_uint_and_trash').addClass('d-none');
+      }
     })
-    //$item_units = $('.item_units');
-    //$item_rows = $item_units.children('.item-row') ;
-    //$item_rows.each(function(index, item_row){
-    //  $item_unit_title = $(item_row).find('.item_unit_title');
-    //  $item_unit_title.html(`商品 ${index + 1}`)
-    //})
+    //在庫有り・無しの内容を取ってっ来て、第一候補のチェックボックスをdisabledにしたり、チェック外したりする
+    $('.have_stock').each(function(index, this_select_tag) {
+      var $this_select_tag = $(this_select_tag);
+      arrangeCheckBoxByHavingStockSelectTag($this_select_tag)
+    })
+    // taobao_url_inputが空なら、第一候補のチェックボックスをdisabledにしたり、チェック外したりする
+    $('.taobao_url_input').each(function(index, this_taobao_url_input) {
+      var $this_taobao_url_input = $(this_taobao_url_input);
+      arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
+    })
+    applyAlwaysOneCheckInAllItemRowFunction()
   }
+  
+  
   function resetTaobaoUrlLink() {
     $('.item_unit_tbody tr').each(function(index, tr_element) {
       var taobao_url = $(tr_element).find('.taobao_url_input').val();
@@ -223,11 +231,10 @@
     var $name_of_a_url_input_array = $name_of_a_url_input.split('][');
     var last_item_unit_id = $name_of_a_url_input_array[0].slice(-1);
     var next_item_unit_id = String(Number(last_item_unit_id) + 1);
-    console.log(next_item_unit_id)
     var new_item_unit_html = `
       <div class="row mx-2 item-row">
       <div class="col mb-5">
-      <div class="h5">
+      <div class="h5 item_uint_and_trash">
       <div class="d-inline item_unit_title">商品 ${next_item_unit_id + 1}</div>
       <div class="btn btn-sm btn-outline-danger item_unit_remove_btn">
       <i class="fas fa-trash-alt"></i>
@@ -339,5 +346,80 @@
       $add_btn = $(e.target);
       $this_table = $add_btn.closest('.d-block').prev('.table');
       addTrFunction($this_table);
+    })
+  }
+  function arrangeCheckBoxByHavingStockSelectTag($this_select_tag) {
+    var n = $this_select_tag.children('option:selected').val();
+    var $this_tr = $this_select_tag.closest('tr');
+    var $this_taobao_url_input = $this_tr.find('.taobao_url_input');
+    var $this_taobao_url_input = $this_taobao_url_input.val();
+    var $this_submit_check_box = $this_tr.find('.submit_check_box');
+    if ($this_taobao_url_input == ""){
+      switch (n) {
+        case '0':
+          $this_select_tag.removeClass('bg-secondary text-white');
+          break;
+        case '1':
+          $this_select_tag.addClass('bg-secondary text-white');
+          break;
+      }
+    } else {
+      switch (n) {
+        case '0':
+          $this_select_tag.removeClass('bg-secondary text-white');
+          $this_submit_check_box.prop('disabled', false);
+          break;
+        case '1':
+          $this_select_tag.addClass('bg-secondary text-white');
+          $this_submit_check_box.prop('checked', false);
+          $this_submit_check_box.prop('disabled', true);
+          break; 
+      }
+    }
+  }
+  function arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input){
+    var this_taobao_url_input_val = $this_taobao_url_input.val();
+    var $this_tr = $this_taobao_url_input.closest('tr');
+    var $this_select_tag = $this_tr.find('.have_stock');
+    var n = $this_select_tag.children('option:selected').val();
+    var $this_submit_check_box = $this_tr.find('.submit_check_box');
+    if (n == '0'){
+      if (this_taobao_url_input_val == ""){
+        $this_submit_check_box.prop('checked', false);
+        $this_submit_check_box.prop('disabled', true);
+      } else {
+        $this_submit_check_box.prop('disabled', false);
+      }
+    }
+  }
+  function applyAlwaysOneCheckInItemRowFunction($item_row){
+    var $all_submit_check_box = $item_row.find('.submit_check_box');
+    var all_check_situation_array = [];
+    $all_submit_check_box.each(function(index, submit_check_box){
+      var $submit_check_box = $(submit_check_box);
+      var check_situation = $submit_check_box.attr('checked');
+      all_check_situation_array.push(check_situation)
+    })
+    if ($.inArray('checked', all_check_situation_array) == -1) {
+      var $item_unit_tbody = $item_row.find('.item_unit_tbody')
+      var $this_all_tr = $item_unit_tbody.find('tr');
+      $this_all_tr.each(function(index, tr){
+        var $this_tr = $(tr);
+        var $this_taobao_url_input = $this_tr.find('.taobao_url_input');
+        var $this_taobao_url_input_val = $this_taobao_url_input.val();
+        var $this_select_tag = $this_tr.find('.have_stock');
+        var n = $this_select_tag.children('option:selected').val();
+        var $this_submit_check_box = $this_tr.find('.submit_check_box');
+        if ($this_taobao_url_input_val != "" && n == '0'){
+          $this_submit_check_box.prop('checked', true);
+          return false;
+        }
+      })
+    }
+  }
+  function applyAlwaysOneCheckInAllItemRowFunction(){
+    $('.item-row').each(function(index, item_row){
+      $item_row = $(item_row);
+      applyAlwaysOneCheckInItemRowFunction($item_row);
     })
   }
