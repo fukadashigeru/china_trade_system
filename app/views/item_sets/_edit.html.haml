@@ -26,24 +26,30 @@
               
           %br
           .h4 買付先URL
-          - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
-            .row.mx-2
-              .col.mb-5
-                .h5
-                  = "商品 #{i + 1}"
-                .d-block.ml-2
+          .item_units
+            - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
+              .row.mx-2.item-row
+                .col.mb-5
+                  .h5
+                    .d-inline.item_unit_title
+                      = ""
+                    -# - if i != 0
+                    .btn.btn-sm.btn-outline-danger.item_unit_remove_btn
+                      %i.fas.fa-trash-alt
                   %table.table.table-bordered
                     %thead.thead-light
                       %tr
                         %th.first_candidate_select 第1候補
                         %th URL
                         %th 在庫
+                        %th 削除
                     %tbody.item_unit_tbody
                       - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, k|
                         %tr
                           - check_box_true_or_false = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
-                          %td.pl-5.pt-4= check_box_tag "first_candidate_select[#{k}]", true, check_box_true_or_false, class: "form-check submit_check_box"
-                          %td
+                          %td.text-center.align-middle
+                            = check_box_tag "first_candidate_select[#{k}]", true, check_box_true_or_false, class: "submit_check_box"
+                          %td.text-center.align-middle
                             .input-group
                               = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
                               .input-group-append
@@ -51,16 +57,20 @@
                                   - taobao_url_url = taobao_url.url.nil? ? '' : taobao_url.url
                                   = link_to taobao_url_url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
                                     %i.fas.fa-external-link-alt
-                          %td
+                          %td.text-center.align-middle
                             - have_stock_options = TaobaoUrl.is_have_stocks.map {|key, value| [ I18n.t("activerecord.attributes.taobao_url.is_have_stock.#{key}", locale: :ja), value]}
                             - have_stock_class = taobao_url.is_have_stock == "have_stock" ? "have_stock form-control" : "have_stock form-control bg-secondary text-white"
                             = select_tag "have_stock[#{k}]", options_for_select(have_stock_options, selected: taobao_url.is_have_stock_before_type_cast), class: have_stock_class
-                  .d-block{style: 'margin-left: 80px; margin-right: 197px;'}
+                          %td.text-center.align-middle
+                            .btn.btn-sm.btn-outline-danger.tr_remove_btn
+                              %i.fas.fa-trash-alt
+
+                  .d-block{style: 'margin-left: 80px; margin-right: 250px;'}
                     .btn.btn-sm.btn-outline-success.btn-block.text-center.add-input-btn
                       %i.fas.fa-arrow-alt-circle-up.fa-lg
                       買付先URL追加
           .d-block
-            .btn.btn-sm.btn-outline-warning.text-center.add-input-btn{title: 'セット商品の場合などで登録したい場合は、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+            .btn.btn-sm.btn-outline-warning.text-center.add-item-unit-btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
               商品追加
               %i.fas.fa-long-arrow-alt-right
 
@@ -71,7 +81,18 @@
 :javascript
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()
-    addTrFunction();
+    $('.add-input-btn').on('click', function(e){
+      $add_btn = $(e.target);
+      $this_table = $add_btn.closest('.d-block').prev('.table');
+      addTrFunction($this_table);
+    })
+    $('.add-item-unit-btn').on('click',function(e){
+      $add_item_unit_btn = $(e.target);
+      $d_block = $add_item_unit_btn.closest('.d-block');
+      $item_units = $d_block.prev('.item_units');
+      addItemUnitFunction($item_units);
+      return recursiveAllFunction();
+    })
     recursiveAllFunction();
   });
   // 再起をする必要がある関数群
@@ -79,11 +100,10 @@
     $('.taobao_url_input').change(function(){
       resetTaobaoUrlLink();
     })
-    $('.form-check').on('click', function(e){
+    $('.submit_check_box').on('click', function(e){
       var $this_form_check = $(e.target);
       var $this_item_unit_tbody = $(e.target).closest('.item_unit_tbody');
-      //console.log($this_item_unit_tbody);
-      var $all_form_checks = $this_item_unit_tbody.find('.form-check');
+      var $all_form_checks = $this_item_unit_tbody.find('.submit_check_box');
       // すべてのチェックボックスのチェックを外す
       $all_form_checks.prop('checked', false);
       // 今回のチェックボックスのチェックを入れる
@@ -101,6 +121,39 @@
           break;
       }
     })
+    $('.tr_remove_btn').on('click', function(e){
+      var $this_tr_remove_btn = $(e.target);
+      var $this_tr = $this_tr_remove_btn.closest('tr');
+      var $this_tbody = $this_tr.parent();
+      var $this_table = $this_tbody.parent();
+      $this_tr.fadeOut('fast').queue(function(e) {
+        $this_tr.remove();
+        var $tbody_tr = $this_tbody.children('tr');
+        if ($tbody_tr.length == 2) {
+          addTrFunction($this_table);
+        }
+      });
+    })
+    $('.item_unit_remove_btn').on('click', function(e){
+      $item_unit_remove_btn = $(e.target)
+      $item_row =  $item_unit_remove_btn.closest('.item-row');
+      removeItemUnitFunction($item_row);
+    })
+    // 商品1,商品2..を整理
+    $(function() {
+      $item_units = $('.item_units');
+      $item_rows = $item_units.children('.item-row') ;
+      $item_rows.each(function(index, item_row){
+        $item_unit_title = $(item_row).find('.item_unit_title');
+        $item_unit_title.html(`商品 ${index + 1}`)
+      })
+    })
+    //$item_units = $('.item_units');
+    //$item_rows = $item_units.children('.item-row') ;
+    //$item_rows.each(function(index, item_row){
+    //  $item_unit_title = $(item_row).find('.item_unit_title');
+    //  $item_unit_title.html(`商品 ${index + 1}`)
+    //})
   }
   function resetTaobaoUrlLink() {
     $('.item_unit_tbody tr').each(function(index, tr_element) {
@@ -108,57 +161,183 @@
       $(tr_element).find('.fontawsome_taobao_url_link').attr('href', taobao_url);
     })
   }
-  //TaobaoUrlを入力するフォームの1行を追加する関数
-  function addTrFunction() {
-    $('.add-input-btn').on('click', function(e){
+  //TaobaoUrlを入力するフォームの1行を追加する関数 
+  function addTrFunction($this_table) {
+    $this_tbody = $this_table.children('.item_unit_tbody');
+    $this_table_last_tr = $this_table.find('tr:last');
+    $this_table_submit_check_box = $this_table_last_tr.find('.submit_check_box');
+    $last_taobao_url_input = $this_table_last_tr.find('.taobao_url_input');
+    // 最後のcheckboxのnameから追加のcheckboxのnameを作る
+    var $this_table_submit_check_box_name = $this_table_submit_check_box.attr('name');
+    var $this_table_submit_check_box_name_slice = $this_table_submit_check_box_name.slice(0, -1);
+    var $this_table_submit_check_box_name_split_array = $this_table_submit_check_box_name_slice.split('[');
+    var last_check_box_id = $this_table_submit_check_box_name_split_array[1];
+    var new_tr_id = String(Number(last_check_box_id) + 1);
+    // 最後のinputのnameから追加のinputのnameを作る
+    var last_taobao_url_input_name = $last_taobao_url_input.attr('name');
+    var last_taobao_url_input_name_split_array = last_taobao_url_input_name.split('][');
+    var new_taobao_url_input_name_split_array = last_taobao_url_input_name_split_array;
+    new_taobao_url_input_name_split_array[2] = String(Number(last_taobao_url_input_name_split_array[2]) + 1);
+    new_taobao_url_input_name_split_array[3] = '0]'
+    var new_taobao_url_input_name = new_taobao_url_input_name_split_array.join('][');
+    // 最後のinputのideから追加のinputのideを作る
+    var last_taobao_url_input_id = $last_taobao_url_input.attr('id');
+    var last_taobao_url_input_id_split_array = last_taobao_url_input_id.split('_');
+    var new_taobao_url_input_id_split_array = last_taobao_url_input_id_split_array;
+    new_taobao_url_input_id_split_array[4] = String(Number(last_taobao_url_input_id_split_array[4]) + 1);
+    new_taobao_url_input_id_split_array[5] = "0";
+    var new_taobao_url_input_id = new_taobao_url_input_id_split_array.join('_');
+    var add_new_input_html =`
+      <tr>
+      <td class="text-center align-middle">
+      <input type="checkbox" name="first_candidate_select[${new_tr_id}]" id="first_candidate_select_${new_tr_id}" value="true" class="submit_check_box">
+      </td>
+      <td class="text-center align-middle">
+      <div class="input-group">
+      <input type="text" name="${new_taobao_url_input_name}" id="${new_taobao_url_input_id}" class="form-control taobao_url_input">
+      <div class="input-group-append">
+      <span class="input-group-text" id="basic-addon2">
+      <a target="_blank" class="fontawsome_taobao_url_link" href=""><i class="fas fa-external-link-alt"></i>
+      </a></span>
+      </div>
+      </div>
+      </td>
+      <td class="text-center align-middle">
+      <select name="have_stock[${new_tr_id}]" id="have_stock_${new_tr_id}" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
+      <option value="1">在庫無し</option></select>
+      </td>
+      <td class="text-center align-middle">
+      <div class="btn btn-sm btn-outline-danger tr_remove_btn">
+      <i class="fas fa-trash-alt"></i>
+      </div>
+      </td>
+      </tr>
+    `
+    $this_tbody.append(add_new_input_html);
+    return recursiveAllFunction();
+  }
+  function addItemUnitFunction($item_units){
+    var $last_item_unit = $item_units.children('.item-row:last');
+    var $a_url_input_of_last_item_unit = $last_item_unit .find('.taobao_url_input:first');
+    var $name_of_a_url_input = $a_url_input_of_last_item_unit.attr('name');
+    var $name_of_a_url_input_array = $name_of_a_url_input.split('][');
+    var last_item_unit_id = $name_of_a_url_input_array[0].slice(-1);
+    var next_item_unit_id = String(Number(last_item_unit_id) + 1);
+    console.log(next_item_unit_id)
+    var new_item_unit_html = `
+      <div class="row mx-2 item-row">
+      <div class="col mb-5">
+      <div class="h5">
+      <div class="d-inline item_unit_title">商品 ${next_item_unit_id + 1}</div>
+      <div class="btn btn-sm btn-outline-danger item_unit_remove_btn">
+      <i class="fas fa-trash-alt"></i>
+      </div>
+      </div>
+      <table class="table table-bordered">
+      <thead class="thead-light">
+      <tr>
+      <th class="first_candidate_select">第1候補</th>
+      <th>URL</th>
+      <th>在庫</th>
+      <th>削除</th>
+      </tr>
+      </thead>
+      <tbody class="item_unit_tbody">
+      <tr>
+      <td class="text-center align-middle">
+      <input type="checkbox" name="first_candidate_select[0]" id="first_candidate_select_0" value="true" class="submit_check_box">
+      </td>
+      <td class="text-center align-middle">
+      <div class="input-group">
+      <input type="text" name="taobao_url[${next_item_unit_id}][0][0][0]" id="taobao_url_${next_item_unit_id}_0_0_0" class="form-control taobao_url_input">
+      <div class="input-group-append">
+      <span class="input-group-text" id="basic-addon2">
+      <a target="_blank" class="fontawsome_taobao_url_link" href=""><i class="fas fa-external-link-alt"></i>
+      </a></span>
+      </div>
+      </div>
+      </td>
+      <td class="text-center align-middle">
+      <select name="have_stock[0]" id="have_stock_0" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
+      <option value="1">在庫無し</option></select>
+      </td>
+      <td class="text-center align-middle">
+      <div class="btn btn-sm btn-outline-danger tr_remove_btn">
+      <i class="fas fa-trash-alt"></i>
+      </div>
+      </td>
+      </tr>
+      <tr>
+      <td class="text-center align-middle">
+      <input type="checkbox" name="first_candidate_select[1]" id="first_candidate_select_1" value="true" class="submit_check_box">
+      </td>
+      <td class="text-center align-middle">
+      <div class="input-group">
+      <input type="text" name="taobao_url[${next_item_unit_id}][0][1][0]" id="taobao_url_${next_item_unit_id}_0_1_0" class="form-control taobao_url_input">
+      <div class="input-group-append">
+      <span class="input-group-text" id="basic-addon2">
+      <a target="_blank" class="fontawsome_taobao_url_link" href=""><i class="fas fa-external-link-alt"></i>
+      </a></span>
+      </div>
+      </div>
+      </td>
+      <td class="text-center align-middle">
+      <select name="have_stock[1]" id="have_stock_1" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
+      <option value="1">在庫無し</option></select>
+      </td>
+      <td class="text-center align-middle">
+      <div class="btn btn-sm btn-outline-danger tr_remove_btn">
+      <i class="fas fa-trash-alt"></i>
+      </div>
+      </td>
+      </tr>
+      <tr>
+      <td class="text-center align-middle">
+      <input type="checkbox" name="first_candidate_select[2]" id="first_candidate_select_2" value="true" class="submit_check_box">
+      </td>
+      <td class="text-center align-middle">
+      <div class="input-group">
+      <input type="text" name="taobao_url[${next_item_unit_id}][0][2][0]" id="taobao_url_${next_item_unit_id}_0_2_0" class="form-control taobao_url_input">
+      <div class="input-group-append">
+      <span class="input-group-text" id="basic-addon2">
+      <a target="_blank" class="fontawsome_taobao_url_link" href=""><i class="fas fa-external-link-alt"></i>
+      </a></span>
+      </div>
+      </div>
+      </td>
+      <td class="text-center align-middle">
+      <select name="have_stock[2]" id="have_stock_2" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
+      <option value="1">在庫無し</option></select>
+      </td>
+      <td class="text-center align-middle">
+      <div class="btn btn-sm btn-outline-danger tr_remove_btn">
+      <i class="fas fa-trash-alt"></i>
+      </div>
+      </td>
+      </tr>
+      </tbody>
+      </table>
+      <div class="d-block" style="margin-left: 80px; margin-right: 250px;">
+      <div class="btn btn-sm btn-outline-success btn-block text-center add-input-btn add-input-btn-${next_item_unit_id}">
+      <i class="fas fa-arrow-alt-circle-up fa-lg"></i>
+      買付先URL追加
+      </div>
+      </div>
+      </div>
+      </div>
+    `
+    $item_units.append(new_item_unit_html);
+    afterPushButtonToAddTrFunction(`.add-input-btn-${next_item_unit_id}`)
+  }
+  function removeItemUnitFunction($item_row){
+    $item_row.remove();
+    return recursiveAllFunction()
+  }
+  //追加したDOM用のTr追加関数
+  function afterPushButtonToAddTrFunction(add_input_btn_i) {
+    $(add_input_btn_i).on('click', function(e){
       $add_btn = $(e.target);
-      $this_table = $add_btn.parent('.d-block').prev('.table');
-      $this_tbody = $this_table.children('.item_unit_tbody');
-      console.log($this_tbody);
-      $this_table_last_tr = $this_table.find('tr:last');
-      $this_table_submit_check_box = $this_table_last_tr.find('.submit_check_box');
-      $last_taobao_url_input = $this_table_last_tr.find('.taobao_url_input');
-      // 最後のcheckboxのnameから追加のcheckboxのnameを作る
-      var $this_table_submit_check_box_name = $this_table_submit_check_box.attr('name');
-      var $this_table_submit_check_box_name_slice = $this_table_submit_check_box_name.slice(0, -1);
-      var $this_table_submit_check_box_name_split_array = $this_table_submit_check_box_name_slice.split('[');
-      var last_check_box_id = $this_table_submit_check_box_name_split_array[1];
-      var new_tr_id = String(Number(last_check_box_id) + 1);
-      // 最後のinputのnameから追加のinputのnameを作る
-      var last_taobao_url_input_name = $last_taobao_url_input.attr('name');
-      var last_taobao_url_input_name_split_array = last_taobao_url_input_name.split('][');
-      var new_taobao_url_input_name_split_array = last_taobao_url_input_name_split_array;
-      new_taobao_url_input_name_split_array[2] = String(Number(last_taobao_url_input_name_split_array[2]) + 1);
-      new_taobao_url_input_name_split_array[3] = '0]'
-      var new_taobao_url_input_name = new_taobao_url_input_name_split_array.join('][');
-      // 最後のinputのideから追加のinputのideを作る
-      var last_taobao_url_input_id = $last_taobao_url_input.attr('id');
-      var last_taobao_url_input_id_split_array = last_taobao_url_input_id.split('_');
-      var new_taobao_url_input_id_split_array = last_taobao_url_input_id_split_array;
-      new_taobao_url_input_id_split_array[4] = String(Number(last_taobao_url_input_id_split_array[4]) + 1);
-      new_taobao_url_input_id_split_array[5] = "0";
-      var new_taobao_url_input_id = new_taobao_url_input_id_split_array.join('_');
-      var add_new_input_html =`
-        <tr>
-        <td class="pl-5 pt-4"><input type="checkbox" name="first_candidate_select[${new_tr_id}]" id="first_candidate_select_${new_tr_id}" value="true" class="form-check submit_check_box"></td>
-        <td>
-        <div class="input-group">
-        <input type="text" name="${new_taobao_url_input_name}" id="${new_taobao_url_input_id}" class="form-control taobao_url_input">
-        <div class="input-group-append">
-        <span class="input-group-text" id="basic-addon2">
-        <a target="_blank" class="fontawsome_taobao_url_link" href=""><i class="fas fa-external-link-alt"></i>
-        </a></span>
-        </div>
-        </div>
-        </td>
-        <td>
-        <select name="have_stock[${new_tr_id}]" id="have_stock_${new_tr_id}" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
-        <option value="1">在庫無し</option></select>
-        </td>
-        </tr>
-      `
-      $this_tbody.append(add_new_input_html);
-      return recursiveAllFunction();
+      $this_table = $add_btn.closest('.d-block').prev('.table');
+      addTrFunction($this_table);
     })
   }
-
