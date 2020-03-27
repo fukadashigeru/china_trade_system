@@ -33,7 +33,6 @@
                   .h5.item_uint_and_trash
                     .d-inline.item_unit_title
                       = ""
-                    -# - if i != 0
                     .btn.btn-sm.btn-outline-danger.item_unit_remove_btn
                       %i.fas.fa-trash-alt
                   %table.table.table-bordered
@@ -397,10 +396,10 @@
     var all_check_situation_array = [];
     $all_submit_check_box.each(function(index, submit_check_box){
       var $submit_check_box = $(submit_check_box);
-      var check_situation = $submit_check_box.attr('checked');
+      var check_situation = $submit_check_box.prop('checked');
       all_check_situation_array.push(check_situation)
     })
-    if ($.inArray('checked', all_check_situation_array) == -1) {
+    if ($.inArray(true, all_check_situation_array) == -1) {
       var $item_unit_tbody = $item_row.find('.item_unit_tbody')
       var $this_all_tr = $item_unit_tbody.find('tr');
       $this_all_tr.each(function(index, tr){
