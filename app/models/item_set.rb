@@ -57,9 +57,13 @@ class ItemSet < ApplicationRecord
               else
                 if taobao_url_url.present?
                   other_taobao_url = current_user.taobao_urls.find_by(url: taobao_url_url)
-                  if other_taobao_url&.id != l.to_i
-                    taobao_url.destroy if taobao_url.item_units.length > 1
-                    taobao_url = other_taobao_url
+                  if other_taobao_url
+                    if other_taobao_url&.id != l.to_i
+                      taobao_url.destroy if taobao_url.item_units.length > 1
+                      taobao_url = other_taobao_url
+                    else
+                      taobao_url.update(url: taobao_url_url)
+                    end
                   else
                     taobao_url.update(url: taobao_url_url)
                   end
