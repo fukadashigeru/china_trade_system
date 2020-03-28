@@ -1,0 +1,33 @@
+.d-block.m-4.pt-4
+  .row
+    .col-5.bg-light.border.border-info.rounded.shadow-sm
+      = form_tag search_item_sets_path, method: :get do
+        .row.my-3
+          .col-lg-4.d-flex.align-items-center
+            %label プラットフォーム
+          .col-lg-8
+            - plat_forms = [['指定なし', 0], ['BUYMA', 1], ['Amazon', 2]]
+            = select_tag :item_no_category, options_for_select(plat_forms)
+        .row.my-3
+          .col-lg-4.d-flex.align-items-center
+            %label No.
+          .col-lg-8
+            = text_field_tag :item_no, nil, class: "form-control d-inline w-100"
+        .row.my-4
+          .col-lg-8.offset-lg-4
+            = submit_tag :検索, class: "form-control btn btn-primary"
+  .row.mt-3
+    .col.bg-light.pt-3
+      .col-4
+        %table.table.table-bordered
+          %thead.thead-light
+            %tr
+              %th.align-middle カテゴリー
+              %th.align-middle 編集
+
+
+
+
+:javascript
+  $("#item_no_category").select2({width:'100%'});
+  $("#plat_form_ids").select2({width:'150'});

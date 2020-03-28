@@ -1,0 +1,23 @@
+#item_sets_modal {
+  .first_candidate_select {
+    width: 80px;
+  }
+}
+
+// input[type=checkbox] {
+//   transform: scale(1.2);
+// }
+
+// input[type=checkbox] {
+//   -ms-transform: scale(1.5, 1.5);
+//   -webkit-transform: scale(1.5, 1.5);
+//   transform: scale(1.5, 1.5);
+// }
+
+option:first-child{
+  background:red;
+  color:#fff;
+}
+option:nth-child(2){
+  background:orange;
+}
