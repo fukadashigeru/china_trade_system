@@ -33,9 +33,8 @@ class ItemSetsController < ApplicationController
     end
 
     def first_candidate_params
-      ## チェックボックスが必ずどれか入れる仕様になったら、下記のコードに変更
-      # params.require(:"first_candidate_select").keys.first
-      params[:"first_candidate_select"]&.keys&.first
+      # params.require(:"first_candidate_select")
+      params[:"first_candidate_select"]
     end
 
     def have_stock_params
