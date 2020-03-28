@@ -11,7 +11,7 @@
       - key = "info" if key == "notice"
       - key = "danger"  if key == "alert"
       .fixed-top
-        %div{class: "alert alert-#{key} alert-dismissible text-center", role: 'alert'}
+        %div{class: "alert alert-#{key} alert-dismissible text-center fade show", role: 'alert'}
           = value
           %button.close{aria: {label: 'Close'}, data: {dismiss: 'alert'}, type: 'button'}
             %span{aria: {hidden: 'true'}} ×
@@ -32,3 +32,5 @@
     -# 2重にモーダル開くとき用のモーダル
     #modal-overlay.modal.fade{role: 'dialog', aria: {hidden: 'true'}, data: {backdrop: 'overlay'}}
 
+:javascript
+  $('.alert-success').delay(1500).fadeOut("slow");
