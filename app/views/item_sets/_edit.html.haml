@@ -22,8 +22,7 @@
                   = link_to @item_set.shop_url, :target=>["_blank"] do
                     = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
                     = "-"
-                    = @item_set.item_no
-              
+                    = @item_set.item_no 
           %br
           .h4 買付先URL
           .item_units
@@ -38,7 +37,9 @@
                   %table.table.table-bordered
                     %thead.thead-light
                       %tr
-                        %th.first_candidate_select 第1候補
+                        %th.first_candidate_select.text-center
+                          優先
+                          %i.fas.fa-question-circle{title: '優先的に購入してほしい店舗に、1つだけチェックをいれてください。', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
                         %th URL
                         %th 在庫
                         %th 削除
@@ -243,7 +244,10 @@
       <table class="table table-bordered">
       <thead class="thead-light">
       <tr>
-      <th class="first_candidate_select">第1候補</th>
+      <th class="first_candidate_select text-center">
+      優先
+      <i class="fas fa-question-circle" data-delay-hide="100" data-delay-show="200" data-placement="top" data-toggle="tooltip" title="" data-original-title="優先的に購入してほしい店舗に、1つだけチェックをいれてください。"></i>
+      </th>
       <th>URL</th>
       <th>在庫</th>
       <th>削除</th>
@@ -335,6 +339,7 @@
     `
     $item_units.append(new_item_unit_html);
     afterPushButtonToAddTrFunction(`.add-input-btn-${next_item_unit_id}`)
+    $('[data-toggle="tooltip"]').tooltip()
   }
   function removeItemUnitFunction($item_row){
     $item_row.remove();

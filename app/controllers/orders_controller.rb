@@ -24,7 +24,6 @@ class OrdersController < ApplicationController
 
   def edit
     @order = current_user.japanese_retailer_orders.find(params[:id])
-    # @order.pictures.new()
   end
 
   # POST /orders
