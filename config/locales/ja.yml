@@ -1,0 +1,18 @@
+---
+ja:
+  hello: "こんにちは"
+  activerecords: "アクティ具レコード"
+  activerecord:
+    errors:
+    models:
+    attributes:
+      order:
+      item_set:
+        item_no_category:
+          unspecified: "指定無し"
+          buyma: "BUYMA"
+          amazon: "AMAZON"
+      taobao_url:
+        is_have_stock:
+          have_stock: "在庫有り"
+          not_have_stock: "在庫無し"

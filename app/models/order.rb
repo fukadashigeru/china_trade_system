@@ -12,16 +12,26 @@ class Order < ApplicationRecord
   accepts_nested_attributes_for :pictures
   belongs_to :japanese_retailer, class_name: 'User'
   belongs_to :chinese_buyer, class_name: 'User'
+  belongs_to :item_set, optional: true
 
   def self.import(file, japanese_retailer, chinese_buyer)
     csv_text = file.read
     encoding_type = NKF.guess(csv_text).to_s
     csv_utf8 = Kconv.toutf8(csv_text)
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
+      next if row["商品ID"].nil?
+      item_set = ItemSet.find_or_initialize_by(
+        user_id: japanese_retailer.id,
+        item_no_category: 1,
+        item_no: row["商品ID"]
+      )
+      item_set.assign_attributes(
+        item_set_name: row["商品名"],
+        shop_url: "https://www.buyma.com/item/" + row["商品ID"] + "/"
+      )
+      item_set.save!
       obj = find_or_initialize_by(trade_no: row["取引ID"])
       obj.assign_attributes(
-        item_no: row["商品ID"],
-        item_name: row["商品名"],
         quantity: row["受注数"],
         price: row["価格"],
         trade_no: row["取引ID"],
@@ -33,7 +43,8 @@ class Order < ApplicationRecord
         customer_remark: row["連絡事項"],
         japanese_retailer_remark: row["受注メモ"],
         japanese_retailer_id: japanese_retailer.id,
-        chinese_buyer_id: chinese_buyer.id
+        chinese_buyer_id: chinese_buyer.id,
+        item_set_id: item_set.id
       )
       obj.save!
     end
