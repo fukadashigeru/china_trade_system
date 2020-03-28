@@ -11,7 +11,7 @@ class ItemSet < ApplicationRecord
       [[item_unit, 3.times.map{ item_unit.taobao_urls.build }]].to_h
     else
       #TODO: 間違ってるかも
-      item_units.map do |item_unit|
+      item_units.order(:id).map do |item_unit|
         # taobao_urls_array = item_unit.taobao_urls.map do |taobao_url|
         taobao_urls_array = item_unit.item_unit_taobao_urls.order(:id).map(&:taobao_url).map do |taobao_url|
           taobao_url
@@ -56,10 +56,15 @@ class ItemSet < ApplicationRecord
                 end
               else
                 if taobao_url_url.present?
-                  taobao_url.update(url: taobao_url_url)
+                  other_taobao_url = current_user.taobao_urls.find_by(url: taobao_url_url)
+                  if other_taobao_url&.id != l.to_i
+                    taobao_url.destroy if taobao_url.item_units.length > 1
+                    taobao_url = other_taobao_url
+                  else
+                    taobao_url.update(url: taobao_url_url)
+                  end
                   taobao_url_ids_included_in_params << taobao_url.id
                 else
-                  # item_unit_taobao_url.destroy
                   taobao_url.destroy
                 end
               end
