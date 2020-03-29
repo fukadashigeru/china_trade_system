@@ -3,8 +3,6 @@ require 'csv'
 require 'nkf'
 
 class Order < ApplicationRecord
-  has_many :user_orders
-  has_many :users, through: :user_orders
   has_many :pictures
   has_one :taobao_color_size
   # accepts_nested_attributes_for :taobao_color_size, update_only: true
