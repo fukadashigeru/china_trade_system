@@ -15,16 +15,19 @@
           = value
           %button.close{aria: {label: 'Close'}, data: {dismiss: 'alert'}, type: 'button'}
             %span{aria: {hidden: 'true'}} ×
-    #wrapper.d-flex{style: "overflow-x: scroll;"}
-      / Sidebar
-      = render 'shared/sidebar'
-      / Page Content
-      #page-content-wrapper
-        / Header
-        = render 'shared/header'
-        / Container
-        .container-fluid#container
-          = yield
+    - if user_signed_in?
+      #wrapper.d-flex{style: "overflow-x: scroll;"}
+        / Sidebar
+        = render 'shared/sidebar'
+        / Page Content
+        #page-content-wrapper
+          / Header
+          = render 'shared/header'
+          / Container
+          .container-fluid#container
+            = yield
+    - else
+      = yield
     -# 背面クリックで閉じれるモーダル
     #modal.modal.fade{role: 'dialog', aria: {hidden: 'true'}, tabindex: '-1'}
     -# 背面クリックで閉じれないモーダル
