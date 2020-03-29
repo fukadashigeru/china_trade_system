@@ -16,3 +16,15 @@ ja:
         is_have_stock:
           have_stock: "在庫有り"
           not_have_stock: "在庫無し"
+  devise:
+    confirmations:
+      confirmed: "メールアドレスの認証が完了しました。"
+      signed_up: "本登録が完了しました。"
+    failure:
+      already_authenticated: "既にログインしています。"
+      not_found_in_database: "メールアドレスまたはパスワードが無効です。"
+      unauthenticated: "ログインまたは登録が必要です。"
+      unconfirmed: "本登録を行ってください。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
