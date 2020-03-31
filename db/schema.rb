@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_29_125117) do
+ActiveRecord::Schema.define(version: 2020_03_30_153344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,26 @@ ActiveRecord::Schema.define(version: 2020_03_29_125117) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["actual_item_variety_id"], name: "index_actual_taobao_urls_on_actual_item_variety_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.boolean "is_japanese_retailer_account", default: true, null: false
+    t.boolean "is_chinese_buyer_account", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "owner_user_id", null: false
+    t.index ["owner_user_id"], name: "index_companies_on_owner_user_id"
+  end
+
+  create_table "company_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.integer "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_users_on_company_id"
+    t.index ["user_id"], name: "index_company_users_on_user_id"
   end
 
   create_table "item_sets", force: :cascade do |t|
@@ -133,6 +153,9 @@ ActiveRecord::Schema.define(version: 2020_03_29_125117) do
 
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
+  add_foreign_key "companies", "users", column: "owner_user_id"
+  add_foreign_key "company_users", "companies"
+  add_foreign_key "company_users", "users"
   add_foreign_key "item_sets", "users"
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"

@@ -11,4 +11,6 @@ class User < ApplicationRecord
   has_many :item_sets
   accepts_nested_attributes_for :japanese_retailer_orders
   has_many :taobao_urls
+  has_many :company_users
+  has_many :companies, through: :company_users
 end

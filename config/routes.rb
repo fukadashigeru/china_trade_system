@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root to: 'orders#index' # root toはroutes.rbの末尾に記載する。
   devise_for :users
+  resources :users
   # devise_for :users, :controllers => {
   #   :registrations => 'users/registrations',
   #   :sessions => 'users/sessions'   
@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :articles
   resources :pictures
   resources :taobao_color_sizes, only: %i[new create edit update]
-  resources :orders do
+  resources :japanese_retailer_orders do
     collection do
       get :edit_all
       patch :update_all
@@ -22,10 +22,19 @@ Rails.application.routes.draw do
   end
   resources :order_csv_imports, only: %i[index]
   resources :order_manual_inputs, only: %i[new create]
+  resources :companies do
+    collection do
+      get :login
+      get :logout
+    end
+  end
   resources :item_sets do
     collection do
       get :search
     end
   end
+
+  root to: 'users#index' # root toはroutes.rbの末尾に記載する。
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
