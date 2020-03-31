@@ -1,0 +1,53 @@
+.row.mt-4
+  .col
+    .d-inline-block
+      .h5 自分がオーナーの会社
+    .d-inline-block
+      = link_to new_company_path, remote: true, class: "btn btn-sm btn-success" do
+        会社作成
+        %i.far.fa-plus-square
+    %table.table.table-bordered.mt-1
+      %thead.thead-light
+        %tr
+          %th 会社名
+          %th アカウントタイプ
+          %th メンバー
+          %th 編集
+          %th ログイン
+      %tbody
+        - @owner_company_users.each do |company_user|
+          %tr
+            %td= company_user.company&.name
+            %td
+            %td= company_user.company.members.map(&:name)
+            %td
+              = link_to root_path, class: "btn btn-primary" do
+                編集
+                %i.fas.fa-edit.fa-lg
+            %td
+              = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
+                ログイン
+                %i.fas.fa-sign-in-alt.fa-lg
+.row.mt-5
+  .col
+    .h5 所属会社
+    %table.table.table-bordered
+      %thead.thead-light
+        %tr
+          %th 会社名
+          %th アカウントタイプ
+          %th オーナー
+          %th 編集
+          %th ログイン
+      %tbody
+        %tr
+          %td
+          %td
+          %td
+          %td
+          %td
+
+.row
+  .col-2
+    = link_to "ログアウト", logout_companies_path, class: "btn btn-danger"
+            

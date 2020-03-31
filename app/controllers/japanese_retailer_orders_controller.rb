@@ -1,10 +1,12 @@
-class OrdersController < ApplicationController
+class JapaneseRetailerOrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_current_cumpany
   
   # GET /orders
   # GET /orders.json
   def index
     @orders = current_user.japanese_retailer_orders.order(id: "ASC")
+    session[:current_order_id] = @orders.first.id
   end
 
   # GET /orders/1
@@ -57,10 +59,10 @@ class OrdersController < ApplicationController
     #モーダルページで、保存済みのpictureのidがparamsに乗ってこなかったら、削除する
     @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
-      redirect_to orders_path
+      redirect_to japanese_retailer_orders_path
     else
       flash[:alert] = '保存できませんでした。'
-      redirect_to orders_path
+      redirect_to japanese_retailer_orders_path
     end
   end
 

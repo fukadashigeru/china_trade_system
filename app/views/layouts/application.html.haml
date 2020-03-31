@@ -15,7 +15,7 @@
           = value
           %button.close{aria: {label: 'Close'}, data: {dismiss: 'alert'}, type: 'button'}
             %span{aria: {hidden: 'true'}} ×
-    - if user_signed_in?
+    - if user_signed_in? && current_company
       #wrapper.d-flex{style: "overflow-x: scroll;"}
         / Sidebar
         = render 'shared/sidebar'
@@ -26,6 +26,11 @@
           / Container
           .container-fluid#container
             = yield
+    - elsif user_signed_in? && !current_company
+      #companies_wrapper
+        = render 'shared/header'
+        .container#container
+          = yield
     - else
       = yield
     -# 背面クリックで閉じれるモーダル

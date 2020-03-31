@@ -6,6 +6,10 @@ ja:
     errors:
     models:
     attributes:
+      user:
+        account_type:
+          china_buyer: "中国代行業者"
+          orderer: "日本卸売業者"
       order:
       item_set:
         item_no_category:

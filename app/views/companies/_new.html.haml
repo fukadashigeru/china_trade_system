@@ -1,0 +1,16 @@
+.modal-dialog
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h4#exampleModalLabel.modal-title 自分がオーナーの会社登録
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      = form_for @company do |f|
+        = f.hidden_field :owner_user_id, value: current_user.id
+        = f.text_field :name, class: 'form-control'
+        = f.submit '登録', class: 'btn btn-primary form-control'
+
