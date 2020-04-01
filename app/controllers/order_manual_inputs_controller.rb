@@ -1,13 +1,13 @@
 class OrderManualInputsController < ApplicationController
   def new
-    @orders = 5.times.map { current_user.japanese_retailer_orders.build }
+    @orders = 5.times.map { current_company.japanese_retailer_orders.build }
   end
 
   def create
     params[:submit_true].keys.each do |i|
-      current_user.japanese_retailer_orders.create(order_params(i))
+      current_company.japanese_retailer_orders.create(order_params(i))
     end
-    redirect_to "/"
+    redirect_to japanese_retailer_orders_path
   end
 
   private
