@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     collection do
       get :login
       get :logout
+      get :new_invite_user
+      post :create_invite_user
     end
   end
   resources :item_sets do
