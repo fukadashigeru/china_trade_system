@@ -1,10 +1,11 @@
-class OrdersController < ApplicationController
+class JapaneseRetailerOrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_current_cumpany
   
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.japanese_retailer_orders.order(id: "ASC")
+    @orders = current_company.japanese_retailer_orders.order(id: "ASC")
   end
 
   # GET /orders/1
@@ -23,7 +24,7 @@ class OrdersController < ApplicationController
   # end
 
   def edit
-    @order = current_user.japanese_retailer_orders.find(params[:id])
+    @order = current_company.japanese_retailer_orders.find(params[:id])
   end
 
   # POST /orders
@@ -57,10 +58,11 @@ class OrdersController < ApplicationController
     #モーダルページで、保存済みのpictureのidがparamsに乗ってこなかったら、削除する
     @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
-      redirect_to orders_path
+      flash[:success] = "保存できました"
+      redirect_to japanese_retailer_orders_path
     else
       flash[:alert] = '保存できませんでした。'
-      redirect_to orders_path
+      redirect_to japanese_retailer_orders_path
     end
   end
 
@@ -75,9 +77,9 @@ class OrdersController < ApplicationController
   end
 
   def import
-    chinese_buyer = User.find(params[:chinese_buyer_id])
-    @orders = Order.import(params[:csv_file], current_user, chinese_buyer)
-    redirect_to "/"
+    chinese_buyer = Company.find(params[:chinese_buyer_id])
+    @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
+    redirect_to japanese_retailer_orders_path
   end
 
   private

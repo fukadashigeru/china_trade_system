@@ -1,0 +1,62 @@
+.row.mt-4
+  .col
+    .h5 自分がオーナーの会社
+    %table.table.table-bordered.mt-1
+      %thead.thead-light
+        %tr
+          %th 会社名
+          %th アカウントタイプ
+          %th メンバー
+          %th メンバー招待
+          %th 編集
+          %th ログイン
+      %tbody
+        - @owner_company_users.each do |company_user|
+          %tr
+            %td= company_user.company&.name
+            %td
+            %td
+              - company_user.company.members.each do |user|
+                .p= user.name
+            %td
+              = link_to new_invite_user_companies_path(company_id: company_user.company.id), remote: true, class: "btn btn-primary" do
+                招待
+            %td
+              = link_to edit_company_path(company_user.company), remote: true, class: "btn btn-primary" do
+                編集
+                %i.fas.fa-edit.fa-lg
+            %td
+              = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
+                ログイン
+                %i.fas.fa-sign-in-alt.fa-lg
+    = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
+      
+.row.mt-5
+  .col
+    .h5 所属会社
+    %table.table.table-bordered
+      %thead.thead-light
+        %tr
+          %th 会社名
+          %th アカウントタイプ
+          %th オーナー
+          %th 編集
+          %th ログイン
+      %tbody
+        -@belong_company_users.each do |company_user|
+          %tr
+            %td= company_user.company&.name
+            %td
+            %td
+              - company_user.company.owner.each do |user|
+                .p= user.name
+            %td
+            %td
+              = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
+                ログイン
+                %i.fas.fa-sign-in-alt.fa-lg
+
+.row
+  .col-2
+    = link_to "ログアウト", logout_companies_path, class: "btn btn-danger"
+            

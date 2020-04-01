@@ -43,20 +43,21 @@
               .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
                 = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1 ks-3"
           %td
-            = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
-            = "-"
-            = order.item_set.item_no
-            %hr/
-            = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
-            %hr/
-            - if order.item_set.item_units.any?
-              = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-light" do
-                買付先情報（マスター）登録済
-                %i.fas.fa-external-link-alt.ml-2
-            - else
-              = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-outline-danger" do
-                買付先情報（マスター）未登録
-                %i.fas.fa-external-link-square-alt.ml-2
+            - if order.item_set
+              = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
+              = "-"
+              = order.item_set&.item_no
+              %hr/
+              = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
+              %hr/
+              - if order.item_set.item_units.any?
+                = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-light" do
+                  買付先情報（マスター）登録済
+                  %i.fas.fa-external-link-alt.ml-2
+              - else
+                = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-outline-danger" do
+                  買付先情報（マスター）未登録
+                  %i.fas.fa-external-link-square-alt.ml-2
           %td{style: "max-width: 180px;"}
             .d-inline-block
               色・サイズ：
@@ -92,7 +93,7 @@
           %td.align-middle
             = ""
           %td.align-middle.text-center
-            = link_to edit_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
+            = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
               %i.far.fa-edit
 
 :javascript

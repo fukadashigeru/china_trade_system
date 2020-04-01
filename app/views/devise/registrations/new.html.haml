@@ -9,7 +9,7 @@
     .field.my-1.py-1
       = f.label :アカウントタイプ
       %br/
-      = f.select :account_type, User.account_types.keys, {}, {autofocus: true, class: "form-control"}
+      = f.select :account_type, User.account_types.keys.map{|k| [I18n.t("activerecord.attributes.user.account_type.#{k}", locale: :ja), k]}, {}, {autofocus: true, class: "form-control"}
     .field.my-1.py-1
       = f.label :Eメール
       %br/
