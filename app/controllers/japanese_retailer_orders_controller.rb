@@ -58,6 +58,7 @@ class JapaneseRetailerOrdersController < ApplicationController
     #モーダルページで、保存済みのpictureのidがparamsに乗ってこなかったら、削除する
     @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
+      flash[:success] = "保存できました"
       redirect_to japanese_retailer_orders_path
     else
       flash[:alert] = '保存できませんでした。'
