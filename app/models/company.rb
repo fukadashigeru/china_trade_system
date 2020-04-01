@@ -1,6 +1,8 @@
 class Company < ApplicationRecord
   has_many :company_users
   has_many :users, through: :company_users
+  has_many :item_sets
+  has_many :taobao_urls
   enum role: { owner: 0, manager: 1, staff: 2 }
   has_many :japanese_retailer_orders, class_name: 'Order', :foreign_key => 'japanese_retailer_id'
   has_many :chinese_buyer_orders, class_name: 'Order', :foreign_key => 'chinese_buyer_id'
