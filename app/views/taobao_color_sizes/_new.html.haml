@@ -12,7 +12,7 @@
     $('.delete-btn').removeClass('disabled');
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
-    var empty_a_tag = `<a class="btn btn-light text-left edit-btn btn-block" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-delay="{&quot;show&quot;:200,&quot;hide&quot;:100}" data-remote="true" href="/taobao_color_sizes/new?order_id=${order_id}" data-original-title="クリックして入力">色・サイズを中国語で入力</a>`;
+    var empty_a_tag = `<a class="btn btn-light text-left edit-btn btn-block" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-delay="{&quot;show&quot;:200,&quot;hide&quot;:100}" data-remote="true" href="/taobao_color_sizes/new?order_id=${order_id}" data-original-title="クリックして入力">中国語で色・サイズなどを入力</a>`;
     $(`#taobao_color_size-order_id-${order_id}`).html(empty_a_tag);
     $('[data-toggle="tooltip"]').tooltip()
     $('[data-toggle="tooltip"]').on('click',function(){
