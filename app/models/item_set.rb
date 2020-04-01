@@ -1,5 +1,5 @@
 class ItemSet < ApplicationRecord
-  belongs_to :user
+  belongs_to :company
   has_many :orders
   has_many :item_units
 
