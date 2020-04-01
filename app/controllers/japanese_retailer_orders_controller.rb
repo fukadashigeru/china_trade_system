@@ -5,8 +5,7 @@ class JapaneseRetailerOrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.japanese_retailer_orders.order(id: "ASC")
-    session[:current_order_id] = @orders.first.id
+    @orders = current_company.japanese_retailer_orders.order(id: "ASC")
   end
 
   # GET /orders/1
@@ -25,7 +24,7 @@ class JapaneseRetailerOrdersController < ApplicationController
   # end
 
   def edit
-    @order = current_user.japanese_retailer_orders.find(params[:id])
+    @order = current_company.japanese_retailer_orders.find(params[:id])
   end
 
   # POST /orders
@@ -77,9 +76,9 @@ class JapaneseRetailerOrdersController < ApplicationController
   end
 
   def import
-    chinese_buyer = User.find(params[:chinese_buyer_id])
-    @orders = Order.import(params[:csv_file], current_user, chinese_buyer)
-    redirect_to "/"
+    chinese_buyer = Company.find(params[:chinese_buyer_id])
+    @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
+    redirect_to japanese_retailer_orders_path
   end
 
   private

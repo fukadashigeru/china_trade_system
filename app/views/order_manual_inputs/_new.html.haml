@@ -15,7 +15,8 @@
           .row.border-secondary
             .col-4.d-flex.align-items-center
               .h5.mr-3 買付担当
-              - china_buyers = User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }
+              -# TODO:Companyのフィルタリングを書く
+              - china_buyers = Company.all.map{ |o| [o.name + " 様", o.id] }
               = select_tag :chinese_buyer_id, options_for_select(china_buyers)
           %br
           %table.table.table-bordered

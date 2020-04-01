@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_30_153344) do
+ActiveRecord::Schema.define(version: 2020_03_31_145427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,8 +95,6 @@ ActiveRecord::Schema.define(version: 2020_03_30_153344) do
     t.string "customer_remark"
     t.string "japanese_retailer_remark"
     t.integer "japanese_retailer_status"
-    t.bigint "japanese_retailer_id"
-    t.bigint "chinese_buyer_id"
     t.integer "estimate_charge"
     t.integer "chinese_buyer_status"
     t.string "chinese_buyer_remark"
@@ -107,6 +105,8 @@ ActiveRecord::Schema.define(version: 2020_03_30_153344) do
     t.integer "other_fee"
     t.integer "tracking_number"
     t.bigint "item_set_id"
+    t.bigint "japanese_retailer_id"
+    t.bigint "chinese_buyer_id"
     t.index ["chinese_buyer_id"], name: "index_orders_on_chinese_buyer_id"
     t.index ["item_set_id"], name: "index_orders_on_item_set_id"
     t.index ["japanese_retailer_id"], name: "index_orders_on_japanese_retailer_id"
@@ -161,9 +161,9 @@ ActiveRecord::Schema.define(version: 2020_03_30_153344) do
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"
   add_foreign_key "item_units", "item_sets"
   add_foreign_key "item_units", "taobao_urls", column: "first_candidate_id"
+  add_foreign_key "orders", "companies", column: "chinese_buyer_id"
+  add_foreign_key "orders", "companies", column: "japanese_retailer_id"
   add_foreign_key "orders", "item_sets"
-  add_foreign_key "orders", "users", column: "chinese_buyer_id"
-  add_foreign_key "orders", "users", column: "japanese_retailer_id"
   add_foreign_key "pictures", "orders"
   add_foreign_key "taobao_color_sizes", "orders"
   add_foreign_key "taobao_urls", "users"
