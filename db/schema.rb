@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_31_145427) do
+ActiveRecord::Schema.define(version: 2020_04_01_004103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,14 +52,14 @@ ActiveRecord::Schema.define(version: 2020_03_31_145427) do
   end
 
   create_table "item_sets", force: :cascade do |t|
-    t.bigint "user_id"
     t.string "item_set_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "item_no"
     t.integer "item_no_category", comment: "指定なし,Buyma,Amazon.."
     t.string "shop_url"
-    t.index ["user_id"], name: "index_item_sets_on_user_id"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_item_sets_on_company_id"
   end
 
   create_table "item_unit_taobao_urls", force: :cascade do |t|
@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_145427) do
   add_foreign_key "companies", "users", column: "owner_user_id"
   add_foreign_key "company_users", "companies"
   add_foreign_key "company_users", "users"
-  add_foreign_key "item_sets", "users"
+  add_foreign_key "item_sets", "companies"
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"
   add_foreign_key "item_units", "item_sets"
