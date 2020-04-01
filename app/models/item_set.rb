@@ -1,5 +1,5 @@
 class ItemSet < ApplicationRecord
-  belongs_to :user
+  belongs_to :company
   has_many :orders
   has_many :item_units
 
@@ -23,7 +23,7 @@ class ItemSet < ApplicationRecord
     end
   end
 
-  def processing_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_user)
+  def processing_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_company)
     item_unit_ids_included_in_params = Array.new
     taobao_url_params.keys.each do |i|
       taobao_url_params[i].keys.each do |j|
@@ -40,7 +40,7 @@ class ItemSet < ApplicationRecord
             ## TODO 空欄でも削除とかせな
             if l == "0"
               next unless taobao_url_url.present?
-              taobao_url = current_user.taobao_urls.find_or_create_by(url: taobao_url_url)
+              taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_url)
               item_unit.item_unit_taobao_urls.create(taobao_url_id: taobao_url.id)
               taobao_url_ids_included_in_params << taobao_url.id
             else
@@ -48,7 +48,7 @@ class ItemSet < ApplicationRecord
               item_unit_taobao_url = ItemUnitTaobaoUrl.find_by(item_unit_id: j.to_i , taobao_url_id: l.to_i)
               if taobao_url.item_units.length > 1
                 if taobao_url_url.present?
-                  taobao_url = current_user.taobao_urls.find_or_create_by(url: taobao_url_url)
+                  taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_url)
                   item_unit_taobao_url.update(taobao_url_id: taobao_url.id)
                   taobao_url_ids_included_in_params << taobao_url.id
                 else
@@ -56,7 +56,7 @@ class ItemSet < ApplicationRecord
                 end
               else
                 if taobao_url_url.present?
-                  other_taobao_url = current_user.taobao_urls.find_by(url: taobao_url_url)
+                  other_taobao_url = current_company.taobao_urls.find_by(url: taobao_url_url)
                   if other_taobao_url
                     if other_taobao_url&.id != l.to_i
                       taobao_url.destroy if taobao_url.item_units.length > 1
@@ -96,7 +96,7 @@ class ItemSet < ApplicationRecord
         #削除処理
         removed_taobao_url_ids = item_unit.taobao_urls.ids - taobao_url_ids_included_in_params
         removed_taobao_url_ids.each do |i|
-          removed_taobao_url = current_user.taobao_urls.find(i)
+          removed_taobao_url = current_company.taobao_urls.find(i)
           if removed_taobao_url.item_units.length > 1
             item_unit_taobao_url = ItemUnitTaobaoUrl.find_by(item_unit_id: item_unit.id, taobao_url_id: i)
             item_unit_taobao_url.destroy

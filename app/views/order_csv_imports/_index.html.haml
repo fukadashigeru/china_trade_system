@@ -10,7 +10,7 @@
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
       / モーダルの本文
-      = form_tag import_orders_path, method: :post, multipart: true do |f|
+      = form_tag import_japanese_retailer_orders_path, method: :post, multipart: true do |f|
         .modal-body
           .row.mb-5
             .col-4.d-flex.align-items-center
@@ -32,7 +32,8 @@
               買付担当：
             .col
               -# - china_buyers = [["全 様", 2], ["王 様", 3], ["陽 様", 4]]
-              - china_buyers = User.where(account_type: 0).map{ |o| [o.name + " 様", o.id] }
+              -# TODO: 修正する
+              - china_buyers = Company.all.map{ |o| [o.name + " 様", o.id] }
               = select_tag(:chinese_buyer_id, options_for_select(china_buyers))
           -# %br/
         .modal-footer

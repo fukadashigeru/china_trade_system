@@ -3,15 +3,13 @@ require 'csv'
 require 'nkf'
 
 class Order < ApplicationRecord
-  has_many :user_orders
-  has_many :users, through: :user_orders
   has_many :pictures
   has_one :taobao_color_size
   # accepts_nested_attributes_for :taobao_color_size, update_only: true
   accepts_nested_attributes_for :taobao_color_size
   accepts_nested_attributes_for :pictures
-  belongs_to :japanese_retailer, class_name: 'User'
-  belongs_to :chinese_buyer, class_name: 'User'
+  belongs_to :japanese_retailer, class_name: 'Company'
+  belongs_to :chinese_buyer, class_name: 'Company'
   belongs_to :item_set, optional: true
 
   def self.import(file, japanese_retailer, chinese_buyer)
@@ -21,7 +19,7 @@ class Order < ApplicationRecord
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
       next if row["商品ID"].nil?
       item_set = ItemSet.find_or_initialize_by(
-        user_id: japanese_retailer.id,
+        company_id: japanese_retailer.id,
         item_no_category: 1,
         item_no: row["商品ID"]
       )

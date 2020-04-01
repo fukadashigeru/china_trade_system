@@ -2,8 +2,8 @@
 
 one:
   user: one
-  order: one
+  company: one
 
 two:
   user: two
-  order: two
+  company: two

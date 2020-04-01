@@ -1,0 +1,33 @@
+.modal-dialog
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h4#exampleModalLabel.modal-title 自分がオーナーの会社登録
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      = form_tag company_path(@company), method: :put do
+        = @company.name
+        - users = User.all.order(:id).map{|user| [user.name, user.id] }
+        -# - users = User.all
+        = select_tag :users, options_for_select(users, selected: nil), {multiple: true, class: "form-control"}
+        = submit_tag "保存", class: "btn btn-primary form-control"
+  -# .row
+  -#   = form_tag({}, method: "get", id: "operations") do
+  -#     .col-md-3
+  -#       %label
+  -#         分析年度
+  -#       = select_tag(:fyear_id,
+  -#         options_for_select(@current_company.fyears.by_year.map { |o| [o.decorate.year_and_month_styled(with_line_breaks: true), o.id] },
+  -#         selected: @selected_fyear&.id))
+  -#     - if @current_company.fyears.by_year.ids.length >= 2
+  -#       .col-md-3
+  -#         %label.vertical-align-top
+  -#           比較対象年度
+  -#         = select_tag:compared_fyear_ids,
+  -#           options_for_select(,
+  -#           selected: ), multiple: true
+        
