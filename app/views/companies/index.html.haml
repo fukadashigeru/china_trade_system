@@ -19,7 +19,7 @@
               - company_user.company.members.each do |user|
                 .p= user.name
             %td
-              = link_to new_invite_user_companies_path(company_id: company_user.company.id), remote: true, class: "btn btn-primary" do
+              = link_to new_invited_company_user_path(company_id: company_user.company.id), remote: true, class: "btn btn-primary" do
                 招待
             %td
               = link_to edit_company_path(company_user.company), remote: true, class: "btn btn-primary" do
