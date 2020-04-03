@@ -6,10 +6,10 @@ Rails.application.routes.draw do
   #   :sessions => 'users/sessions'   
   # } 
 
-  # devise_scope :user do
-  #   get "sign_in", :to => "users/sessions#new"
-  #   get "sign_out", :to => "users/sessions#destroy" 
-  # end
+  devise_scope :user do
+    get "sign_in", :to => "users/sessions#new"
+    get "sign_out", :to => "users/sessions#destroy" 
+  end
   resources :articles
   resources :pictures
   resources :taobao_color_sizes, only: %i[new create edit update]
@@ -26,8 +26,6 @@ Rails.application.routes.draw do
     collection do
       get :login
       get :logout
-      get :new_invite_user
-      post :create_invite_user
     end
   end
   resources :item_sets do
