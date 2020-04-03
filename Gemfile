@@ -38,6 +38,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # User Authorization
 gem 'devise'
+gem 'devise_invitable'
 
 # gem 'bootstrap-sass'
 # gem 'sass-rails'
