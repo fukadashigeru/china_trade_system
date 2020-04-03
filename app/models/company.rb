@@ -1,9 +1,12 @@
 class Company < ApplicationRecord
   has_many :company_users
   has_many :users, through: :company_users
+  has_many :invited_company_users
+  has_many :invited_users, through: :invited_company_users, class_name: 'User'
   has_many :item_sets
   has_many :taobao_urls
-  enum role: { owner: 0, manager: 1, staff: 2 }
+  enum is_japanese_retailer_account: { not_japanese_retailer: 0, japanese_retailer: 1 }
+  enum is_chinese_buyer_account: { not_chinese_buyer: 0, chinese_buyer: 1 }
   has_many :japanese_retailer_orders, class_name: 'Order', :foreign_key => 'japanese_retailer_id'
   has_many :chinese_buyer_orders, class_name: 'Order', :foreign_key => 'chinese_buyer_id'
   accepts_nested_attributes_for :japanese_retailer_orders

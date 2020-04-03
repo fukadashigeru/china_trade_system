@@ -7,10 +7,6 @@
       %br/
       = f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control"
     .field.my-1.py-1
-      = f.label :アカウントタイプ
-      %br/
-      = f.select :account_type, User.account_types.keys.map{|k| [I18n.t("activerecord.attributes.user.account_type.#{k}", locale: :ja), k]}, {}, {autofocus: true, class: "form-control"}
-    .field.my-1.py-1
       = f.label :Eメール
       %br/
       = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"
