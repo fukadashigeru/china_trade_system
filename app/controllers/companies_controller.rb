@@ -3,6 +3,7 @@ class CompaniesController < ApplicationController
     session[:current_company_id] = nil
     @owner_company_users = current_user.company_users.includes(:user).select{|x| x.role == "owner"}
     @belong_company_users = current_user.company_users.includes(:user).select{|x| x.role != "owner"}
+    @invited_company_users = current_user.invited_company_users.includes(:company)
   end
 
   def new
@@ -29,6 +30,17 @@ class CompaniesController < ApplicationController
   end
 
   def update
+    company = current_user.companies.find(params[:id])
+    begin
+      ActiveRecord::Base.transaction do
+        company.update(company_params)
+      end
+      flash[:success] = "会社を更新しました"
+      redirect_to companies_path
+    rescue
+      flash[:danger] = "会社を更新できませんでした"
+      redirect_to companies_path
+    end
   end
 
   def login
@@ -45,24 +57,8 @@ class CompaniesController < ApplicationController
     redirect_to companies_path
   end
 
-  def new_invite_user
-    @company = current_user.companies.find(params[:company_id])
-  end
-
-  def create_invite_user
-    user = User.find_by(email: params[:email])
-    company = current_user.companies.find(params[:company_id])
-    company_users = company.company_users.find_by(user_id: user.id)
-    if company_users
-      company_users.update(role: params[:role].to_i)
-    else
-      company.company_users.create(user_id: user.id, role: params[:role].to_i)
-    end
-    redirect_to companies_path
-  end
-
   private
     def company_params
-      params.require(:company).permit(:name, :owner_user_id)
+      params.require(:company).permit(:name, :owner_user_id, :is_japanese_retailer_account, :is_chinese_buyer_account)
     end 
 end

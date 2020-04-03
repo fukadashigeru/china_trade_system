@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   def ensure_current_cumpany
     return if @current_company
 
-    flash[:danger] = '会社にログインしてください'
+    # flash[:danger] = '会社にログインしてください'
     redirect_to companies_path
   end
 

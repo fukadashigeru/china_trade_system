@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_004906) do
+ActiveRecord::Schema.define(version: 2020_04_03_034542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,11 +33,11 @@ ActiveRecord::Schema.define(version: 2020_04_01_004906) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
-    t.boolean "is_japanese_retailer_account", default: true, null: false
-    t.boolean "is_chinese_buyer_account", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owner_user_id", null: false
+    t.integer "is_japanese_retailer_account", default: 0, null: false
+    t.integer "is_chinese_buyer_account", default: 0, null: false
     t.index ["owner_user_id"], name: "index_companies_on_owner_user_id"
   end
 
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(version: 2020_04_01_004906) do
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_company_users_on_company_id"
     t.index ["user_id"], name: "index_company_users_on_user_id"
+  end
+
+  create_table "invited_company_users", force: :cascade do |t|
+    t.integer "role"
+    t.bigint "company_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_invited_company_users_on_company_id"
+    t.index ["user_id"], name: "index_invited_company_users_on_user_id"
   end
 
   create_table "item_sets", force: :cascade do |t|
@@ -146,7 +156,6 @@ ActiveRecord::Schema.define(version: 2020_04_01_004906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", null: false
-    t.integer "account_type", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -156,6 +165,8 @@ ActiveRecord::Schema.define(version: 2020_04_01_004906) do
   add_foreign_key "companies", "users", column: "owner_user_id"
   add_foreign_key "company_users", "companies"
   add_foreign_key "company_users", "users"
+  add_foreign_key "invited_company_users", "companies"
+  add_foreign_key "invited_company_users", "users"
   add_foreign_key "item_sets", "companies"
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"

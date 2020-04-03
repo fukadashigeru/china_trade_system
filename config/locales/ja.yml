@@ -4,12 +4,29 @@ ja:
   activerecords: "アクティ具レコード"
   activerecord:
     errors:
-    models:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "は既に使用されています。"
+              blank: "が入力されていません。"
+            password:
+              blank: "が入力されていません。"
     attributes:
+      company:
+        is_japanese_retailer_account:
+          japanese_retailer: "買付依頼"
+        is_chinese_buyer_account:
+          chinese_buyer: "買付代行"
       user:
         account_type:
           china_buyer: "中国代行業者"
           orderer: "日本卸売業者"
+      company_user:
+        role:
+          owner: "オーナー"
+          manager: "マネージャー"
+          staff: "スタッフ"
       order:
       item_set:
         item_no_category:
@@ -29,6 +46,16 @@ ja:
       not_found_in_database: "メールアドレスまたはパスワードが無効です。"
       unauthenticated: "ログインまたは登録が必要です。"
       unconfirmed: "本登録を行ってください。"
+      user:
+        invalid: "メールアドレス、またはパスワードが無効です."
     sessions:
       signed_in: "ログインしました。"
       signed_out: "ログアウトしました。"
+    passwords:
+      user:
+        send_instructions: "パスワードのリセット方法を数分以内にメールでご連絡します。"
+  errors:
+    messages:
+      not_saved: "登録・保存できませんでした。"
+      not_found: "は見つかりませんでした。"
+

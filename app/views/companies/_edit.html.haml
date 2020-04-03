@@ -9,25 +9,21 @@
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      = form_tag company_path(@company), method: :put do
-        = @company.name
-        - users = User.all.order(:id).map{|user| [user.name, user.id] }
-        -# - users = User.all
-        = select_tag :users, options_for_select(users, selected: nil), {multiple: true, class: "form-control"}
-        = submit_tag "保存", class: "btn btn-primary form-control"
-  -# .row
-  -#   = form_tag({}, method: "get", id: "operations") do
-  -#     .col-md-3
-  -#       %label
-  -#         分析年度
-  -#       = select_tag(:fyear_id,
-  -#         options_for_select(@current_company.fyears.by_year.map { |o| [o.decorate.year_and_month_styled(with_line_breaks: true), o.id] },
-  -#         selected: @selected_fyear&.id))
-  -#     - if @current_company.fyears.by_year.ids.length >= 2
-  -#       .col-md-3
-  -#         %label.vertical-align-top
-  -#           比較対象年度
-  -#         = select_tag:compared_fyear_ids,
-  -#           options_for_select(,
-  -#           selected: ), multiple: true
+      .modal-body
+        = form_for @company do |f|
+          .form-group.pt-3
+            %label#InputName 会社名
+            = f.text_field :name, class: 'form-control'
+          .p.mt-2 アカウントタイプ
+          .form-check
+            - is_japanese_retailer_account = f.object.is_japanese_retailer_account == "japanese_retailer" ? true : false
+            = f.check_box :is_japanese_retailer_account, {class: 'form-check-input', id: "japaneseRetailerInput", checked: is_japanese_retailer_account }, 'japanese_retailer', 'not_japanese_retailer'
+            %label.form-check-label{for: "japaneseRetailerInput"}= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.japanese_retailer", locale: :ja)
+          .form-check
+            - is_chinese_buyer_account = f.object.is_chinese_buyer_account == "chinese_buyer" ? true : false
+            = f.check_box :is_chinese_buyer_account, {class: 'form-check-input', id: "chineseBuyerInput", checked: is_chinese_buyer_account }, 'chinese_buyer', 'not_chinese_buyer'
+            %label.form-check-label{for: "chineseBuyerInput"}= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.chinese_buyer", locale: :ja)
+          .modal-footer.mt-3
+            = submit_tag "保存", class: "btn btn-primary form-control"
+
         
