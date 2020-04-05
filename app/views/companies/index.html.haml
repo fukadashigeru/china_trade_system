@@ -12,6 +12,7 @@
               %th メンバー招待
               %th 編集
               %th ログイン
+              %th 招待
           %tbody
             - @owner_company_users.each do |company_user|
               - company = company_user.company
@@ -27,7 +28,7 @@
                   - company.members.each do |user|
                     .p= user.name
                   - company.invited_company_users.each do |invited_company_user|
-                    .p= invited_company_user.user.name + " [招待中]"
+                    .p= invited_company_user.user.email + " [招待中]"
                 %td.align-middle
                   = link_to new_invited_company_user_path(company_id: company.id), remote: true, class: "btn btn-primary" do
                     招待
@@ -40,6 +41,8 @@
                   = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                     ログイン
                     %i.fas.fa-sign-in-alt.fa-lg
+                %td.align-middle
+                  = link_to "メンバー招待", new_user_invitation_path(company_id: company.id), class: "btn btn-warning"
       - else
         .h6 自分がオーナーの会社はありません。
       = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
@@ -87,3 +90,6 @@
               %tr
                 %td= invited_company_users.company.name
                 %td= link_to "招待認証", invited_company_user_path(invited_company_users), method: :delete, class: "btn btn-success"
+
+
+

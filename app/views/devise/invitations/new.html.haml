@@ -1,10 +1,16 @@
 %h2= t "devise.invitations.new.header"
 = form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f|
   = render "devise/shared/error_messages", resource: resource
+  = hidden_field_tag :company_id, @company.id
   - resource.class.invite_key_fields.each do |field|
     .field
       = f.label field
       %br/
-      = f.text_field field
+      = f.text_field field, class: "w-25"
+    .field.w-25
+      %label#SelectRole 招待する方の役職
+      - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),v] if k != "owner"}.compact
+      = select_tag "[invited_company_user][role]", options_for_select(company_users_roles), class: "form-control", id: "SelectRole"
+      %small#roleHelp.form-text.text-muted 役職は招待承認後にも変更は可能です
   .actions
     = f.submit t("devise.invitations.new.submit_button")
