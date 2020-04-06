@@ -10,7 +10,7 @@ ja:
       no_invitations_remaining: 'これ以上招待できません。'
       invitation_removed: '招待を取り消しました。'
       new:
-        header: '招待する'
+        header: 'メンバーを招待'
         submit_button: '招待メールを送る'
       edit:
         header: 'パスワードを設定する'
