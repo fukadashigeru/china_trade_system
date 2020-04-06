@@ -6,6 +6,9 @@
       .modal-header
         / モーダルのタイトル
         .h4#exampleModalLabel.modal-title= t "devise.invitations.new.header"
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
       .modal-body
         = form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f|
           = render "devise/shared/error_messages", resource: resource

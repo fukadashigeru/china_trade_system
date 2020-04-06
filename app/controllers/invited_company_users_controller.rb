@@ -1,24 +1,24 @@
 class InvitedCompanyUsersController < ApplicationController
-  def new
-    @company = current_user.companies.find(params[:company_id])
-  end
+  # def new
+  #   @company = current_user.companies.find(params[:company_id])
+  # end
 
-  def create
-    company = current_user.companies.find(params[:company_id])
-    begin
-      ActiveRecord::Base.transaction do
-        user = User.find_by(email: params[:email])
-        if user
-          InvitedCompanyUser.create(invited_company_user_params(user, company))
-          flash[:success] = "招待しました"
-          redirect_to japanese_retailer_orders_path
-        end
-      end
-    rescue
-      flash[:danger] = "招待済みのため招待できませんでした"
-      redirect_to japanese_retailer_orders_path
-    end
-  end
+  # def create
+  #   company = current_user.companies.find(params[:company_id])
+  #   begin
+  #     ActiveRecord::Base.transaction do
+  #       user = User.find_by(email: params[:email])
+  #       if user
+  #         InvitedCompanyUser.create(invited_company_user_params(user, company))
+  #         flash[:success] = "招待しました"
+  #         redirect_to japanese_retailer_orders_path
+  #       end
+  #     end
+  #   rescue
+  #     flash[:danger] = "招待済みのため招待できませんでした"
+  #     redirect_to japanese_retailer_orders_path
+  #   end
+  # end
 
   def destroy
     @invite_company_users = current_user.invited_company_users.find(params[:id])

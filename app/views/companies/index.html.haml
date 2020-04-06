@@ -8,11 +8,10 @@
             %tr
               %th 会社名
               %th アカウントタイプ
-              %th メンバー
+              %th{style: "width:330px;"} メンバー
               %th メンバー招待
               %th 編集
               %th ログイン
-              %th 招待
           %tbody
             - @owner_company_users.each do |company_user|
               - company = company_user.company
@@ -26,11 +25,21 @@
                     %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
                 %td.align-middle
                   - company.members.each do |user|
-                    .p= user.name
+                    - if user.confirmed?
+                      .p= user.name ? user.name : "名無し"
+                    - else
+                      .p= user.name ? user.name + " [アカウント未承認]" : "名無し [アカウント未承認]"
                   - company.invited_company_users.each do |invited_company_user|
-                    .p= invited_company_user.user.email + " [招待中]"
+                    - user = invited_company_user.user
+                    - if user.confirmed?
+                      .p= user.name ? user.name + " [招待未承認]" : "名無し [招待未承認]"
+                    - else
+                      .p= user.email + "[招待未承認] [アカウント未承認]"
                 %td.align-middle
-                  = link_to new_invited_company_user_path(company_id: company.id), remote: true, class: "btn btn-primary" do
+                  -# = link_to new_invited_company_user_path(company_id: company.id), remote: true, class: "btn btn-primary" do
+                  -#   招待
+                  -#   %i.fas.fa-address-card
+                  = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
                     招待
                     %i.fas.fa-address-card
                 %td.align-middle
@@ -41,8 +50,8 @@
                   = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                     ログイン
                     %i.fas.fa-sign-in-alt.fa-lg
-                %td.align-middle
-                  = link_to "メンバー招待", new_user_invitation_path(company_id: company.id), class: "btn btn-warning"
+                -# %td.align-middle
+                -#   = link_to "メンバー招待", new_user_invitation_path(company_id: company.id), class: "btn btn-warning"
       - else
         .h6 自分がオーナーの会社はありません。
       = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"

@@ -1,24 +1,24 @@
-.modal-dialog
-  / モーダルのコンテンツ部分
-  .modal-content
-    / モーダルのヘッダー
-    .container
-      .modal-header
-        / モーダルのタイトル
-        .h4#exampleModalLabel.modal-title メンバーを招待
-        / 閉じるアイコン
-        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-      .modal-body
-        = form_tag invited_company_users_path(company_id: @company.id), method: :post do
-          .form-group.pt-3
-            %label#InputEmail 招待する方のemailアドレス
-            = text_field_tag :email, nil, class: "form-control", id: "InputEmail", placeholder: "emailを入力してください"
-            %small#emailHelp.form-text.text-muted 登録済みの方も未登録の方も招待可能です
-          .form-group.py-3
-            %label#SelectRole 招待する方の役職
-            - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),v] if k != "owner"}.compact
-            = select_tag "[invited_company_user][role]", options_for_select(company_users_roles), class: "form-control", id: "SelectRole"
-            %small#roleHelp.form-text.text-muted 役職は招待承認後にも変更は可能です
-          .modal-footer.mt-5
-            = submit_tag :招待, class: "form-control btn btn-primary"
+-# .modal-dialog
+-#   / モーダルのコンテンツ部分
+-#   .modal-content
+-#     / モーダルのヘッダー
+-#     .container
+-#       .modal-header
+-#         / モーダルのタイトル
+-#         .h4#exampleModalLabel.modal-title メンバーを招待
+-#         / 閉じるアイコン
+-#         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+-#           %span{"aria-hidden" => "true"} ×
+-#       .modal-body
+-#         = form_tag invited_company_users_path(company_id: @company.id), method: :post do
+-#           .form-group.pt-3
+-#             %label#InputEmail 招待する方のemailアドレス
+-#             = text_field_tag :email, nil, class: "form-control", id: "InputEmail", placeholder: "emailを入力してください"
+-#             %small#emailHelp.form-text.text-muted 登録済みの方も未登録の方も招待可能です
+-#           .form-group.py-3
+-#             %label#SelectRole 招待する方の役職
+-#             - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),v] if k != "owner"}.compact
+-#             = select_tag "[invited_company_user][role]", options_for_select(company_users_roles), class: "form-control", id: "SelectRole"
+-#             %small#roleHelp.form-text.text-muted 役職は招待承認後にも変更は可能です
+-#           .modal-footer.mt-5
+-#             = submit_tag :招待, class: "form-control btn btn-primary"

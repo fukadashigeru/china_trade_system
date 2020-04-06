@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { confirmations: 'users/confirmations',
-                                    invitations:   'users/invitations'},
+  devise_for :users, controllers: { invitations:   'users/invitations'},
                      path: 'auth',
                      path_names: { sign_in: 'login',
                                    sign_out: 'logout',
