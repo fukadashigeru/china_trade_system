@@ -1,4 +1,6 @@
 class Users::InvitationsController < Devise::InvitationsController
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   def new
     @company = current_user.companies.find(params[:company_id])
     super
@@ -49,8 +51,19 @@ class Users::InvitationsController < Devise::InvitationsController
     super
   end
 
+  protected
+  def configure_permitted_parameters
+    #strong parametersを設定し、fname、gnameを許可
+    devise_parameter_sanitizer.permit(:invite, keys: [:name])
+    devise_parameter_sanitizer.permit(:accept_invitation, keys: [:name])
+  end
+
   private
     def invited_company_user_params
       params.require(:invited_company_user).permit(:role)
+    end
+
+    def user_params
+      params.require(:user).permit(:name)
     end
 end

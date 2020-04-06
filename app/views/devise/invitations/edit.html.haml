@@ -1,15 +1,27 @@
-%h2= t "devise.invitations.edit.header"
-= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f|
-  = render "devise/shared/error_messages", resource: resource
-  = f.hidden_field :invitation_token, readonly: true
-  - if f.object.class.require_password_on_accepting
-    .field
-      = f.label :password
-      %br/
-      = f.password_field :password
-    .field
-      = f.label :password_confirmation
-      %br/
-      = f.password_field :password_confirmation
-  .actions
-    = f.submit t("devise.invitations.edit.submit_button")
+-# メンテ済み
+.mx-auto.col-md-4.mt-xl-5.p-5.shadow-lg.bg-white.rounded
+  .h2= t "devise.invitations.edit.header"
+  .div.px-4
+    %hr
+    .field.py-2
+      %label= User.human_attribute_name(:email)
+      %h4
+        %b= resource.email
+    = form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f|
+      = render "devise/shared/error_messages", resource: resource
+      = f.hidden_field :invitation_token, readonly: true
+      - if f.object.class.require_password_on_accepting
+        .field.py-2
+          = f.label :名前
+          %br/
+          = f.text_field :name, class: "form-control"
+        .field.py-2
+          = f.label :password
+          %br/
+          = f.password_field :password, class: "form-control"
+        .field.py-2
+          = f.label :password_confirmation
+          %br/
+          = f.password_field :password_confirmation, class: "form-control"
+      .actions.py-5
+        = f.submit t("devise.invitations.edit.submit_button"), class: "btn btn-primary w-100"
