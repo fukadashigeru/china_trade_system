@@ -2,8 +2,8 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # before_action :set_minimum_password_length, only: [:show, :confirm]
 
   def create
-    resource = User.find_by(email:params[:user][:email])
-    if resource&.invitation_token.nil?
+    user = User.find_by(email:params[:user][:email])
+    if user&.invitation_token.nil?
       super
     else
       flash[:danger] = "保留中の招待からアカウントを作成してください。"
