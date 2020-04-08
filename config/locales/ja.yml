@@ -10,7 +10,10 @@ ja:
             email:
               taken: "は既に使用されています。"
               blank: "が入力されていません。"
+              already_confirmed: "は既に登録済みです。ログインしてください"
             password:
+              blank: "が入力されていません。"
+            confirmation_token:
               blank: "が入力されていません。"
     attributes:
       company:
@@ -58,4 +61,3 @@ ja:
     messages:
       not_saved: "登録・保存できませんでした。"
       not_found: "は見つかりませんでした。"
-
