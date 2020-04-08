@@ -6,7 +6,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     if user&.invitation_token.nil?
       super
     else
-      flash[:danger] = "保留中の招待からアカウントを作成してください。"
+      flash[:danger] = I18n.t('devise.failure.invitation_unaccepted')
       redirect_to new_user_confirmation_path
     end
   end
