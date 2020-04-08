@@ -6,11 +6,11 @@
     .field.my-2.py-2
       = f.label :お名前（本名）
       %br/
-      = f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control"
+      = f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control", required: :true
     .field.my-2.py-2
       = f.label :Eメール
       %br/
-      = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"
+      = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: :true
     .text-right.small.pt-5
       = render "devise/shared/links"
     .actions.center-block.text-center.mt-xl-5.mb-2

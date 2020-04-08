@@ -5,7 +5,7 @@
     .field.my-4.py-2
       = f.label :Eメール
       %br/
-      = f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "form-control"
+      = f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "form-control", required: :true
     .actions.mb-4
       = f.submit "登録用認証メールを再送する", class: "btn btn-primary w-100"
   .text-right.small

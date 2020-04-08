@@ -13,18 +13,7 @@ ja:
         header: 'メンバーの招待'
         submit_button: '招待メールを送る'
       edit:
-        header: 'アカウントの登録'
-        submit_button: 'アカウントを登録する'
-    confirmations:
-      user:
-        send_instructions: '認証用メールが送信されました。'
-        # send_instructions: '認証用メールが送信されました。'
-    registrations:
-      user:
-        signed_up_but_unconfirmed:  '確認メールを登録したメールアドレス宛に送信しました。リンクを開いてアカウントを有効にして下さい。'
-    auth:
-      confirmation:
-        show: 'アカウントの登録'
+        header: '招待からのアカウントの登録'
         submit_button: 'アカウントを登録する'
     mailer:
       invitation_instructions:
