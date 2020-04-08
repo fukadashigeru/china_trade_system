@@ -13,7 +13,7 @@
           - resource.class.invite_key_fields.each do |field|
             .field.form-group.pt-2
               = f.label field
-              = f.text_field field, class: "form-control w-75", placeholder: "招待する人の#{field}を入力してください"
+              = f.text_field field, class: "form-control w-75", placeholder: "招待する人の#{field}を入力してください", required: :true
           .field.form-group.py-2
             %label#SelectRole 招待する方の役職
             - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),v] if k != "owner"}.compact

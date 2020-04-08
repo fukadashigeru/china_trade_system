@@ -1,6 +1,16 @@
 class Users::ConfirmationsController < Devise::ConfirmationsController
   # before_action :set_minimum_password_length, only: [:show, :confirm]
 
+  def create
+    resource = User.find_by(email:params[:user][:email])
+    if resource&.invitation_token.nil?
+      super
+    else
+      flash[:danger] = "保留中の招待からアカウントを作成してください。"
+      redirect_to new_user_confirmation_path
+    end
+  end
+
   def show
     current_resource = send(:"current_#{resource_name}")
     prev_resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key) if current_resource
@@ -12,11 +22,16 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   def confirm
     confirmation_token = params[resource_name][:confirmation_token]
     self.resource = resource_class.find_by!(confirmation_token: confirmation_token)
-    if resource.update(confirm_params)
-      self.resource = resource_class.confirm_by_token(confirmation_token)
-      set_flash_message :notice, :signed_up
-      sign_in_and_redirect(resource_name, resource)
+    if resource.invitation_token.nil?
+      if resource.update(confirm_params)
+        self.resource = resource_class.confirm_by_token(confirmation_token)
+        set_flash_message :notice, :signed_up
+        sign_in_and_redirect(resource_name, resource)
+      else
+        render action: 'show'
+      end
     else
+      flash[:danger] = "保留中の招待からアカウントを作成してください。"
       render action: 'show'
     end
   end

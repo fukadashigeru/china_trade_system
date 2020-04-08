@@ -1,8 +1,6 @@
 -# メンテ済み
 .mx-auto.col-md-4.mt-xl-5.p-5.shadow-lg.bg-white.rounded
   .h2= t "devise.invitations.edit.header"
-  .h6= "招待メール一発目"
-  .h6= "edit"
   .div.px-4
     %hr
     .field.py-2
@@ -16,14 +14,14 @@
         .field.py-2
           = f.label :名前
           %br/
-          = f.text_field :name, class: "form-control"
+          = f.text_field :name, class: "form-control", required: :true
         .field.py-2
           = f.label :password
           %br/
-          = f.password_field :password, class: "form-control"
+          = f.password_field :password, class: "form-control", required: :true
         .field.py-2
           = f.label :password_confirmation
           %br/
-          = f.password_field :password_confirmation, class: "form-control"
+          = f.password_field :password_confirmation, class: "form-control", required: :true
       .actions.py-5
         = f.submit t("devise.invitations.edit.submit_button"), class: "btn btn-primary w-100"
