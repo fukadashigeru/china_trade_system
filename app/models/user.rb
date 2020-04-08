@@ -15,4 +15,9 @@ class User < ApplicationRecord
   scope :confirmed, -> do
     where.not(confirmed_at: nil)
   end
+
+  # パスワード無しで仮登録できるようオーバーライド
+  def password_required?
+    super && confirmed?
+  end
 end

@@ -1,24 +1,17 @@
 .mx-auto.col-md-4.mt-xl-5.p-5.shadow-lg.bg-white.rounded
-  %h4.my-1.py-1 アカウント登録
+  .h2.my-1.py-1= (t "devise.auth.confirmation.show") + " [STEP-1]"
+  %hr
   = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = render "devise/shared/error_messages", resource: resource
-    .field.my-1.py-1
+    .field.my-2.py-2
       = f.label :お名前（本名）
       %br/
       = f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control"
-    .field.my-1.py-1
+    .field.my-2.py-2
       = f.label :Eメール
       %br/
       = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"
-    .field.my-1.py-1
-      = f.label :パスワード
-      %br/
-      = f.password_field :password, autocomplete: "new-password", placeholder: "#{@minimum_password_length}桁以上", class: "form-control"
-    .field.my-1.py-1
-      = f.label :パスワード（確認用）
-      %br/
-      = f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"
-    .text-right.small
+    .text-right.small.pt-5
       = render "devise/shared/links"
     .actions.center-block.text-center.mt-xl-5.mb-2
       = f.submit "Create", class: "btn btn-primary w-100"
