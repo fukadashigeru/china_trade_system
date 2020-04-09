@@ -18,9 +18,9 @@
               = f.label field
               = f.text_field field, class: "form-control w-75", placeholder: "招待する人の#{field}を入力してください"
           .field.form-group.py-2
-            %label#SelectRole 招待する方の役職
+            %label#SelectRole 招待する方のメンバーアカウントタイプ
             - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),v] if k != "owner"}.compact
             = select_tag "[invited_company_user][role]", options_for_select(company_users_roles), class: "form-control w-75", id: "SelectRole"
-            %small#roleHelp.form-text.text-muted 役職は招待承認後にも変更は可能です
+            %small#roleHelp.form-text.text-muted メンバーアカウントタイプは招待承認後にも変更は可能です
           .modal-footer.mt-3.actions
             = f.submit t("devise.invitations.new.submit_button"), class: "form-control btn btn-primary"
