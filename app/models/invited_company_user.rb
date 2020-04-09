@@ -1,6 +1,7 @@
 class InvitedCompanyUser < ApplicationRecord
   belongs_to :company
   belongs_to :user
+  enum role: { owner: 0, manager: 1, staff: 2}
 
   def validation_save
     invited_company_user = InvitedCompanyUser.find_by(user_id: user_id, company_id: company_id)
