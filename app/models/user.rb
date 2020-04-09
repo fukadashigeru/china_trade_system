@@ -12,14 +12,13 @@ class User < ApplicationRecord
   has_many :invited_company_users
   has_many :invited_companies, through: :invited_company_users, class_name: 'Company'
 
-  validates :password, confirmation: true
-
   scope :confirmed, -> do
     where.not(confirmed_at: nil)
   end
 
   # パスワード無しで仮登録できるようオーバーライド
   def password_required?
-    super && confirmed?
+    return false if new_record?
+    super
   end
 end
