@@ -12,20 +12,20 @@ class Users::InvitationsController < Devise::InvitationsController
     begin
       ApplicationRecord.transaction do
         if already_create_user
-          @invited_company_user = already_create_user.invited_company_users.build(invited_company_user_params).tap do |invited_company_user|
-            invited_company_user.company = @company
+          @company_user = already_create_user.company_users.build(company_user_params).tap do |company_user|
+            company_user.company = @company
           end
-          if @invited_company_user.validation_save
+          if @company_user.save
             flash[:success] = "招待しました"
             redirect_to companies_path
           end
         else
           super do |user|
-            @invited_company_user = user.invited_company_users.build(invited_company_user_params).tap do |invited_company_user|
-              invited_company_user.company = @company
+            @company_user = user.company_users.build(company_user_params).tap do |company_user|
+              company_user.company = @company
             end
             if user.errors.empty?
-              @invited_company_user.validation_save
+              @company_user.save
             else
               render :new
               raise ActiveRecord::Rollback
@@ -59,8 +59,8 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   private
-    def invited_company_user_params
-      params.require(:invited_company_user).permit(:role)
+    def company_user_params
+      params.require(:company_user).permit(:role).merge(invited_accepted: false)
     end
 
     def user_params
