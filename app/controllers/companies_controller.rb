@@ -3,7 +3,6 @@ class CompaniesController < ApplicationController
     session[:current_company_id] = nil
     @owner_company_users = current_user.company_users.includes(:user).select{|x| x.role == "owner"}
     @belong_company_users = current_user.company_users.includes(:user).select{|x| x.role != "owner"}
-    # @invited_company_users = current_user.invited_company_users.includes(:company)
   end
 
   def new
