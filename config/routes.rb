@@ -43,7 +43,7 @@ Rails.application.routes.draw do
       get :search
     end
   end
-
+  resources :company_users
   # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 
