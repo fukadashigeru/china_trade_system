@@ -12,12 +12,14 @@ class CompaniesController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        company = current_user.companies.create(company_params)
-        company_user = current_user.company_users.find_by(company_id: company.id)
-        company_user.update(role: 0)
+        company_user = current_user.company_users.build(role: 0, invited_accepted: true).tap do |company_user|
+          company_user.company = Company.create(company_params)
+        end
+        if company_user.save
+          flash[:success] = "会社を登録しました"
+          redirect_to companies_path
+        end
       end
-      flash[:success] = "会社を登録しました"
-      redirect_to companies_path
     rescue
       flash[:danger] = "会社を登録できませんでした"
       redirect_to companies_path
