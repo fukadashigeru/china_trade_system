@@ -15,7 +15,7 @@
             %label.h5#InputName 会社名
             .mx-3
               = f.text_field :name, class: 'form-control w-50'
-          .h5.mt-2 会社アカウントタイプ
+          .h5.mt-2 会社タイプ
           .mx-3
             .form-check.py-1
               - is_japanese_retailer_account = f.object.is_japanese_retailer_account == "japanese_retailer" ? true : false
