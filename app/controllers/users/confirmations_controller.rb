@@ -1,5 +1,6 @@
 class Users::ConfirmationsController < Devise::ConfirmationsController
   # before_action :set_minimum_password_length, only: [:show, :confirm]
+  before_action :require_no_authentication, only: :new
 
   def create
     user = User.find_by(email:params[:user][:email])
