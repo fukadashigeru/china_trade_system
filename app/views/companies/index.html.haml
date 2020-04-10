@@ -9,7 +9,7 @@
               %tr
                 %th 会社名
                 %th 会社アカウントタイプ
-                %th.th_member メンバー/メンバーアカウントタイプ
+                %th.th_member メンバー
                 %th メンバー招待
                 %th 編集
                 %th ログイン
@@ -26,25 +26,25 @@
                       %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
                   %td.align-middle
                     %table.w-100
+                      %thead
+                        %tr
+                          %th 名前orEメール
+                          %th メンバータイプ
+                          %th　招待承認
                       %tbody
-                        - company.company_users.each do |company_user|
+                        - company_users = company.company_users.order(invited_accepted: "DESC")
+                        - company_users.each do |company_user|
                           - user = company_user.user
                           - role = I18n.t("activerecord.attributes.company_user.role.#{company_user.role}", locale: :ja)
-                          -# .p.text-break= user.name ? user.name + role : user.email + role
                           %tr
-                            %td.w-50.text-break= user.name ? user.name : user.email
-                            %td.w-50.text-break= role
-                        - company.invited_company_users.each do |invited_company_user|
-                          - user = invited_company_user.user
-                          - role =  I18n.t("activerecord.attributes.company_user.role.#{invited_company_user.role}", locale: :ja)
-                          -# .p.text-break= user.name ? user.name + role : user.email + role
-                          %tr
-                            %td.w-50.text-break= user.name ? user.name : user.email
-                            %td.w-50.text-break= role
+                            %td.text-break= user.name ? user.name : user.email
+                            %td.text-break= role
+                            %td.text-break.text-center
+                              - if company_user.invited_accepted
+                                %i.fas.fa-check-circle.fa-lg.text-success
+                              - else
+                                %i.fas.fa-minus-circle.fa-lg.text-danger
                   %td.align-middle
-                    -# = link_to new_invited_company_user_path(company_id: company.id), remote: true, class: "btn btn-primary" do
-                    -#   招待
-                    -#   %i.fas.fa-address-card
                     = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
                       招待
                       %i.fas.fa-address-card
@@ -56,8 +56,6 @@
                     = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                       ログイン
                       %i.fas.fa-sign-in-alt.fa-lg
-                  -# %td.align-middle
-                  -#   = link_to "メンバー招待", new_user_invitation_path(company_id: company.id), class: "btn btn-warning"
         - else
           .h6 自分がオーナーの会社はありません。
         = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
