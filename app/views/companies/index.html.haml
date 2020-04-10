@@ -3,7 +3,7 @@
     .col
       .h5.font-weight-bold 自分がオーナーの会社
       .owner_company_block.ml-4
-        - if @owner_company_users.present?
+        - if @owner_company_users_accepted.present?
           %table.table.table-bordered.mt-1#owner_company_table
             %thead.thead-light
               %tr
@@ -14,7 +14,7 @@
                 %th 編集
                 %th ログイン
             %tbody
-              - @owner_company_users.each do |company_user|
+              - @owner_company_users_accepted.each do |company_user|
                 - company = company_user.company
                 - user = company_user.user
                 %tr
@@ -64,7 +64,7 @@
     .col
       .h5.font-weight-bold 所属会社
       .belong_company_block.ml-4
-        - if  @belong_company_users.present?
+        - if  @belong_company_users_accepted.present?
           %table.table.table-bordered#belong_company_table
             %thead.thead-light
               %tr
@@ -74,7 +74,7 @@
                 %th 編集
                 %th ログイン
             %tbody
-              -@belong_company_users.each do |company_user|
+              - @belong_company_users_accepted.each do |company_user|
                 %tr
                   %td.align-middle= company_user.company&.name
                   %td.align-middle
@@ -88,7 +88,7 @@
                       %i.fas.fa-sign-in-alt.fa-lg
         - else
           .h6 所属会社はありません。
-  -if @invited_company_users.present?
+  -if @company_users_unaccepted.present?
     .row.mt-5
       .col-3
         .h5.font-weight-bold 所属が招待されている会社
@@ -99,10 +99,10 @@
                 %th 会社名
                 %th 招待認証
             %tbody
-              -@invited_company_users.each do |invited_company_users|
+              -@company_users_unaccepted.each do |company_user|
                 %tr
-                  %td= invited_company_users.company.name
-                  %td= link_to "招待認証", invited_company_user_path(invited_company_users), method: :delete, class: "btn btn-success"
+                  %td= company_user.company.name
+                  %td= link_to "招待認証", company_user_path(company_user), method: :put, class: "btn btn-success"
 
 
 

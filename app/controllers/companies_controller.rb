@@ -1,8 +1,9 @@
 class CompaniesController < ApplicationController
   def index
     session[:current_company_id] = nil
-    @owner_company_users = current_user.company_users.includes(:user).select{|x| x.role == "owner"}
-    @belong_company_users = current_user.company_users.includes(:user).select{|x| x.role != "owner"}
+    @owner_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role == "owner"}
+    @belong_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role != "owner"}
+    @company_users_unaccepted = current_user.company_users.where(invited_accepted: false)
   end
 
   def new
