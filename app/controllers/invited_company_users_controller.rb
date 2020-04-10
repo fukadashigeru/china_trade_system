@@ -21,7 +21,7 @@ class InvitedCompanyUsersController < ApplicationController
   # end
 
   def destroy
-    @invite_company_users = current_user.invited_company_users.find(params[:id])
+    # @invite_company_users = current_user.invited_company_users.find(params[:id])
     begin
       ActiveRecord::Base.transaction do
         current_user.company_users.create(

@@ -3,7 +3,7 @@ class CompaniesController < ApplicationController
     session[:current_company_id] = nil
     @owner_company_users = current_user.company_users.includes(:user).select{|x| x.role == "owner"}
     @belong_company_users = current_user.company_users.includes(:user).select{|x| x.role != "owner"}
-    @invited_company_users = current_user.invited_company_users.includes(:company)
+    # @invited_company_users = current_user.invited_company_users.includes(:company)
   end
 
   def new
@@ -42,8 +42,8 @@ class CompaniesController < ApplicationController
         end
         params[:invited_company_user]&.each do |k, v|
           if v == "false"
-            invited_company_user = company.invited_company_users.find(k.to_i)
-            invited_company_user.destroy
+            # invited_company_user = company.invited_company_users.find(k.to_i)
+            # invited_company_user.destroy
           end
         end
       end
