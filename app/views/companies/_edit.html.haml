@@ -37,7 +37,8 @@
                   %th.text-center.align-middle Eメール
                   %th.text-center.align-middle.th_80 招待承認
               %tbody
-                - f.object.company_users.each do |company_user|
+                - company_users = f.object.company_users.order(invited_accepted: "DESC")
+                - company_users.each do |company_user|
                   - user = company_user.user
                   %tr
                     %td.align-middle.text-center
@@ -48,19 +49,10 @@
                     %td.align-middle.text-center
                     %td.align-middle.text-center.text-break= user.email
                     %td.align-middle.text-center
-                      %i.fas.fa-check-circle.fa-lg.text-success
-                - f.object.invited_company_users.each do |invited_company_user|
-                  - user = invited_company_user.user
-                  %tr
-                    %td.align-middle.text-center
-                      - if invited_company_user.role != 'owner'
-                        = hidden_field_tag "[invited_company_user][#{invited_company_user.id}]", false
-                        = check_box_tag "[invited_company_user][#{invited_company_user.id}]", true, class: "form-check-input"
-                    %td.align-middle.text-center= user&.name
-                    %td.align-middle.text-center
-                    %td.align-middle.text-center.text-break= user.email
-                    %td.align-middle.text-center
-                      %i.fas.fa-minus-circle.fa-lg.text-danger
+                      - if company_user.invited_accepted
+                        %i.fas.fa-check-circle.fa-lg.text-success
+                      - else
+                        %i.fas.fa-minus-circle.fa-lg.text-danger
           .modal-footer.mt-3
             = submit_tag "保存", class: "btn btn-primary form-control w-25"
 
