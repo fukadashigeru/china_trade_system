@@ -10,8 +10,13 @@ ja:
             email:
               taken: "は既に使用されています。"
               blank: "が入力されていません。"
+              already_confirmed: "は既に登録済みです。ログインしてください"
             password:
               blank: "が入力されていません。"
+            confirmation_token:
+              blank: "が入力されていません。"
+            password_confirmation:
+              confirmation: "とPasswordの入力が一致しません。"
     attributes:
       company:
         is_japanese_retailer_account:
@@ -41,6 +46,8 @@ ja:
     confirmations:
       confirmed: "メールアドレスの認証が完了しました。"
       signed_up: "本登録が完了しました。"
+      user:
+        send_instructions: '認証用メールが送信されました。'
     failure:
       already_authenticated: "既にログインしています。"
       not_found_in_database: "メールアドレスまたはパスワードが無効です。"
@@ -54,8 +61,15 @@ ja:
     passwords:
       user:
         send_instructions: "パスワードのリセット方法を数分以内にメールでご連絡します。"
+        updated: "パスワードを変更しました。"
+    registrations:
+      user:
+        signed_up_but_unconfirmed:  '確認メールを登録したメールアドレス宛に送信しました。リンクを開いてアカウントを有効にして下さい。'
+    auth:
+      confirmation:
+        show: 'アカウントの登録'
+        submit_button: 'アカウントを登録する'
   errors:
     messages:
       not_saved: "登録・保存できませんでした。"
       not_found: "は見つかりませんでした。"
-

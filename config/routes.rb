@@ -1,15 +1,25 @@
 Rails.application.routes.draw do
-  devise_for :users
-  resources :users
-  # devise_for :users, :controllers => {
-  #   :registrations => 'users/registrations',
-  #   :sessions => 'users/sessions'   
-  # } 
+  devise_for :users, controllers: { confirmations: 'users/confirmations',
+                                    invitations:   'users/invitations',
+                                    passwords:     'users/passwords',
+                                    registrations: 'users/registrations'},
+                     path: 'auth',
+                     path_names: { sign_in: 'login',
+                                   sign_out: 'logout',
+                                   password: 'secret',
+                                   confirmation: 'verification',
+                                   unlock: 'unblock',
+                                   registration: 'register',
+                                   sign_up: 'cmon_let_me_in' }
 
   devise_scope :user do
-    get "sign_in", :to => "users/sessions#new"
-    get "sign_out", :to => "users/sessions#destroy" 
+    # get "sign_in", :to => "users/sessions#new"
+    # get "sign_out", :to => "users/sessions#destroy"
+    patch 'users/verification', to: 'users/confirmations#confirm'
+    get "thanks", to: "users/registrations#thanks"
   end
+
+
   resources :articles
   resources :pictures
   resources :taobao_color_sizes, only: %i[new create edit update]
@@ -33,8 +43,8 @@ Rails.application.routes.draw do
       get :search
     end
   end
-  resources :invited_company_users
-
+  resources :company_users
+  # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

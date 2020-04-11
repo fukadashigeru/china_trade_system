@@ -1,89 +1,109 @@
-.row.mt-4
-  .col
-    .h5.font-weight-bold 自分がオーナーの会社
-    .owner_company_block.ml-4
-      - if @owner_company_users.present?
-        %table.table.table-bordered.mt-1#owner_company_table
-          %thead.thead-light
-            %tr
-              %th 会社名
-              %th アカウントタイプ
-              %th メンバー
-              %th メンバー招待
-              %th 編集
-              %th ログイン
-          %tbody
-            - @owner_company_users.each do |company_user|
-              - company = company_user.company
-              - user = company_user.user
+#companies_index
+  .row.mt-4
+    .col
+      .h5.font-weight-bold 自分がオーナーの会社
+      .owner_company_block.ml-4
+        - if @owner_company_users_accepted.present?
+          %table.table.table-bordered.mt-1#owner_company_table
+            %thead.thead-light
               %tr
-                %td.align-middle= company&.name
-                %td.align-middle
-                  - if company.is_japanese_retailer_account == "japanese_retailer"
-                    %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                  - if company.is_chinese_buyer_account == "chinese_buyer"
-                    %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
-                %td.align-middle
-                  - company.members.each do |user|
-                    .p= user.name
-                  - company.invited_company_users.each do |invited_company_user|
-                    .p= invited_company_user.user.name + " [招待中]"
-                %td.align-middle
-                  = link_to new_invited_company_user_path(company_id: company.id), remote: true, class: "btn btn-primary" do
-                    招待
-                    %i.fas.fa-address-card
-                %td.align-middle
-                  = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
-                    編集
-                    %i.fas.fa-edit.fa-lg
-                %td.align-middle
-                  = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
-                    ログイン
-                    %i.fas.fa-sign-in-alt.fa-lg
-      - else
-        .h6 自分がオーナーの会社はありません。
-      = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
-      
-.row.mt-5
-  .col
-    .h5.font-weight-bold 所属会社
-    .belong_company_block.ml-4
-      - if  @belong_company_users.present?
-        %table.table.table-bordered#belong_company_table
-          %thead.thead-light
-            %tr
-              %th 会社名
-              %th アカウントタイプ
-              %th オーナー
-              %th 編集
-              %th ログイン
-          %tbody
-            -@belong_company_users.each do |company_user|
-              %tr
-                %td.align-middle= company_user.company&.name
-                %td.align-middle
-                %td.align-middle
-                  - company_user.company.owner.each do |user|
-                    .p= user.name
-                %td.align-middle
-                %td.align-middle
-                  = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
-                    ログイン
-                    %i.fas.fa-sign-in-alt.fa-lg
-      - else
-        .h6 所属会社はありません。
--if @invited_company_users.present?
+                %th 会社名
+                %th 会社タイプ
+                %th.th_member メンバー
+                %th メンバー招待
+                %th 編集
+                %th ログイン
+            %tbody
+              - @owner_company_users_accepted.each do |company_user|
+                - company = company_user.company
+                - user = company_user.user
+                %tr
+                  %td.align-middle= company&.name
+                  %td.align-middle
+                    - if company.is_japanese_retailer_account == "japanese_retailer"
+                      %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
+                    - if company.is_chinese_buyer_account == "chinese_buyer"
+                      %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                  %td.align-middle
+                    %table.w-100
+                      %thead
+                        %tr
+                          %th 名前 or Eメール
+                          %th メンバータイプ
+                          %th　招待承認
+                      %tbody
+                        - company_users = company.company_users.order(invited_accepted: "DESC")
+                        - company_users.each do |company_user|
+                          - user = company_user.user
+                          - role = I18n.t("activerecord.attributes.company_user.role.#{company_user.role}", locale: :ja)
+                          %tr
+                            %td.text-break= user.name ? user.name : user.email
+                            %td.text-break= role
+                            %td.text-break.text-center
+                              - if company_user.role != "owner"
+                                - if company_user.invited_accepted
+                                  %i.fas.fa-check-circle.fa-lg.text-success
+                                - else
+                                  %i.fas.fa-minus-circle.fa-lg.text-danger
+                  %td.align-middle
+                    = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
+                      招待
+                      %i.fas.fa-address-card
+                  %td.align-middle
+                    = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
+                      編集
+                      %i.fas.fa-edit.fa-lg
+                  %td.align-middle
+                    = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
+                      ログイン
+                      %i.fas.fa-sign-in-alt.fa-lg
+        - else
+          .h6 自分がオーナーの会社はありません。
+        = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
+        
   .row.mt-5
-    .col-3
-      .h5.font-weight-bold 所属が招待されている会社
+    .col
+      .h5.font-weight-bold 所属会社
       .belong_company_block.ml-4
-        %table.table.table-bordered#belong_company_table
-          %thead.thead-light
-            %tr
-              %th 会社名
-              %th 招待認証
-          %tbody
-            -@invited_company_users.each do |invited_company_users|
+        - if  @belong_company_users_accepted.present?
+          %table.table.table-bordered#belong_company_table
+            %thead.thead-light
               %tr
-                %td= invited_company_users.company.name
-                %td= link_to "招待認証", invited_company_user_path(invited_company_users), method: :delete, class: "btn btn-success"
+                %th 会社名
+                %th アカウントタイプ
+                %th オーナー
+                %th 編集
+                %th ログイン
+            %tbody
+              - @belong_company_users_accepted.each do |company_user|
+                %tr
+                  %td.align-middle= company_user.company&.name
+                  %td.align-middle
+                  %td.align-middle
+                    - company_user.company.owner.each do |user|
+                      .p= user.name
+                  %td.align-middle
+                  %td.align-middle
+                    = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
+                      ログイン
+                      %i.fas.fa-sign-in-alt.fa-lg
+        - else
+          .h6 所属会社はありません。
+  -if @company_users_unaccepted.present?
+    .row.mt-5
+      .col-3
+        .h5.font-weight-bold 所属が招待されている会社
+        .belong_company_block.ml-4
+          %table.table.table-bordered#belong_company_table
+            %thead.thead-light
+              %tr
+                %th 会社名
+                %th 招待認証
+            %tbody
+              -@company_users_unaccepted.each do |company_user|
+                %tr
+                  %td= company_user.company.name
+                  %td= link_to "招待認証", company_user_path(company_user), method: :put, class: "btn btn-success"
+
+
+

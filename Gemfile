@@ -38,6 +38,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # User Authorization
 gem 'devise'
+gem 'devise_invitable'
 
 # gem 'bootstrap-sass'
 # gem 'sass-rails'
@@ -66,6 +67,8 @@ gem 'erb2haml'
 gem 'select2-rails'
 
 gem 'font-awesome-sass'
+
+gem 'letter_opener'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
