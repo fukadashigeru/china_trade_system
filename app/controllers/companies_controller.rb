@@ -42,12 +42,6 @@ class CompaniesController < ApplicationController
             company_user.destroy
           end
         end
-        params[:invited_company_user]&.each do |k, v|
-          if v == "false"
-            # invited_company_user = company.invited_company_users.find(k.to_i)
-            # invited_company_user.destroy
-          end
-        end
       end
       flash[:success] = "会社を更新しました"
       redirect_to companies_path
