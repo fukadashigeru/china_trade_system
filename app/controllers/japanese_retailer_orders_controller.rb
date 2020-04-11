@@ -5,7 +5,7 @@ class JapaneseRetailerOrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_company.japanese_retailer_orders.order(id: "ASC")
+    @orders = current_company.japanese_retailer_orders.includes(:item_set).order(id: "ASC")
   end
 
   # GET /orders/1
