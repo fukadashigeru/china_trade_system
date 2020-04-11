@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_03_034542) do
+ActiveRecord::Schema.define(version: 2020_04_10_154223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,18 +47,10 @@ ActiveRecord::Schema.define(version: 2020_04_03_034542) do
     t.integer "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "invited_accepted", default: false, null: false
     t.index ["company_id"], name: "index_company_users_on_company_id"
+    t.index ["user_id", "company_id"], name: "company_user_unique_index", unique: true
     t.index ["user_id"], name: "index_company_users_on_user_id"
-  end
-
-  create_table "invited_company_users", force: :cascade do |t|
-    t.integer "role"
-    t.bigint "company_id"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_invited_company_users_on_company_id"
-    t.index ["user_id"], name: "index_invited_company_users_on_user_id"
   end
 
   create_table "item_sets", force: :cascade do |t|
@@ -155,8 +147,24 @@ ActiveRecord::Schema.define(version: 2020_04_03_034542) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name", null: false
+    t.string "name"
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.bigint "invited_by_id"
+    t.integer "invitations_count", default: 0
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -165,8 +173,6 @@ ActiveRecord::Schema.define(version: 2020_04_03_034542) do
   add_foreign_key "companies", "users", column: "owner_user_id"
   add_foreign_key "company_users", "companies"
   add_foreign_key "company_users", "users"
-  add_foreign_key "invited_company_users", "companies"
-  add_foreign_key "invited_company_users", "users"
   add_foreign_key "item_sets", "companies"
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"

@@ -1,12 +1,12 @@
 .mx-auto.col-md-4.mt-xl-5.p-5.shadow-lg.bg-white.rounded
-  %h4 パスワードリセット
+  .h2 パスワードリセット
   = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
     = render "devise/shared/error_messages", resource: resource
-    .field.my-4.py-4
+    .field.my-4.py-2
       = f.label :Eメール
       %br/
       = f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control"
-    .actions.center-block.text-center.mb-4
+    .actions.mb-4
       = f.submit "RESET", class: "btn btn-primary w-100"
-    .text-right.small
-      = render "devise/shared/links"
+  .text-right.small
+    = render "devise/shared/links"

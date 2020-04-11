@@ -1,0 +1,27 @@
+-# メンテ済み
+.mx-auto.col-md-4.mt-xl-5.p-5.shadow-lg.bg-white.rounded
+  .h2= (t "devise.auth.confirmation.show") + " [STEP - 2/2]"
+  %hr
+  .div.px-4
+    .field.py-2
+      %label= User.human_attribute_name(:email)
+      %h4
+        %b= resource.email
+      = devise_error_messages!
+      = form_for(resource, as: resource_name, url: users_verification_path(resource)) do |f|
+        = f.hidden_field :confirmation_token
+        .field.py-2
+          = f.label :名前
+          %br/
+          = f.text_field :name, class: "form-control", required: :true
+        .field.py-2
+          = f.label :password
+          %br/
+          = f.password_field :password, class: "form-control", required: :true
+        .field.py-2
+          = f.label :password_confirmation
+          %br/
+          = f.password_field :password_confirmation, class: "form-control", required: :true
+        .actions.py-5
+          = f.submit t("devise.auth.confirmation.submit_button"), class: "btn btn-primary w-100"
+

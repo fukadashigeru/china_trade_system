@@ -1,8 +1,6 @@
 class Company < ApplicationRecord
   has_many :company_users
   has_many :users, through: :company_users
-  has_many :invited_company_users
-  has_many :invited_users, through: :invited_company_users, class_name: 'User'
   has_many :item_sets
   has_many :taobao_urls
   enum is_japanese_retailer_account: { not_japanese_retailer: 0, japanese_retailer: 1 }

@@ -1,29 +1,63 @@
-.modal-dialog
+.modal-dialog.modal-lg#companies_edit
   / モーダルのコンテンツ部分
   .modal-content
     / モーダルのヘッダー
     .container
       .modal-header
         / モーダルのタイトル
-        .h4#exampleModalLabel.modal-title 自分がオーナーの会社登録
+        .h3#exampleModalLabel.modal-title 自分がオーナーの会社編集
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
       .modal-body
         = form_for @company do |f|
           .form-group.pt-3
-            %label#InputName 会社名
-            = f.text_field :name, class: 'form-control'
-          .p.mt-2 アカウントタイプ
-          .form-check
-            - is_japanese_retailer_account = f.object.is_japanese_retailer_account == "japanese_retailer" ? true : false
-            = f.check_box :is_japanese_retailer_account, {class: 'form-check-input', id: "japaneseRetailerInput", checked: is_japanese_retailer_account }, 'japanese_retailer', 'not_japanese_retailer'
-            %label.form-check-label{for: "japaneseRetailerInput"}= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.japanese_retailer", locale: :ja)
-          .form-check
-            - is_chinese_buyer_account = f.object.is_chinese_buyer_account == "chinese_buyer" ? true : false
-            = f.check_box :is_chinese_buyer_account, {class: 'form-check-input', id: "chineseBuyerInput", checked: is_chinese_buyer_account }, 'chinese_buyer', 'not_chinese_buyer'
-            %label.form-check-label{for: "chineseBuyerInput"}= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.chinese_buyer", locale: :ja)
+            %label.h5#InputName 会社名
+            .mx-3
+              = f.text_field :name, class: 'form-control w-50'
+          .h5.mt-2 会社タイプ
+          .mx-3
+            .form-check.py-1
+              - is_japanese_retailer_account = f.object.is_japanese_retailer_account == "japanese_retailer" ? true : false
+              = f.check_box :is_japanese_retailer_account, {class: 'form-check-input', id: "japaneseRetailerInput", checked: is_japanese_retailer_account }, 'japanese_retailer', 'not_japanese_retailer'
+              %label.form-check-label{for: "japaneseRetailerInput"}= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.japanese_retailer", locale: :ja)
+            .form-check.py-1
+              - is_chinese_buyer_account = f.object.is_chinese_buyer_account == "chinese_buyer" ? true : false
+              = f.check_box :is_chinese_buyer_account, {class: 'form-check-input', id: "chineseBuyerInput", checked: is_chinese_buyer_account }, 'chinese_buyer', 'not_chinese_buyer'
+              %label.form-check-label{for: "chineseBuyerInput"}= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.chinese_buyer", locale: :ja)
+          .h5.mt-2 メンバー
+          .mx-3
+            %table.table.table-sm.table_700.table-bordered.table-hover
+              %thead.thead-light
+                %tr
+                  %th.text-center.align-middle.th_80
+                    %i.fas.fa-question-circle{title: '退社させる場合、チェックをはずしてください。', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+                  %th.text-center.align-middle.th_120 名前
+                  %th.text-center.align-middle.th_120 メンバーアカウントタイプ
+                  %th.text-center.align-middle Eメール
+                  %th.text-center.align-middle.th_80 招待承認
+              %tbody
+                - company_users = f.object.company_users.order(invited_accepted: "DESC")
+                - company_users.each do |company_user|
+                  - user = company_user.user
+                  %tr
+                    %td.align-middle.text-center
+                      - if company_user.role != 'owner'
+                        = hidden_field_tag "[company_user][#{company_user.id}]", false
+                        = check_box_tag "[company_user][#{company_user.id}]", true, class: "form-check-input"
+                    %td.align-middle.pl-3= user&.name
+                    %td.align-middle.text-center
+                    %td.align-middle.pl-3.text-break= user.email
+                    %td.align-middle.text-center
+                      - if company_user.role != "owner"
+                        - if company_user.invited_accepted
+                          %i.fas.fa-check-circle.fa-lg.text-success
+                        - else
+                          %i.fas.fa-minus-circle.fa-lg.text-danger
           .modal-footer.mt-3
-            = submit_tag "保存", class: "btn btn-primary form-control"
+            = submit_tag "保存", class: "btn btn-primary form-control w-25"
 
-        
+:javascript
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+  })

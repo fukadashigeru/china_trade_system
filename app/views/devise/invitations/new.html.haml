@@ -1,0 +1,23 @@
+.modal-dialog
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h4#exampleModalLabel.modal-title= t "devise.invitations.new.header"
+      .modal-body
+        = form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f|
+          = render "devise/shared/error_messages", resource: resource
+          = hidden_field_tag :company_id, @company.id
+          - resource.class.invite_key_fields.each do |field|
+            .field.form-group.pt-2
+              = f.label field
+              = f.text_field field, class: "form-control w-75", placeholder: "招待する人の#{field}を入力してください", required: :true
+          .field.form-group.py-2
+            %label#SelectRole 招待する方のメンバーアカウントタイプ
+            - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja), k] if k != "owner"}.compact
+            = select_tag "[company_user][role]", options_for_select(company_users_roles), class: "form-control w-75", id: "SelectRole"
+            %small#roleHelp.form-text.text-muted メンバーアカウントタイプは招待承認後にも変更は可能です
+          .modal-footer.mt-3.actions
+            = f.submit t("devise.invitations.new.submit_button"), class: "form-control btn btn-primary"

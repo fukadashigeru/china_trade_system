@@ -1,9 +1,9 @@
 class CompaniesController < ApplicationController
   def index
     session[:current_company_id] = nil
-    @owner_company_users = current_user.company_users.includes(:user).select{|x| x.role == "owner"}
-    @belong_company_users = current_user.company_users.includes(:user).select{|x| x.role != "owner"}
-    @invited_company_users = current_user.invited_company_users.includes(:company)
+    @owner_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role == "owner"}
+    @belong_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role != "owner"}
+    @company_users_unaccepted = current_user.company_users.where(invited_accepted: false)
   end
 
   def new
@@ -13,12 +13,14 @@ class CompaniesController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        company = current_user.companies.create(company_params)
-        company_user = current_user.company_users.find_by(company_id: company.id)
-        company_user.update(role: 0)
+        company_user = current_user.company_users.build(role: 0, invited_accepted: true).tap do |company_user|
+          company_user.company = Company.create(company_params)
+        end
+        if company_user.save
+          flash[:success] = "会社を登録しました"
+          redirect_to companies_path
+        end
       end
-      flash[:success] = "会社を登録しました"
-      redirect_to companies_path
     rescue
       flash[:danger] = "会社を登録できませんでした"
       redirect_to companies_path
@@ -34,6 +36,12 @@ class CompaniesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         company.update(company_params)
+        params["company_user"]&.each do |k, v|
+          if v == "false"
+            company_user = company.company_users.find(k.to_i)
+            company_user.destroy
+          end
+        end
       end
       flash[:success] = "会社を更新しました"
       redirect_to companies_path
