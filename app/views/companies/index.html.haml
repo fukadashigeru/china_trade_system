@@ -40,10 +40,11 @@
                             %td.text-break= user.name ? user.name : user.email
                             %td.text-break= role
                             %td.text-break.text-center
-                              - if company_user.invited_accepted
-                                %i.fas.fa-check-circle.fa-lg.text-success
-                              - else
-                                %i.fas.fa-minus-circle.fa-lg.text-danger
+                              - if company_user.role != "owner"
+                                - if company_user.invited_accepted
+                                  %i.fas.fa-check-circle.fa-lg.text-success
+                                - else
+                                  %i.fas.fa-minus-circle.fa-lg.text-danger
                   %td.align-middle
                     = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
                       招待

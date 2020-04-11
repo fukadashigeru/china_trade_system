@@ -49,10 +49,11 @@
                     %td.align-middle.text-center
                     %td.align-middle.pl-3.text-break= user.email
                     %td.align-middle.text-center
-                      - if company_user.invited_accepted
-                        %i.fas.fa-check-circle.fa-lg.text-success
-                      - else
-                        %i.fas.fa-minus-circle.fa-lg.text-danger
+                      - if company_user.role != "owner"
+                        - if company_user.invited_accepted
+                          %i.fas.fa-check-circle.fa-lg.text-success
+                        - else
+                          %i.fas.fa-minus-circle.fa-lg.text-danger
           .modal-footer.mt-3
             = submit_tag "保存", class: "btn btn-primary form-control w-25"
 
