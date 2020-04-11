@@ -45,9 +45,9 @@
                       - if company_user.role != 'owner'
                         = hidden_field_tag "[company_user][#{company_user.id}]", false
                         = check_box_tag "[company_user][#{company_user.id}]", true, class: "form-check-input"
-                    %td.align-middle.text-center= user&.name
+                    %td.align-middle.pl-3= user&.name
                     %td.align-middle.text-center
-                    %td.align-middle.text-center.text-break= user.email
+                    %td.align-middle.pl-3.text-break= user.email
                     %td.align-middle.text-center
                       - if company_user.invited_accepted
                         %i.fas.fa-check-circle.fa-lg.text-success
