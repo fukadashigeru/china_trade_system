@@ -10,13 +10,21 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :japanese_retailer_orders
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :company_users
+  has_many :contact_from_self_company_companies, class_name: 'CompanyCompany', :foreign_key => 'contact_from_company_id'
+  has_many :contact_to_self_company_companies, class_name: 'CompanyCompany', :foreign_key => 'contact_to_company_id'
+  
   
   def owner
     owner_company_users = company_users.select{|x| x.role == "owner"}
     owner_company_users.map(&:user)
   end
+
   def members
     members_company_users = company_users.select{|x| x.role != "owner"}
     members_company_users.map(&:user)
+  end
+
+  def trade_companies_array
+    contact_from_self_company_companies.where(contact_status: 0).map(&:contact_to_company) + contact_to_self_company_companies.where(contact_status: 0).map(&:contact_from_company)
   end
 end
