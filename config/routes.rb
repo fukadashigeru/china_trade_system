@@ -46,11 +46,7 @@ Rails.application.routes.draw do
   resources :company_users
   resources :company_companies
   resources :search_companies
-  resources :japanese_retailer_topics
   resources :messages
-  resources :chinese_buyer_companies
-  resources :chinese_buyer_topics
-  resources :chinese_buyer_messages
   resources :company_connects
   resources :topics
   resources :connects
