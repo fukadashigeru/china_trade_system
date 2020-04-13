@@ -5,6 +5,7 @@ require 'nkf'
 class Order < ApplicationRecord
   has_many :pictures
   has_one :taobao_color_size
+  has_many :topics
   # accepts_nested_attributes_for :taobao_color_size, update_only: true
   accepts_nested_attributes_for :taobao_color_size
   accepts_nested_attributes_for :pictures

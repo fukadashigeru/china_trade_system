@@ -1,0 +1,17 @@
+#topics_index
+  .row.mt-4
+    .col
+      .h5.font-weight-bold= @chinese_buyer_company.name + "やりとり"
+      %table.table.table-bordered.mt-1.ml-4.w-75{style: "table-layout:fixed"}
+        %thead.thead-light
+          %tr
+            %th 題目
+            %th メッセージ
+        %tbody
+          - @topic.each do |topic|
+            %tr
+              %td= topic.title
+              %td
+                = link_to japanese_retailer_topic_path(topic), class: 'btn btn-primary' do
+                  %p メッセージ
+

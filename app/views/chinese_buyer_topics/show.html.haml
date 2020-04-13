@@ -1,0 +1,35 @@
+#chinese_buyer_topics_show
+  .row.pt-2
+    .col.text-right
+      - if @company_company.contact_status == 'contact_offer'
+        = link_to company_company_path(@company_company, contact_status: "trade", topic_id: @topic.id), method: :put, class: "btn btn-success" do
+          取引承認
+  - @topic.messages.each do |message|
+    - company_user = message.company_user
+    - company = company_user&.company
+    - user = company_user&.user
+    - if message.content
+      .row.mt-2
+        - if current_company == company
+          .col
+          .col-4.offset-8
+            %p= user.name + " @ " + company.name
+            .rounded.bg-info.text-white
+              .pl-2.py-1
+                .h5= message.content
+            %p= message.created_at.strftime('%Y/%m/%d %H:%M')
+        - else
+          .col-4
+            %p= user.name + " @ " + company.name
+            .rounded.bg-info.text-white
+              .pl-2.py-1
+                .h5= message.content
+            %p= message.created_at.strftime('%Y/%m/%d %H:%M')
+
+  .fixed-bottom.ml_side_width.p-2.bg-light
+    = form_for @message, url: chinese_buyer_messages_path(topic_id: @topic.id) do |f|
+      .row
+        .col-10
+          = f.text_field :content, class: "form-control"
+        .col-2
+          = f.submit "送信", class: "btn btn-primary form-control"

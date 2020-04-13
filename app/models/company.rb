@@ -10,8 +10,8 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :japanese_retailer_orders
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :company_users
-  has_many :contact_from_self_company_companies, class_name: 'CompanyCompany', :foreign_key => 'contact_from_company_id'
-  has_many :contact_to_self_company_companies, class_name: 'CompanyCompany', :foreign_key => 'contact_to_company_id'
+  has_many :japanese_retailer_company_companies, class_name: 'CompanyCompany', :foreign_key => 'japanese_retailer_company_id'
+  has_many :chinese_buyer_company_companies, class_name: 'CompanyCompany', :foreign_key => 'chinese_buyer_company_id'
   
   
   def owner
@@ -26,5 +26,17 @@ class Company < ApplicationRecord
 
   def trade_companies_array
     contact_from_self_company_companies.where(contact_status: 0).map(&:contact_to_company) + contact_to_self_company_companies.where(contact_status: 0).map(&:contact_from_company)
+  end
+
+  def find_or_create_company_company(target_company_id)
+    contact_to_self_company_company = contact_to_self_company_companies.find_by(contact_from_company_id: target_company_id)
+    contact_from_self_company_company = contact_from_self_company_companies.find_by(contact_to_company_id: target_company_id)
+    if contact_to_self_company_company
+      contact_to_self_company_company
+    elsif contact_from_self_company_company
+      contact_from_self_company_company
+    else
+      CompanyCompany.create(contact_from_company_id: self.id, contact_to_company_id: target_company_id, contact_status: "only_message")
+    end
   end
 end

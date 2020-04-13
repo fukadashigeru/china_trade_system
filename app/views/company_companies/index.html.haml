@@ -1,79 +1,89 @@
-#company_companies_index
-  .row.mt-4
-    .col
-      .h5.font-weight-bold 自社の取引会社一覧
-      - if @trade_companies_array.present?
+#company_companies_index.pt-1
+  - if @chinese_buyer_company_companies.present?
+    .row.mt-4
+      .col
+        .h5.font-weight-bold 自社へ買付依頼する事業者一覧
         %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-75{style: "table-layout:fixed"}
           %thead.thead-light
             %tr
               %th 会社名
-              %th 現在の会社タイプ
               %th 買付を依頼された件数
+              %th メッセージ
+          %tbody
+            - @chinese_buyer_company_companies.each do |company_company|
+              %tr
+                - japanese_retailer_company = company_company.japanese_retailer_company
+                %td= japanese_retailer_company.name
+                %td
+                %td
+                  = link_to chinese_buyer_topics_path(company_id: japanese_retailer_company.id), class: 'btn btn-primary' do
+                    %p メッセージ
+
+  - if @japanese_retailer_company_companies.present?
+    .row.mt-4
+      .col
+        .h5.font-weight-bold 自社と取引する買付代行事業者一覧
+        %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-75{style: "table-layout:fixed"}
+          %thead.thead-light
+            %tr
+              %th 事業者名
               %th 買付を依頼した件数
               %th メッセージ
           %tbody
-            - @trade_companies_array.each do |company|
+            - @japanese_retailer_company_companies.each do |company_company|
               %tr
-                %td= company.name
-                %td
-                  - if company.is_japanese_retailer_account == "japanese_retailer"
-                    %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                  - if company.is_chinese_buyer_account == "chinese_buyer"
-                    %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                - chinese_buyer_company = company_company.chinese_buyer_company
+                %td= chinese_buyer_company.name
                 %td
                 %td
-                %td
+                  = link_to japanese_retailer_topics_path(company_id: chinese_buyer_company.id), class: 'btn btn-primary' do
+                    %p メッセージ
 
-
-  .row.mt-5
-    .col
-      .h5.font-weight-bold 自社へのコンタクト申請中の会社
-      - if @contact_to_self_companies.present?
+  - if @chinese_buyer_company_companies_contact_offered.present?
+    .row.mt-5
+      .col
+        .h5.font-weight-bold 自社へ買付依頼取引申請している事業者一覧
         %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50{style: "table-layout:fixed"}
           %thead.thead-light
             %tr
               %th 会社名
-              %th 現在の会社タイプ
               %th メッセージ
               %th 申請承認
           %tbody
-            - @contact_to_self_companies.each do |company|
+            - @chinese_buyer_company_companies_contact_offered.each do |company_company|
               %tr
-                %td= company.name
+                - japanese_retailer_company = company_company.japanese_retailer_company
+                %td= company_company.japanese_retailer_company.name
                 %td
-                  - if company.is_japanese_retailer_account == "japanese_retailer"
-                    %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                  - if company.is_chinese_buyer_account == "chinese_buyer"
-                    %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                  = link_to chinese_buyer_topics_path(company_id: japanese_retailer_company.id), class: 'btn btn-primary' do
+                    %p メッセージ
                 %td
-                %td
+                  = link_to company_company_path(company_company, contact_status: "trade"), method: :put, class: "btn btn-success" do
+                    取引承認
 
-
-  .row.mt-5
-    .col
-      .h5.font-weight-bold 自社からコンタクト申請中の会社
-      - if @contact_from_self_companies.present?
+  - if @japanese_retailer_company_companies_contact_offering.present?
+    .row.mt-5
+      .col
+        .h5.font-weight-bold 自社から買付依頼取引申請している事業者一覧
         %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50{style: "table-layout:fixed"}
           %thead.thead-light
             %tr
               %th 会社名
-              %th 現在の会社タイプ
               %th メッセージ
               %th 申請取消
           %tbody
-            - @contact_from_self_companies.each do |company|
+            - @japanese_retailer_company_companies_contact_offering.each do |company_company|
               %tr
-                %td= company.name
-                %td
-                  - if company.is_japanese_retailer_account == "japanese_retailer"
-                    %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                  - if company.is_chinese_buyer_account == "chinese_buyer"
-                    %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                %td= company_company.chinese_buyer_company.name
                 %td
                 %td
-      .ml-4
-        = link_to companies_path, class: 'btn btn-primary' do
-          %p 取引会社を探す
+                  -# - company_company = current_company.find_or_create_company_company(company.id)
+                  -# = link_to company_company_path(company_company, contact_status: "trade"), method: :put, class: "btn btn-success" do
+                  -#   取引承認
+  - if current_company.japanese_retailer?
+    .ml-4
+      = link_to search_companies_path, class: 'btn btn-primary' do
+        %p 買付代行事業者を探す
   
 
 

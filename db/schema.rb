@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_12_022702) do
+ActiveRecord::Schema.define(version: 2020_04_12_053439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,13 +42,13 @@ ActiveRecord::Schema.define(version: 2020_04_12_022702) do
   end
 
   create_table "company_companies", force: :cascade do |t|
-    t.bigint "contact_from_company_id", null: false
-    t.bigint "contact_to_company_id", null: false
+    t.bigint "japanese_retailer_company_id", null: false
+    t.bigint "chinese_buyer_company_id", null: false
     t.integer "contact_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contact_from_company_id"], name: "index_company_companies_on_contact_from_company_id"
-    t.index ["contact_to_company_id"], name: "index_company_companies_on_contact_to_company_id"
+    t.index ["chinese_buyer_company_id"], name: "index_company_companies_on_chinese_buyer_company_id"
+    t.index ["japanese_retailer_company_id"], name: "index_company_companies_on_japanese_retailer_company_id"
   end
 
   create_table "company_users", force: :cascade do |t|
@@ -91,6 +91,16 @@ ActiveRecord::Schema.define(version: 2020_04_12_022702) do
     t.bigint "first_candidate_id"
     t.index ["first_candidate_id"], name: "index_item_units_on_first_candidate_id"
     t.index ["item_set_id"], name: "index_item_units_on_item_set_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "topic_id"
+    t.bigint "company_user_id"
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_user_id"], name: "index_messages_on_company_user_id"
+    t.index ["topic_id"], name: "index_messages_on_topic_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -149,6 +159,18 @@ ActiveRecord::Schema.define(version: 2020_04_12_022702) do
     t.index ["company_id"], name: "index_taobao_urls_on_company_id"
   end
 
+  create_table "topics", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "company_company_id"
+    t.boolean "resolve", default: false, null: false
+    t.integer "topic_variety", null: false
+    t.string "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_company_id"], name: "index_topics_on_company_company_id"
+    t.index ["order_id"], name: "index_topics_on_order_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -181,8 +203,8 @@ ActiveRecord::Schema.define(version: 2020_04_12_022702) do
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
   add_foreign_key "companies", "users", column: "owner_user_id"
-  add_foreign_key "company_companies", "companies", column: "contact_from_company_id"
-  add_foreign_key "company_companies", "companies", column: "contact_to_company_id"
+  add_foreign_key "company_companies", "companies", column: "chinese_buyer_company_id"
+  add_foreign_key "company_companies", "companies", column: "japanese_retailer_company_id"
   add_foreign_key "company_users", "companies"
   add_foreign_key "company_users", "users"
   add_foreign_key "item_sets", "companies"
@@ -190,10 +212,14 @@ ActiveRecord::Schema.define(version: 2020_04_12_022702) do
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"
   add_foreign_key "item_units", "item_sets"
   add_foreign_key "item_units", "taobao_urls", column: "first_candidate_id"
+  add_foreign_key "messages", "company_users"
+  add_foreign_key "messages", "topics"
   add_foreign_key "orders", "companies", column: "chinese_buyer_id"
   add_foreign_key "orders", "companies", column: "japanese_retailer_id"
   add_foreign_key "orders", "item_sets"
   add_foreign_key "pictures", "orders"
   add_foreign_key "taobao_color_sizes", "orders"
   add_foreign_key "taobao_urls", "companies"
+  add_foreign_key "topics", "company_companies"
+  add_foreign_key "topics", "orders"
 end
