@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_13_090426) do
+ActiveRecord::Schema.define(version: 2020_04_13_165002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,16 +39,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_090426) do
     t.integer "is_japanese_retailer_account", default: 0, null: false
     t.integer "is_chinese_buyer_account", default: 0, null: false
     t.index ["owner_user_id"], name: "index_companies_on_owner_user_id"
-  end
-
-  create_table "company_companies", force: :cascade do |t|
-    t.bigint "japanese_retailer_company_id", null: false
-    t.bigint "chinese_buyer_company_id", null: false
-    t.integer "contact_status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["chinese_buyer_company_id"], name: "index_company_companies_on_chinese_buyer_company_id"
-    t.index ["japanese_retailer_company_id"], name: "index_company_companies_on_japanese_retailer_company_id"
   end
 
   create_table "company_connects", force: :cascade do |t|
@@ -222,8 +212,6 @@ ActiveRecord::Schema.define(version: 2020_04_13_090426) do
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
   add_foreign_key "companies", "users", column: "owner_user_id"
-  add_foreign_key "company_companies", "companies", column: "chinese_buyer_company_id"
-  add_foreign_key "company_companies", "companies", column: "japanese_retailer_company_id"
   add_foreign_key "company_connects", "companies"
   add_foreign_key "company_connects", "connects"
   add_foreign_key "company_users", "companies"
