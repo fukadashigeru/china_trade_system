@@ -1,0 +1,2 @@
+module ConnectAuthorizationsHelper
+end

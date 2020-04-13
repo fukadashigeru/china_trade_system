@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
       message.company_user = @company_user
     end
     if message.save
-      redirect_to japanese_retailer_topic_path(@topic)
+      redirect_to topic_path(@topic)
     end
   end
 

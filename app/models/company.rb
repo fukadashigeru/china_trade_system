@@ -12,7 +12,10 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :company_users
   has_many :japanese_retailer_company_companies, class_name: 'CompanyCompany', :foreign_key => 'japanese_retailer_company_id'
   has_many :chinese_buyer_company_companies, class_name: 'CompanyCompany', :foreign_key => 'chinese_buyer_company_id'
-  
+  has_many :company_connects
+  has_many :connects , through: :company_connects
+  has_many :connects_from_self, class_name: 'Connect', :foreign_key => 'from_company_id'
+  has_many :connects_to_self, class_name: 'Connect', :foreign_key => 'to_company_id'
   
   def owner
     owner_company_users = company_users.select{|x| x.role == "owner"}
@@ -38,5 +41,22 @@ class Company < ApplicationRecord
     else
       CompanyCompany.create(contact_from_company_id: self.id, contact_to_company_id: target_company_id, contact_status: "only_message")
     end
+  end
+
+  def get_trade_companies
+    connects.map(&:companies).flatten.reject{|x| x == self}
+  end
+
+  def get_trade_company_connects
+    connects.map(&:company_connects).flatten.reject{|x| x.company == self}
+  end
+
+  def get_connect_of_target_company(target_company)
+    connects.each do |connect|
+      if connect.companies.include?(target_company)
+        target_connect = connect
+      end
+    end
+    target_connect
   end
 end

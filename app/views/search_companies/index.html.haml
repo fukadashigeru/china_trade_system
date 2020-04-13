@@ -1,5 +1,10 @@
 #search_companies_index
-  .row
+  .row.pt-2
+    .col
+      = link_to company_connects_path, class: 'btn btn-sm btn-link' do
+        %i.fas.fa-arrow-left
+        自社と既に取引している事業者一覧
+  .row.pt-2
     .col
       .h5.font-weight-bold 買付代行事業者一覧
       %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50{style: "table-layout:fixed"}
@@ -8,12 +13,12 @@
             %th 事業者名
             %th メッセージを送る
         %tbody
-          - @chinese_buyer_companies.each do |company|
-            - if company != current_company 
-              %tr
-                %td= company.name
-                %td
-                  = link_to japanese_retailer_topics_path(company_id: company.id), class: 'btn btn-primary' do
+          - @companies.each do |company|
+            %tr
+              %td= company.name
+              %td
+                - if !@trade_companies.include?(company)
+                  = link_to company_connects_path(company_id: company.id), method: :post, class: 'btn btn-primary' do
                     %p メッセージを送る
   
 

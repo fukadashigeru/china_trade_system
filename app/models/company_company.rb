@@ -1,7 +1,6 @@
 class CompanyCompany < ApplicationRecord
   belongs_to :japanese_retailer_company, class_name: 'Company'
   belongs_to :chinese_buyer_company, class_name: 'Company'
-  has_many :topics
   enum contact_status: {trade: 0, contact_offer: 1, only_message: 2}
 
   def find_target_company(current_company)

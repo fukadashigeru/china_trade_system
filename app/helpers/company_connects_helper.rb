@@ -1,0 +1,2 @@
+module CompanyConnectsHelper
+end

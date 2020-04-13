@@ -51,6 +51,10 @@ Rails.application.routes.draw do
   resources :chinese_buyer_companies
   resources :chinese_buyer_topics
   resources :chinese_buyer_messages
+  resources :company_connects
+  resources :topics
+  resources :connects
+  resources :connect_authorizations
   # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 

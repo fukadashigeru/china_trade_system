@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_12_053439) do
+ActiveRecord::Schema.define(version: 2020_04_13_090426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,15 @@ ActiveRecord::Schema.define(version: 2020_04_12_053439) do
     t.index ["japanese_retailer_company_id"], name: "index_company_companies_on_japanese_retailer_company_id"
   end
 
+  create_table "company_connects", force: :cascade do |t|
+    t.bigint "company_id"
+    t.bigint "connect_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_connects_on_company_id"
+    t.index ["connect_id"], name: "index_company_connects_on_connect_id"
+  end
+
   create_table "company_users", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "company_id"
@@ -61,6 +70,16 @@ ActiveRecord::Schema.define(version: 2020_04_12_053439) do
     t.index ["company_id"], name: "index_company_users_on_company_id"
     t.index ["user_id", "company_id"], name: "company_user_unique_index", unique: true
     t.index ["user_id"], name: "index_company_users_on_user_id"
+  end
+
+  create_table "connects", force: :cascade do |t|
+    t.bigint "from_company_id"
+    t.bigint "to_company_id"
+    t.integer "contact_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_company_id"], name: "index_connects_on_from_company_id"
+    t.index ["to_company_id"], name: "index_connects_on_to_company_id"
   end
 
   create_table "item_sets", force: :cascade do |t|
@@ -161,13 +180,13 @@ ActiveRecord::Schema.define(version: 2020_04_12_053439) do
 
   create_table "topics", force: :cascade do |t|
     t.bigint "order_id"
-    t.bigint "company_company_id"
     t.boolean "resolve", default: false, null: false
     t.integer "topic_variety", null: false
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["company_company_id"], name: "index_topics_on_company_company_id"
+    t.bigint "connect_id"
+    t.index ["connect_id"], name: "index_topics_on_connect_id"
     t.index ["order_id"], name: "index_topics_on_order_id"
   end
 
@@ -205,8 +224,12 @@ ActiveRecord::Schema.define(version: 2020_04_12_053439) do
   add_foreign_key "companies", "users", column: "owner_user_id"
   add_foreign_key "company_companies", "companies", column: "chinese_buyer_company_id"
   add_foreign_key "company_companies", "companies", column: "japanese_retailer_company_id"
+  add_foreign_key "company_connects", "companies"
+  add_foreign_key "company_connects", "connects"
   add_foreign_key "company_users", "companies"
   add_foreign_key "company_users", "users"
+  add_foreign_key "connects", "companies", column: "from_company_id"
+  add_foreign_key "connects", "companies", column: "to_company_id"
   add_foreign_key "item_sets", "companies"
   add_foreign_key "item_unit_taobao_urls", "item_units"
   add_foreign_key "item_unit_taobao_urls", "taobao_urls"
@@ -220,6 +243,6 @@ ActiveRecord::Schema.define(version: 2020_04_12_053439) do
   add_foreign_key "pictures", "orders"
   add_foreign_key "taobao_color_sizes", "orders"
   add_foreign_key "taobao_urls", "companies"
-  add_foreign_key "topics", "company_companies"
+  add_foreign_key "topics", "connects"
   add_foreign_key "topics", "orders"
 end
