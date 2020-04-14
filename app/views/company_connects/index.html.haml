@@ -3,11 +3,11 @@
     .row.mt-4
       .col
         .h5.font-weight-bold 自社と取引している事業者一覧
-        %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50{style: "table-layout:fixed"}
+        %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50
           %thead.thead-light
             %tr
               %th 会社名
-              %th 買付を依頼された件数
+              %th アカウントタイプ
               %th メッセージ
               %th 取引申請
           %tbody
@@ -21,23 +21,26 @@
                     %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{target_company.is_japanese_retailer_account}", locale: :ja)
                   - if target_company.is_chinese_buyer_account == "chinese_buyer"
                     %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{target_company.is_chinese_buyer_account}", locale: :ja)
-                %td
+                %td.text-center
                   = link_to topics_path(connect_id: connect.id), class: 'btn btn-primary' do
                     %p メッセージ
                 %td
                   - if connect.contact_status == "trade"
                     %p 取引中
-                  - elsif connect.contact_status == "contact_offer"
+                  - elsif connect.contact_status == "offer"
                     - if connect.from_company == current_company
-                      取引申請中
-                      = link_to root_path, class: "btn btn-outline-danger" do
-                        取引申請取消
+                      .d-inline
+                        自社から取引申請中
+                      .d-inline
+                        = link_to connect_delete_path(connect) ,method: :put, class: "btn btn-danger" do
+                          %i.fas.fa-trash-alt
                     - elsif connect.to_company == current_company
                       = link_to connect_authorization_path(connect, company_id: target_company.id), method: :put, class: "btn btn-success" do
                         取引承認
                   - else
-                    = link_to connect_path(connect, contact_status: "contact_offer"), method: :put, class: 'btn btn-primary' do
+                    = link_to connect_offer_path(connect), method: :put, class: 'btn btn-primary' do
                       取引開始申請
-  .ml-4
-    = link_to search_companies_path, class: 'btn btn-primary' do
-      %p 買付代行事業者を探す
+  .ml-4.mt-3
+    = link_to search_companies_path, class: 'btn btn-info' do
+      事業者を探す
+      %i.fas.fa-search

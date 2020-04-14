@@ -4,7 +4,7 @@ class Connect < ApplicationRecord
   has_many :topics
   belongs_to :from_company, class_name: 'Company', optional: true
   belongs_to :to_company, class_name: 'Company', optional: true
-  enum contact_status: {trade: 0, contact_offer: 1, only_message: 2}
+  enum contact_status: {trade: 0, offer: 1, only_message: 2}
   
   def get_target_company(current_company)
     targete_companies = companies.reject{|x| x == current_company}

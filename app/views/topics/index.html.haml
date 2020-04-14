@@ -19,7 +19,7 @@
               %tr
                 %td= topic.title
                 %td
-                  = link_to topic_path(topic), class: 'btn btn-primary' do
+                  = link_to topic_path(topic, before_page_type: 'topics'), class: 'btn btn-primary' do
                     %p メッセージ
       - else
         .h5.font-weight-bold= target_company.name + "へのメッセージを作成してください。"

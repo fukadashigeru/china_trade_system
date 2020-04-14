@@ -1,24 +1,35 @@
 #topics_show
   .row.pt-2
     .col
-      = link_to topics_path(connect_id: @connect.id), class: 'btn btn-sm btn-link' do
-        %i.fas.fa-arrow-left
-        メッセージ一覧
+      - if params[:before_page_type] == "search_companies"
+        = link_to search_companies_path, class: 'btn btn-sm btn-link' do
+          %i.fas.fa-arrow-left
+          その他の事業者
+      - elsif params[:before_page_type] == "topics"
+        = link_to topics_path(connect_id: @connect.id), class: 'btn btn-sm btn-link' do
+          %i.fas.fa-arrow-left
+          メッセージ一覧
   .row.pt-2
     .col.ml-3
       - target_company = @connect.get_target_company(current_company)
       .h5= target_company.name + " / " + @topic.title
-  - if @connect.contact_status == "contact_offer" && @connect.to_company == current_company
+  - if @connect.contact_status == "offer" && @connect.to_company == current_company
     .row.pt-2
       .col
-        = link_to connect_authorization_path(@connect, company_id: target_company.id, topic_id: @topic.id), method: :put, class: "btn btn-success" do
+        = link_to connect_authorization_path(@connect, company_id: target_company.id, topic_id: @topic.id, before_page_type: params[:before_page_type]), method: :put, class: "btn btn-success" do
           取引承認
   .row.pt-2
     .col.text-right
-      - if @connect.from_company.nil? || @connect.contact_status !="trade"
-        - btn_class = @connect.contact_status == 'contact_offer' || @topic.messages.empty? ? "btn btn-primary disabled" : "btn btn-primary"
-        = link_to connect_path(@connect, contact_status: "contact_offer", topic_id: @topic.id), method: :put, class: btn_class do
-          買付代行取引開始申請
+      - if @connect.from_company == current_company && @connect.contact_status == "offer"
+        .d-inline
+          自社から取引申請中
+        .d-inline
+          = link_to connect_delete_path(@connect, topic_id: @topic.id, before_page_type: params[:before_page_type]) ,method: :put, class: "btn btn-danger" do
+            申請取消
+      - elsif @connect.to_company != current_company && @connect.contact_status != "trade" && @connect.contact_status != "offer" 
+        - btn_class = @connect.contact_status == 'offer' || @topic.messages.empty? ? "btn btn-primary disabled" : "btn btn-primary"
+        = link_to connect_offer_path(@connect, topic_id: @topic.id, before_page_type: params[:before_page_type]), method: :put, class: btn_class do
+          取引開始申請
   - @topic.messages.each do |message|
     - company_user = message.company_user
     - company = company_user&.company
@@ -43,6 +54,7 @@
 
   .fixed-bottom.ml_side_width.p-2.bg-light
     = form_tag messages_path(topic_id: @topic.id), method: :post do
+      = hidden_field_tag "before_page_type", params[:before_page_type]
       .row
         .col-10
           = text_field_tag "[message][content]", "",class: "form-control"

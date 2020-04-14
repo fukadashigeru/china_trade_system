@@ -1,9 +1,6 @@
 class CompanyConnectsController < ApplicationController
   def index
-    @company_connects = current_company.get_trade_company_connects
-  end
-
-  def show
+    @company_connects = current_company.get_trade_company_connects.sort
   end
 
   def create
@@ -12,6 +9,6 @@ class CompanyConnectsController < ApplicationController
     current_company_connect = current_company.company_connects.create(connect_id: connect.id)
     target_company_connect = target_company.company_connects.create(connect_id: connect.id)
     topic = connect.topics.create(title: "コンタクト依頼", topic_variety: "contact")
-    redirect_to topic_path(topic)
+    redirect_to topic_path(topic, before_page_type: params[:before_page_type])
   end
 end

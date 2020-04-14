@@ -49,7 +49,9 @@ Rails.application.routes.draw do
   resources :company_connects
   resources :topics
   resources :connects
+  resources :connect_offers
   resources :connect_authorizations
+  resources :connect_deletes
   # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 

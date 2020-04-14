@@ -6,19 +6,25 @@
         自社と既に取引している事業者一覧
   .row.pt-2
     .col
-      .h5.font-weight-bold 買付代行事業者一覧
-      %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50{style: "table-layout:fixed"}
+      .h5.font-weight-bold 事業者一覧
+      %table.table.table-bordered.mt-1#owner_company_table.ml-4.w-50
         %thead.thead-light
           %tr
             %th 事業者名
-            %th メッセージを送る
+            %th アカウントタイプ
+            %th メッセージ
         %tbody
           - @companies.each do |company|
             %tr
               %td= company.name
               %td
+                - if company.is_japanese_retailer_account == "japanese_retailer"
+                  %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
+                - if company.is_chinese_buyer_account == "chinese_buyer"
+                  %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+              %td.text-center
                 - if !@trade_companies.include?(company)
-                  = link_to company_connects_path(company_id: company.id), method: :post, class: 'btn btn-primary' do
+                  = link_to new_connect_path(company_id: company.id, before_page_type: "search_companies"), class: 'btn btn-primary' do
                     %p メッセージを送る
   
 

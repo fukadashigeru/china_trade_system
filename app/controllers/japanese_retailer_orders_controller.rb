@@ -1,6 +1,6 @@
 class JapaneseRetailerOrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :ensure_current_cumpany
+  before_action :ensure_current_company
   
   # GET /orders
   # GET /orders.json

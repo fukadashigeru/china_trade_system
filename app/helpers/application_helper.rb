@@ -9,4 +9,12 @@ module ApplicationHelper
       company
     end
   end
+
+  def current_company_user
+    if current_company && current_user
+      CompanyUser.find_by(company: current_company, user: current_user)
+    else
+      nil
+    end
+  end
 end
