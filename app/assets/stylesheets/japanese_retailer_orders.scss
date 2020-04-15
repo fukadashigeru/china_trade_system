@@ -1,9 +1,7 @@
-// Place all the styles related to the Articles controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "variable";
 
 #page-content-wrapper {
-  margin-left: 160px;
+  margin-left: $side_bar_width;
   // transition: all 0.6s;
 }
 
@@ -12,7 +10,7 @@
 }
 
 #page-content-wrapper nav {
-  width:calc(100% - 160px);
+  width:calc(100% - #{$side_bar_width});
 }
 
 #page-content-wrapper.active nav {

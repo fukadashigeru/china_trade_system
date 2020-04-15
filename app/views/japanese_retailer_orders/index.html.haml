@@ -1,33 +1,37 @@
-.d-block.py-1.position-fixed.bg-white.w-100#order-input-header
-  .d-inline-block.mr-2
-    = link_to "注文インポート", order_csv_imports_path, class: "btn btn-success", remote: true
-  .d-inline-block
-    = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary", remote: true
-%br
+-# .d-block.py-1.position-fixed.bg-white.w-100#order-input-header
+-#   .d-inline-block.mr-2
+-#     = link_to "注文インポート", order_csv_imports_path, class: "btn btn-success", remote: true
+-#   .d-inline-block
+-#     = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary", remote: true
+-# %br
+.pt-1
 - if @orders.present?
-  .table-responsive.mt-4{style: "width: 1500px"}
+  .table-responsive.mt-4
     %table.table.table-hover.table-bordered
       %thead.thead-light
         %tr
-          %th.align-middle 注文No
+          %th.align-middle{style:"width: 80px;"}
+            注文No
           %th.align-middle 注文商品画像
-          %th.align-middle
+          %th.align-middle{style:"width: 170px;"}
             カテゴリー - 商品ID
             %br
             販売サイト
             %br
             買付先情報（マスター）
-          %th.align-middle 色・サイズ・数量
-          %th.align-middle お届け先
-          %th.align-middle 予定費用
-          %th.align-middle 実績費用
-          %th.align-middle 発注状況
-          %th.align-middle 直接編集
+          %th.align-middle{style:"width: 170px;"} 色・サイズ・数量
+          %th.align-middle{style:"width: 170px;"} お届け先
+          %th.align-middle{style:"width: 170px;"} 予定費用
+          %th.align-middle{style:"width: 170px;"} 実績費用
+          %th.align-middle{style:"width: 170px;"} 発注状況
+
       %tbody
         - @orders.each do |order|
           %tr
-            %td.align-middle
+            %td.align-middle.text-break.text-center
               = order.trade_no
+              = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-primary btn-sm edit-btn", remote: true do
+                %i.fas.fa-edit
             %td.ks-1.align-middle{id: "order-id-#{order.id}_pictures", style: "max-width: 180px;"}
               - if order.pictures.empty?
                 .ks-2.d-inline-block{id: "order-id-#{order.id}_picture-1"}
@@ -43,7 +47,7 @@
                       = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
                 .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
                   = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1 ks-3"
-            %td
+            %td.text-break
               - if order.item_set
                 = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
                 = "-"
@@ -59,7 +63,7 @@
                   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-outline-danger" do
                     買付先情報（マスター）未登録
                     %i.fas.fa-external-link-square-alt.ml-2
-            %td{style: "max-width: 180px;"}
+            %td
               .d-inline-block
                 色・サイズ：
               .d-inline-block
@@ -68,19 +72,29 @@
               数量: 
               = order.quantity
               %hr/
-              %div
+              %div{id: "taobao_color_size-order_id-#{order.id}"}
                 .d-inline-block
                   メモ:
-                .d-inline-block.pull-left{id: "taobao_color_size-order_id-#{order.id}"}
-                  - if order.taobao_color_size.present?
-                    - if order.taobao_color_size.name.present?
-                      = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn", style: "word-break: break-all;"
-                    - else
-                      = link_to "中国語で色・サイズなどを入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
+                .d-inline-block
+                  - if order.taobao_color_size
+                    = link_to edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light btn-sm text-left edit-btn btn-block" do
+                      %i.fas.fa-pen-alt
                   - else
-                    = link_to "中国語で色・サイズなどを入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
+                    = link_to new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light btn-sm text-left edit-btn btn-block" do
+                      %i.fas.fa-pen-alt
+                    
+                %div.mt-2.taobao_color_size_name.text-break
+                  = order&.taobao_color_size&.name
+                -# .d-inline-block.pull-left{id: "taobao_color_size-order_id-#{order.id}"}
+                -#   - if order.taobao_color_size.present?
+                -#     - if order.taobao_color_size.name.present?
+                -#       = link_to "#{order.taobao_color_size.name}", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn", style: "word-break: break-all;"
+                -#     - else
+                -#       = link_to "中国語で色・サイズなどを入力", edit_taobao_color_size_path(order.taobao_color_size.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
+                -#   - else
+                -#     = link_to "中国語で色・サイズなどを入力", new_taobao_color_size_path(order_id: order.id), remote: true, class: "btn btn-light text-left edit-btn btn-block", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
 
-            %td{style: "max-width: 150px;"}
+            %td
               = order.postal
               %br
               = order.address
@@ -94,9 +108,8 @@
               = ""
             %td.align-middle
               = ""
-            %td.align-middle.text-center
-              = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-blue btn-ml edit-btn", remote: true do
-                %i.far.fa-edit
+
+
 - else
   .row.mt-4
     .col

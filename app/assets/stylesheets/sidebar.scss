@@ -1,3 +1,5 @@
+@import "variable";
+
 #sidebar-wrapper {
   li.top-category {
     position: relative;
@@ -16,13 +18,13 @@
     display: none;
     position: absolute;
     top: 0;
-    left: 160px;
-    width: 160px;
+    left: $side_bar_width;
+    width: $side_bar_width;
     z-index: 3;
     overflow: visible;
     background-color: black;
     .list-group-item {
-      width: 160px;
+      width: $side_bar_width;
       position: relative;
      }
   }

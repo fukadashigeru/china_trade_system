@@ -1,14 +1,19 @@
 #sidebar-wrapper.bg-light.border-right
   .d-block
     .sidebar-heading.text-muted
-      .h5 ChinaTradeSystem
   %ul.list-group.side_bar_width
     %li
       = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
         Home
     - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.japanese_retailer_orders.present?
-      = link_to japanese_retailer_orders_path, class: "list-group-item list-group-item-action bg-light" do
-        発注案件一覧
+      %li.top-category
+        = link_to japanese_retailer_orders_path, class: "list-group-item list-group-item-action bg-light" do
+          発注案件一覧
+        %ul.second-category.bg-light
+          %li.m-1.bg-light
+            = link_to "注文インポート", order_csv_imports_path, class: "btn bg-success text-white list-group-item w-100", remote: true
+          %li.m-1.bg-light
+            = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary w-100 list-group-item", remote: true
     - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.item_sets.present?
       = link_to item_sets_path, class: "list-group-item list-group-item-action bg-light" do
         発注案件用買付先
@@ -17,11 +22,11 @@
         = link_to chinese_buyer_orders_path, class: "list-group-item list-group-item-action bg-light" do
           受注案件一覧
         %ul.second-category.bg-light
-          %li
+          %li.bg-light
             - japanese_retailers = current_company.chinese_buyer_orders.map(&:japanese_retailer).flatten.uniq
             - japanese_retailers.each do |japanese_retailer|
-              = link_to japanese_retailer.name, chinese_buyer_orders_path(japanese_retailer_id: japanese_retailer.id), class: "list-group-item list-group-item-action bg-light", style: "width: 160px;"
-    = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light", style: "width: 160px;" do
+              = link_to japanese_retailer.name, chinese_buyer_orders_path(japanese_retailer_id: japanese_retailer.id), class: "list-group-item list-group-item-action bg-light"
+    = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light" do
       取引先一覧
 
 

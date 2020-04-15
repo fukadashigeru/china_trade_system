@@ -19,7 +19,7 @@ class Order < ApplicationRecord
     csv_utf8 = Kconv.toutf8(csv_text)
     CSV.parse(csv_utf8, headers: true, liberal_parsing: true) do |row|
       next if row["商品ID"].nil?
-      item_set = ItemSet.find_or_initialize_by(
+      item_set = japanese_retailer.item_sets.find_or_initialize_by(
         company_id: japanese_retailer.id,
         item_no_category: 1,
         item_no: row["商品ID"]
@@ -29,7 +29,7 @@ class Order < ApplicationRecord
         shop_url: "https://www.buyma.com/item/" + row["商品ID"] + "/"
       )
       item_set.save!
-      obj = find_or_initialize_by(trade_no: row["取引ID"])
+      obj = japanese_retailer.japanese_retailer_orders.find_or_initialize_by(trade_no: row["取引ID"])
       obj.assign_attributes(
         quantity: row["受注数"],
         price: row["価格"],
@@ -41,7 +41,6 @@ class Order < ApplicationRecord
         color_size: row["色・サイズ"],
         customer_remark: row["連絡事項"],
         japanese_retailer_remark: row["受注メモ"],
-        japanese_retailer_id: japanese_retailer.id,
         chinese_buyer_id: chinese_buyer.id,
         item_set_id: item_set.id
       )

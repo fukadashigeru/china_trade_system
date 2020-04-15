@@ -1,26 +1,22 @@
 = form_for(@taobao_color_size, url: taobao_color_sizes_path, remote: true) do |f|
   .form-inline
     = f.hidden_field :order_id, value: @taobao_color_size.order_id
-    = f.text_field :name, class: "form-control w-100"
+    = f.text_area :name, class: "form-control w-100"
     .d-inline-block.p-1{style: "width: 60%;"}
-      = f.submit "保存", class: "btn btn-primary save-btn btn-block btn-sm"
+      = f.submit "Save", class: "btn btn-primary save-btn btn-block btn-sm"
     .d-inline-block.p-1{style: "width: 40%;"}
-      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} キャンセル
+      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} Cancel
 
 :javascript
   $('.btn-cancel').click(function() {
     $('.delete-btn').removeClass('disabled');
     $('.edit-btn').removeClass('disabled');
     $('.add-btn').removeClass('disabled');
-    var empty_a_tag = `<a class="btn btn-light text-left edit-btn btn-block" style="color: gray;" title="" data-toggle="tooltip" data-placement="right" data-delay="{&quot;show&quot;:200,&quot;hide&quot;:100}" data-remote="true" href="/taobao_color_sizes/new?order_id=${order_id}" data-original-title="クリックして入力">中国語で色・サイズなどを入力</a>`;
-    $(`#taobao_color_size-order_id-${order_id}`).html(empty_a_tag);
-    $('[data-toggle="tooltip"]').tooltip()
-    $('[data-toggle="tooltip"]').on('click',function(){
-      $(this).tooltip('hide');
-    })
+    $(`#taobao_color_size-order_id-${order_id}`).find(".taobao_color_size_name").html("");
   });
   $(function(){
     $('.delete-btn').addClass('disabled');
     $('.edit-btn').addClass('disabled');
     $('.add-btn').addClass('disabled');
   });
+
