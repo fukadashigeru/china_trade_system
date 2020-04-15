@@ -2,22 +2,26 @@
   .d-block
     .sidebar-heading.text-muted
       .h5 ChinaTradeSystem
-  %ul.list-group
+  %ul.list-group.side_bar_width
     %li
+      = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
+        Home
+    - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.japanese_retailer_orders.present?
       = link_to japanese_retailer_orders_path, class: "list-group-item list-group-item-action bg-light" do
-        %i.fas.far.fa-list-alt.fa-lg.active.list-fontawsome.mt-1
-        .active.list-item 注文一覧
-    %li
+        発注案件一覧
+    - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.item_sets.present?
       = link_to item_sets_path, class: "list-group-item list-group-item-action bg-light" do
-        %i.fa.fa-store-alt.fa-lg.active.list-fontawsome.mt-1
-        .active.list-item 買付先一覧
-    %li
-      = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light" do
-        %i.fas.fa-building.fa-lg.active.list-fontawsome.mt-1
-        .active.list-item 取引先一覧
-  .d-block.mt-2
-    .d-inline-block.float-right#arrow-toggle
-      .btn.btn-light#sidebarCollapse
-        %i.fas.fa-arrow-left.fa-lg
-        %i.active.fas.fa-arrow-right.fa-lg
+        発注案件用買付先
+    - if current_company.is_chinese_buyer_account == "chinese_buyer" || current_company.chinese_buyer_orders.present?
+      %li.top-category
+        = link_to chinese_buyer_orders_path, class: "list-group-item list-group-item-action bg-light" do
+          受注案件一覧
+        %ul.second-category.bg-light
+          %li
+            - japanese_retailers = current_company.chinese_buyer_orders.map(&:japanese_retailer).flatten.uniq
+            - japanese_retailers.each do |japanese_retailer|
+              = link_to japanese_retailer.name, chinese_buyer_orders_path(japanese_retailer_id: japanese_retailer.id), class: "list-group-item list-group-item-action bg-light", style: "width: 160px;"
+    = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light", style: "width: 160px;" do
+      取引先一覧
+
 

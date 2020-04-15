@@ -10,7 +10,6 @@
                 %th 会社名
                 %th 会社タイプ
                 %th.th_member メンバー
-                %th メンバー招待
                 %th 編集
                 %th ログイン
             %tbody
@@ -45,15 +44,15 @@
                                   %i.fas.fa-check-circle.fa-lg.text-success
                                 - else
                                   %i.fas.fa-minus-circle.fa-lg.text-danger
-                  %td.align-middle
-                    = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
-                      招待
-                      %i.fas.fa-address-card
-                  %td.align-middle
+                    .mt-2
+                      = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
+                        招待
+                        %i.fas.fa-address-card
+                  %td.align-middle.text-center
                     = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
                       編集
                       %i.fas.fa-edit.fa-lg
-                  %td.align-middle
+                  %td.align-middle.text-center
                     = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                       ログイン
                       %i.fas.fa-sign-in-alt.fa-lg

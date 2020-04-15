@@ -15,7 +15,7 @@
   top: 0;
   left: 0;
   background-color: #111;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   /* transition: all 0.6s; */
 }
 
@@ -66,11 +66,11 @@
 }
 
 #sidebar-wrapper .list-group {
-  width: 15rem;
+  width: 160px;
 }
 
 #sidebar-wrapper .list-group .list-group-item {
-  width: 15rem;
+  width: 160px;
   height: 38px;
 }
 

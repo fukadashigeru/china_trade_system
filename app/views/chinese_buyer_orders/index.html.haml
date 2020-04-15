@@ -1,0 +1,65 @@
+- if @orders.present?
+  .table-responsive.pt-4{style: "width: 1500px"}
+    %table.table.table-hover.table-bordered
+      %thead.thead-light
+        %tr
+          %th.align-middle 注文No
+          %th.align-middle 注文商品画像
+          %th.align-middle
+            カテゴリー - 商品ID
+            %br
+            販売サイト
+          %th.align-middle 色・サイズ・数量
+          %th.align-middle お届け先
+          %th.align-middle 予定費用
+          %th.align-middle 実績費用
+          %th.align-middle 発注状況
+      %tbody
+        - @orders.each do |order|
+          %tr
+            %td.align-middle
+              = order.trade_no
+            %td.ks-1.align-middle{style: "max-width: 180px;"}
+              - order.pictures.order(:id).each do |picture|
+                .d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{style: "min-height: 70px;"}
+                  %img.ks-3{:src => picture.url, :class => "w-100"}/
+            %td
+              - if order.item_set
+                = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
+                = "-"
+                = order.item_set&.item_no
+                %hr/
+                = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
+            %td{style: "max-width: 180px;"}
+              .d-inline-block
+                色・サイズ：
+              .d-inline-block
+                = order.color_size
+              %hr/
+              数量: 
+              = order.quantity
+              %hr/
+              %div
+                .d-inline-block
+                  メモ:
+                .d-inline-block.pull-left
+                  = order&.taobao_color_size&.name
+
+            %td{style: "max-width: 150px;"}
+              = order.postal
+              %br
+              = order.address
+              %br
+              = order.customer_name
+              %br
+              = order.phone
+            %td.align-middle
+              = ""
+            %td.align-middle
+              = ""
+            %td.align-middle
+              = ""
+- else
+  .row.mt-4
+    .col
+      .h6.pt-2 受注案件はりません。

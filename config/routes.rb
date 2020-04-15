@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   resources :connect_offers
   resources :connect_authorizations
   resources :connect_deletes
+  resources :chinese_buyer_orders
   # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 

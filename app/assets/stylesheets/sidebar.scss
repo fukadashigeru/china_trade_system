@@ -1,0 +1,29 @@
+#sidebar-wrapper {
+  li.top-category {
+    position: relative;
+  
+    &:hover ul.second-category{
+      overflow: visible;
+      display: block;
+      opacity:1;
+      li {
+       position: relative;
+      }
+    }
+  }
+  
+  ul.second-category {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 160px;
+    width: 160px;
+    z-index: 3;
+    overflow: visible;
+    background-color: black;
+    .list-group-item {
+      width: 160px;
+      position: relative;
+     }
+  }
+}
