@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_13_165002) do
+ActiveRecord::Schema.define(version: 2020_04_15_165226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "actual_item_unit_taobao_urls", force: :cascade do |t|
+    t.bigint "actual_item_unit_id"
+    t.bigint "taobao_url_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actual_item_unit_id"], name: "index_actual_item_unit_taobao_urls_on_actual_item_unit_id"
+    t.index ["taobao_url_id"], name: "index_actual_item_unit_taobao_urls_on_taobao_url_id"
+  end
+
+  create_table "actual_item_units", force: :cascade do |t|
+    t.bigint "item_unit_id"
+    t.bigint "order_id"
+    t.bigint "first_taobao_url_id"
+    t.string "item_unit_name"
+    t.integer "price"
+    t.string "color_size"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["first_taobao_url_id"], name: "index_actual_item_units_on_first_taobao_url_id"
+    t.index ["item_unit_id"], name: "index_actual_item_units_on_item_unit_id"
+    t.index ["order_id"], name: "index_actual_item_units_on_order_id"
+  end
 
   create_table "actual_item_varieties", force: :cascade do |t|
     t.bigint "order_id"
@@ -209,6 +232,11 @@ ActiveRecord::Schema.define(version: 2020_04_13_165002) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "actual_item_unit_taobao_urls", "actual_item_units"
+  add_foreign_key "actual_item_unit_taobao_urls", "taobao_urls"
+  add_foreign_key "actual_item_units", "item_units"
+  add_foreign_key "actual_item_units", "orders"
+  add_foreign_key "actual_item_units", "taobao_urls", column: "first_taobao_url_id"
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
   add_foreign_key "companies", "users", column: "owner_user_id"

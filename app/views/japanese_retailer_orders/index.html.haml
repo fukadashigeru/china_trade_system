@@ -13,17 +13,18 @@
           %th.align-middle{style:"width: 80px;"}
             注文No
           %th.align-middle 注文商品画像
-          %th.align-middle{style:"width: 170px;"}
+          %th.align-middle{style:"width: 160px;"}
             カテゴリー - 商品ID
             %br
             販売サイト
             %br
             買付先情報（マスター）
-          %th.align-middle{style:"width: 170px;"} 色・サイズ・数量
-          %th.align-middle{style:"width: 170px;"} お届け先
-          %th.align-middle{style:"width: 170px;"} 予定費用
-          %th.align-middle{style:"width: 170px;"} 実績費用
-          %th.align-middle{style:"width: 170px;"} 発注状況
+          %th.align-middle{style:"width: 160px;"} 買付先情報（今回の注文）
+          %th.align-middle{style:"width: 160px;"} 色・サイズ・数量
+          %th.align-middle{style:"width: 160px;"} お届け先
+          %th.align-middle{style:"width: 100px;"} 予定費用
+          %th.align-middle{style:"width: 100px;"} 実績費用
+          %th.align-middle{style:"width: 100px;"} 発注状況
 
       %tbody
         - @orders.each do |order|
@@ -63,6 +64,7 @@
                   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-outline-danger" do
                     買付先情報（マスター）未登録
                     %i.fas.fa-external-link-square-alt.ml-2
+            %td
             %td
               .d-inline-block
                 色・サイズ：
