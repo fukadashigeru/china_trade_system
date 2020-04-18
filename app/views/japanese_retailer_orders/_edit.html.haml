@@ -21,7 +21,7 @@
                 = "-"
                 = @order.item_set&.item_no
             %br/
-        = form_for(@order, url: japanese_retailer_order_path(id: @order.id)) do |f|
+        = form_for(@order, url: japanese_retailer_order_path(@order)) do |f|
           .row.justify-content-center
             .col-4.border-right
               %h6.mr-5 商品写真

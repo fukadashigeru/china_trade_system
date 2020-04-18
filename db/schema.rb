@@ -27,13 +27,13 @@ ActiveRecord::Schema.define(version: 2020_04_15_165226) do
   create_table "actual_item_units", force: :cascade do |t|
     t.bigint "item_unit_id"
     t.bigint "order_id"
-    t.bigint "first_taobao_url_id"
+    t.bigint "first_candidate_id"
     t.string "item_unit_name"
     t.integer "price"
     t.string "color_size"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["first_taobao_url_id"], name: "index_actual_item_units_on_first_taobao_url_id"
+    t.index ["first_candidate_id"], name: "index_actual_item_units_on_first_candidate_id"
     t.index ["item_unit_id"], name: "index_actual_item_units_on_item_unit_id"
     t.index ["order_id"], name: "index_actual_item_units_on_order_id"
   end
@@ -236,7 +236,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_165226) do
   add_foreign_key "actual_item_unit_taobao_urls", "taobao_urls"
   add_foreign_key "actual_item_units", "item_units"
   add_foreign_key "actual_item_units", "orders"
-  add_foreign_key "actual_item_units", "taobao_urls", column: "first_taobao_url_id"
+  add_foreign_key "actual_item_units", "taobao_urls", column: "first_candidate_id"
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
   add_foreign_key "companies", "users", column: "owner_user_id"

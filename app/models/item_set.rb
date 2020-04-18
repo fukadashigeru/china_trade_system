@@ -45,8 +45,9 @@ class ItemSet < ApplicationRecord
               taobao_url_ids_included_in_params << taobao_url.id
             else
               taobao_url = item_unit.taobao_urls.find(l.to_i)
-              item_unit_taobao_url = ItemUnitTaobaoUrl.find_by(item_unit_id: j.to_i , taobao_url_id: l.to_i)
-              if taobao_url.item_units.length > 1
+              # item_unit_taobao_url = ItemUnitTaobaoUrl.find_by(item_unit_id: j.to_i , taobao_url_id: l.to_i)
+              item_unit_taobao_url = current_company.taobao_urls.find(l.to_i).item_unit_taobao_urls.find_by(item_unit_id: j.to_i)
+              if taobao_url.item_units.length + taobao_url.actual_item_units.length > 1
                 if taobao_url_url.present?
                   taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_url)
                   item_unit_taobao_url.update(taobao_url_id: taobao_url.id)
@@ -59,10 +60,11 @@ class ItemSet < ApplicationRecord
                   other_taobao_url = current_company.taobao_urls.find_by(url: taobao_url_url)
                   if other_taobao_url
                     if other_taobao_url&.id != l.to_i
-                      taobao_url.destroy if taobao_url.item_units.length > 1
+                      taobao_url.destroy if taobao_url.item_units.length + taobao_url.actual_item_units.length > 1
                       taobao_url = other_taobao_url
                     else
-                      taobao_url.update(url: taobao_url_url)
+                      # binding.pry
+                      # taobao_url.update(url: taobao_url_url)
                     end
                   else
                     taobao_url.update(url: taobao_url_url)

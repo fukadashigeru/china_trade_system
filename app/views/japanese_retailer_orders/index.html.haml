@@ -7,19 +7,19 @@
 .pt-1
 - if @orders.present?
   .table-responsive.mt-4
-    %table.table.table-hover.table-bordered
+    %table.table.table-bordered
       %thead.thead-light
         %tr
           %th.align-middle{style:"width: 80px;"}
             注文No
-          %th.align-middle 注文商品画像
-          %th.align-middle{style:"width: 160px;"}
+          %th.align-middle{style: "width: 250px;"} 注文商品画像
+          %th.align-middle{style: "width: 160px;"}
             カテゴリー - 商品ID
             %br
             販売サイト
             %br
             買付先情報（マスター）
-          %th.align-middle{style:"width: 160px;"} 買付先情報（今回の注文）
+          %th.align-middle{style: "width: 200px"} 買付先情報（今回の注文）
           %th.align-middle{style:"width: 160px;"} 色・サイズ・数量
           %th.align-middle{style:"width: 160px;"} お届け先
           %th.align-middle{style:"width: 100px;"} 予定費用
@@ -33,7 +33,7 @@
               = order.trade_no
               = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-primary btn-sm edit-btn", remote: true do
                 %i.fas.fa-edit
-            %td.ks-1.align-middle{id: "order-id-#{order.id}_pictures", style: "max-width: 180px;"}
+            %td.ks-1.align-middle{id: "order-id-#{order.id}_pictures"}
               - if order.pictures.empty?
                 .ks-2.d-inline-block{id: "order-id-#{order.id}_picture-1"}
                   = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
@@ -55,16 +55,53 @@
                 = order.item_set&.item_no
                 %hr/
                 = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
-                %hr/
+                -# %hr/
+                -# - if order.item_set.item_units.any?
+                -#   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-light" do
+                -#     マスター買付け先 登録済
+                -#     %i.fas.fa-external-link-alt.ml-2
+                -# - else
+                -#   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
+                -#     マスター買付け先 未登録
+                -#     %i.fas.fa-external-link-square-alt.ml-2
+            %td
+              .mb-2
                 - if order.item_set.item_units.any?
-                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-light" do
-                    買付先情報（マスター）登録済
+                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-light" do
+                    マスター買付け先 登録済
                     %i.fas.fa-external-link-alt.ml-2
                 - else
-                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-outline-danger" do
-                    買付先情報（マスター）未登録
+                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
+                    マスター買付け先 未登録
                     %i.fas.fa-external-link-square-alt.ml-2
-            %td
+              .mb-2
+                = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
+                  今回の買付け先
+                  %i.fas.fa-external-link-alt.ml-2
+              - actual_item_units = order.actual_item_units
+              - actual_item_units.includes(:taobao_urls).each_with_index do |actual_item_unit, i|
+                .mb-2
+                  - if actual_item_units.length > 1
+                    %p= "商品 #{i + 1}"
+                  %table
+                    %tbody
+                      - actual_item_unit.taobao_urls.each do |taobao_url|
+                        %tr
+                          %td.w-25.text-center
+                            - if taobao_url.id == actual_item_unit.first_candidate_id
+                              %i.fas.fa-check
+                          %td.w-75{style: "max-width: 110px"}
+                            %p.text-truncate= link_to taobao_url.url, taobao_url.url, :target=>["_blank"]
+                -# .d-table
+                -#   .d-table-row
+                -#     .d-table-cell 優先
+                -#     .d-table-cell URL
+                -#   .d-table-row
+                -#     .d-table-cell 優先
+                -#     .d-table-cell URL
+                -#   .d-table-row
+                -#     .d-table-cell 優先
+                -#     .d-table-cell URL
             %td
               .d-inline-block
                 色・サイズ：

@@ -14,6 +14,20 @@ class ItemSetsController < ApplicationController
           have_stock_params,
           current_company
         )
+        item_units = item_set.item_units.includes(:taobao_urls)
+        item_set.orders.each do |order|
+          if order.actual_item_units.empty?
+            item_units.each do |item_unit|
+              actual_item_unit = order.actual_item_units.create(first_candidate_id: item_unit.first_candidate_id)
+              actual_taobao_urls = actual_item_unit.taobao_urls
+              item_unit.taobao_urls.each do |taobao_url|
+                if !actual_taobao_urls.include?(taobao_url)
+                  actual_item_unit.actual_item_unit_taobao_urls.create(taobao_url: taobao_url)
+                end
+              end
+            end
+          end
+        end
       end
       flash[:success] = "更新できました"
       redirect_to japanese_retailer_orders_path
