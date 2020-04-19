@@ -28,6 +28,8 @@
           .item_units
             - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
               .row.mx-2.item-row
+                - if item_unit.id.to_i != 0
+                  = hidden_field_tag "not_remove_item_unit[#{i}][#{item_unit.id.to_i}]", "must_remove"
                 .col.mb-5
                   .h5.item_uint_and_trash
                     .d-inline.item_unit_title
@@ -46,6 +48,8 @@
                     %tbody.item_unit_tbody
                       - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, k|
                         %tr
+                          - if taobao_url.id.to_i != 0
+                            = hidden_field_tag "not_remove_taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
                           - check_box_true_or_false = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
                           %td.text-center.align-middle
                             = check_box_tag "first_candidate_select[#{i}][#{k}]", true, check_box_true_or_false, class: "submit_check_box"
@@ -122,16 +126,31 @@
       var $this_tbody = $this_tr.parent();
       var $this_table = $this_tbody.parent();
       $this_tr.fadeOut('fast').queue(function(e) {
+        var $hidden_input = $this_tr.children('input:first');
+        var temp_name = $hidden_input.attr('name');
+        if (temp_name) {
+          var revision_name = temp_name.slice(4);
+          $hidden_input.attr('name', revision_name);
+          $this_tr.before($hidden_input);
+        }
         $this_tr.remove();
         var $tbody_tr = $this_tbody.children('tr');
         if ($tbody_tr.length == 2) {
           addTrFunction($this_table);
         }
+        return recursiveAllFunction()
       });
     })
     $('.item_unit_remove_btn').on('click', function(e){
       $item_unit_remove_btn = $(e.target)
       $item_row =  $item_unit_remove_btn.closest('.item-row');
+      var $hidden_input = $item_row.children('input:first');
+      var temp_name = $hidden_input.attr('name');
+      if (temp_name) {
+          var revision_name = temp_name.slice(4);
+          $hidden_input.attr('name', revision_name);
+          $item_row.before($hidden_input);
+      }
       removeItemUnitFunction($item_row);
     })
     // 商品1,商品2..を整理

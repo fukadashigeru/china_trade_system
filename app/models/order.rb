@@ -87,8 +87,8 @@ class Order < ApplicationRecord
   end
 
   # 今回の買付先を更新するメソッド
-  def processing_actual_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_company)
-    actual_item_unit_ids_included_in_params = Array.new
+  def processing_actual_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_company, remove_taobao_url_params, remove_actual_item_unit_params)
+    # actual_item_unit_ids_included_in_params = Array.new
     taobao_url_params.keys.each do |i|
       taobao_url_params[i].keys.each do |j|
         if j == "0"
@@ -96,30 +96,29 @@ class Order < ApplicationRecord
         else
           actual_item_unit = actual_item_units.find(j.to_i)
         end
-        actual_item_unit_ids_included_in_params << actual_item_unit.id
-        taobao_url_ids_included_in_params = Array.new
+        # actual_item_unit_ids_included_in_params << actual_item_unit.id
+        # taobao_url_ids_included_in_params = Array.new
         taobao_url_params[i][j].keys.each do |k|
           taobao_url_params[i][j][k].keys.each do |l|
             taobao_url_params_url = taobao_url_params[i][j][k][l]
-            ## 新規入力のINPUTの場合
+            # 新規入力のinput_fieldの場合(元々空の場合)
             if l == "0"
               next unless taobao_url_params_url.present?
-              taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
-              actual_item_unit.actual_item_unit_taobao_urls.create(taobao_url_id: taobao_url.id)
-              taobao_url_ids_included_in_params << taobao_url.id
-            ## 上書きされたINPUTの場合
+              new_taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
+              actual_item_unit.actual_item_unit_taobao_urls.find_or_create_by(taobao_url_id: new_taobao_url.id)
+            # 上書きされたinput_fieldの場合
             else
-              taobao_url = actual_item_unit.taobao_urls.find(l.to_i)
+              old_taobao_url = actual_item_unit.taobao_urls.find(l.to_i)
               # actual_item_unit_taobao_url = ActualItemUnitTaobaoUrl.find_by(actual_item_unit_id: j.to_i , taobao_url_id: l.to_i)
               actual_item_unit_taobao_url = current_company.taobao_urls.find(l.to_i).actual_item_unit_taobao_urls.find_by(actual_item_unit_id: j.to_i)
               # 当該のactual_item_unit以外に当該のtaobao_urlにitem_unitかactual_item_unitがつながってる場合
-              if taobao_url.item_units.length + taobao_url.actual_item_units.length > 1
+              if old_taobao_url.item_units.length + old_taobao_url.actual_item_units.length > 1
                 if taobao_url_params_url.present?
-                  taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
-                  actual_item_unit_taobao_url.update(taobao_url_id: taobao_url.id)
+                  new_taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
+                  actual_item_unit_taobao_url.update(taobao_url_id: new_taobao_url.id)
                   # taobao_url = new_taobao_url
-                  taobao_url_ids_included_in_params << taobao_url.id
                 # 当該のactual_item_unit以外に当該のtaobao_urlにitem_unitかactual_item_unitがつながってる場合に、中間テーブルを削除
+                # taobao_urlは他のItemUnit or ActualItemUnitと紐付いているので削除不要
                 else
                   actual_item_unit_taobao_url.destroy
                 end
@@ -131,32 +130,32 @@ class Order < ApplicationRecord
                   if new_taobao_url
                     # 入力されたURLの既存のレコードが、当該のtaobao_urlではない場合
                     if new_taobao_url&.id != l.to_i
-                      taobao_url.destroy if taobao_url.item_units.length + taobao_url.actual_item_units.length > 1
-                      taobao_url = new_taobao_url
-                    # 入力されたURLのレコードがない場合場合
+                      old_taobao_url.destroy 
+                      new_taobao_url.actual_item_unit_taobao_urls.find_or_create_by(actual_item_unit_id: actual_item_unit.id )
+                    # 
                     else
                       # ここの記述いらんかも
-                      taobao_url.update(url: taobao_url_params_url)
+                      # old_taobao_url.update(url: taobao_url_params_url)
                     end
-                  # 入力されたURLのレコードがない場合場合
+                  # 入力されたURLのレコードが既にない場合
                   else
-                    taobao_url.update(url: taobao_url_params_url)
+                     old_taobao_url.update(url: taobao_url_params_url)
                   end
-                  taobao_url_ids_included_in_params << taobao_url.id
+                  # taobao_url_ids_included_in_params << old_taobao_url.id
                 else
-                  taobao_url.destroy
+                  old_taobao_url.destroy
                 end
               end
             end
             ## 第一候補をactual_item_unitのfirst_candidate_idに登録する
             if first_candidate_params
               if k == first_candidate_params[i]&.keys&.first
-                actual_item_unit.update(first_candidate_id: taobao_url.id)
+                actual_item_unit.update(first_candidate_id: new_taobao_url.id)
               end
             end
             # 在庫の有無を変更
             if taobao_url_params_url.present?
-              taobao_url.update(is_have_stock: have_stock_params[i][k].to_i)
+              new_taobao_url.update(is_have_stock: have_stock_params[i][k].to_i)
             end
           end
         end
@@ -169,14 +168,18 @@ class Order < ApplicationRecord
           actual_item_unit.update(first_candidate_id: nil)
         end
         #削除処理
-        removed_taobao_url_ids = actual_item_unit.taobao_urls.ids - taobao_url_ids_included_in_params
-        removed_taobao_url_ids.each do |i|
-          removed_taobao_url = current_company.taobao_urls.find(i)
-          if removed_taobao_url.actual_item_units.length > 1
-            actual_item_unit_taobao_url = ActualItemUnitTaobaoUrl.find_by(actual_item_unit_id: actual_item_unit.id, taobao_url_id: i)
-            actual_item_unit_taobao_url.destroy
-          else
-            removed_taobao_url.destroy
+        if remove_taobao_url_params[i]
+          if remove_taobao_url_params[i][j]
+            remove_taobao_url_params[i][j].keys.each do |m|
+              remove_taobao_url_params[i][j][m].keys.each do |n|
+                remove_taobao_url = actual_item_unit.taobao_urls.find(n.to_i)
+                if remove_taobao_url.item_units.length + remove_taobao_url.actual_item_units.length > 1
+                  remove_taobao_url.actual_item_unit_taobao_urls.find_by(actual_item_unit_id: actual_item_unit.id).destroy
+                else
+                  remove_taobao_url.destroy
+                end
+              end
+            end
           end
         end
         if actual_item_unit.taobao_urls.empty?
@@ -184,11 +187,13 @@ class Order < ApplicationRecord
         end
       end
     end
-    removed_actual_item_unit_ids = actual_item_units.ids - actual_item_unit_ids_included_in_params
-    removed_actual_item_unit_ids.each do |i|
-      removed_actual_item_unit = actual_item_units.find(i)
-      removed_actual_item_unit.destroy
+    if remove_actual_item_unit_params
+      remove_actual_item_unit_params.keys.each do |o|
+        remove_actual_item_unit_params[o].keys.each do |p|
+          actual_item_unit = actual_item_units.find(p.to_i)
+          actual_item_unit.destroy
+        end
+      end
     end
   end
-
 end

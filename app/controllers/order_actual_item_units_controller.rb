@@ -12,7 +12,9 @@ class OrderActualItemUnitsController < ApplicationController
           taobao_url_params,
           first_candidate_params,
           have_stock_params,
-          current_company
+          current_company,
+          remove_taobao_url_params,
+          remove_actual_item_unit_params
         )
       end
       flash[:success] = "更新できました"
@@ -34,5 +36,17 @@ class OrderActualItemUnitsController < ApplicationController
 
     def have_stock_params
       params.require(:"have_stock")
+    end
+
+    def remove_taobao_url_params
+      if params[:"remove_taobao_url"]
+        params.require(:"remove_taobao_url")
+      end
+    end
+
+    def remove_actual_item_unit_params
+      if params[:"remove_actual_item_unit"]
+        params.require(:"remove_actual_item_unit")
+      end
     end
 end

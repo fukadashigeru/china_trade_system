@@ -12,7 +12,9 @@ class ItemSetsController < ApplicationController
           taobao_url_params,
           first_candidate_params,
           have_stock_params,
-          current_company
+          current_company,
+          remove_taobao_url_params,
+          remove_item_unit_params
         )
         item_units = item_set.item_units.includes(:taobao_urls)
         item_set.orders.each do |order|
@@ -53,5 +55,17 @@ class ItemSetsController < ApplicationController
 
     def have_stock_params
       params.require(:"have_stock")
+    end
+
+    def remove_taobao_url_params
+      if params[:"remove_taobao_url"]
+        params.require(:"remove_taobao_url")
+      end
+    end
+
+    def remove_item_unit_params
+      if params[:"remove_item_unit"]
+        params.require(:"remove_item_unit")
+      end
     end
 end
