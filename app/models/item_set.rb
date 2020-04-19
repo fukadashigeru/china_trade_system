@@ -24,7 +24,6 @@ class ItemSet < ApplicationRecord
   end
 
   def processing_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_company, remove_taobao_url_params, remove_item_unit_params)
-    # item_unit_ids_included_in_params = Array.new
     taobao_url_params.keys.each do |i|
       taobao_url_params[i].keys.each do |j|
         if j == "0"
@@ -32,9 +31,6 @@ class ItemSet < ApplicationRecord
         else
           item_unit = item_units.find(j.to_i)
         end
-        # binding.pry
-        # item_unit_ids_included_in_params << item_unit.id
-        # taobao_url_ids_included_in_params = Array.new
         taobao_url_params[i][j].keys.each do |k|
           taobao_url_params[i][j][k].keys.each do |l|
             taobao_url_params_url = taobao_url_params[i][j][k][l]
@@ -42,19 +38,18 @@ class ItemSet < ApplicationRecord
             if l == "0"
               next unless taobao_url_params_url.present?
               new_taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
-              item_unit.item_unit_taobao_urls.create(taobao_url_id: new_taobao_url.id)
+              # 既に中間テーブルがない場合
+              item_unit.item_unit_taobao_urls.find_or_create_by(taobao_url_id: new_taobao_url.id)
               # taobao_url_ids_included_in_params << taobao_url.id
             # 上書きされたinput_fieldの場合
             else
               old_taobao_url = item_unit.taobao_urls.find(l.to_i)
-              # item_unit_taobao_url = ItemUnitTaobaoUrl.find_by(item_unit_id: j.to_i , taobao_url_id: l.to_i)
               item_unit_taobao_url = current_company.taobao_urls.find(l.to_i).item_unit_taobao_urls.find_by(item_unit_id: j.to_i)
               # 当該のitem_unit以外に当該のtaobao_urlにitem_unitかactual_item_unitがつながってる場合
               if old_taobao_url.item_units.length + old_taobao_url.actual_item_units.length > 1
                 if taobao_url_params_url.present?
                   new_taobao_url = current_company.taobao_urls.find_or_create_by(url: taobao_url_params_url)
                   item_unit_taobao_url.update(taobao_url_id: new_taobao_url.id)
-                  # taobao_url_ids_included_in_params << taobao_url.id
                 else
                   item_unit_taobao_url.destroy
                 end
@@ -62,19 +57,15 @@ class ItemSet < ApplicationRecord
               else
                 if taobao_url_params_url.present?
                   new_taobao_url = current_company.taobao_urls.find_by(url: taobao_url_params_url)
-                  # 入力されたURLのレコードが既にある場合
+                  # 入力されたURLのレコードが既にあり、かつ、当該のtaobao_urlとそのレコードが異なる場合
                   if new_taobao_url
                     if new_taobao_url&.id != l.to_i
                       old_taobao_url.destroy
                       new_taobao_url.item_unit_taobao_urls.find_or_create_by(item_unit_id: item_unit.id )
-                    else
-                      # ここの記述いらんかも
-                      # taobao_url.update(url: taobao_url_params_url)
                     end
                   else
                     old_taobao_url.update(url: taobao_url_params_url)
                   end
-                  # taobao_url_ids_included_in_params << taobao_url.id
                 # 入力されたURLのレコードが既にない場合
                 else
                   old_taobao_url.destroy
@@ -102,13 +93,11 @@ class ItemSet < ApplicationRecord
           item_unit.update(first_candidate_id: nil)
         end
         #削除処理
-        # binding.pry
         if remove_taobao_url_params
           if remove_taobao_url_params[i]
             if remove_taobao_url_params[i][j]
               remove_taobao_url_params[i][j].keys.each do |m|
                 remove_taobao_url_params[i][j][m].keys.each do |n|
-                  # binding.pry
                   remove_taobao_url = item_unit.taobao_urls.find(n.to_i)
                   if remove_taobao_url.item_units.length + remove_taobao_url.actual_item_units.length > 1
                     remove_taobao_url.item_unit_taobao_urls.find_by(item_unit_id: item_unit.id).destroy

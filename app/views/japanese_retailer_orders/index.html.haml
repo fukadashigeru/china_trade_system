@@ -78,8 +78,8 @@
                 = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
                   今回の買付け先
                   %i.fas.fa-external-link-alt.ml-2
-              - actual_item_units = order.actual_item_units
-              - actual_item_units.includes(:taobao_urls).each_with_index do |actual_item_unit, i|
+              - actual_item_units = order.actual_item_units.order(:id).includes(:taobao_urls)
+              - actual_item_units.each_with_index do |actual_item_unit, i|
                 .mb-2
                   - if actual_item_units.length > 1
                     %p= "商品 #{i + 1}"
