@@ -78,8 +78,16 @@ class JapaneseRetailerOrdersController < ApplicationController
 
   def import
     chinese_buyer = Company.find(params[:chinese_buyer_id])
-    @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
-    redirect_to japanese_retailer_orders_path
+    begin
+      ActiveRecord::Base.transaction do
+        @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
+      end
+      flash[:success] = "インポートに成功しました。"
+      redirect_to japanese_retailer_orders_path
+    rescue
+      flash[:danger] = "インポートに失敗しました。"
+      redirect_to japanese_retailer_orders_path
+    end
   end
 
   private

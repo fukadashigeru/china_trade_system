@@ -5,26 +5,30 @@
     .container
       .modal-header
         / モーダルのタイトル
-        .h4#exampleModalLabel.modal-title 買付先情報（マスター）
+        .h4#exampleModalLabel.modal-title
+          買付先情報
+          %span.badge.badge-success マスター
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
       = form_tag item_set_path(@item_set), method: :put do 
         / モーダルの本文
         .modal-body
-          .d-table
-            .d-table-row
-              .d-table-cell.border.border-secondary.bg-info.text-white.px-2.pt-1
-                .h5
-                  カテゴリー - 商品ID
-              .d-table-cell.border.border-secondary.px-2.pt-1
-                .h5
-                  = link_to @item_set.shop_url, :target=>["_blank"] do
-                    = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
-                    = "-"
-                    = @item_set.item_no 
+          .h5
+            = "販売サイト/商品ID"
+            = " : "
+            = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
+            = "/"
+            = @item_set.item_no 
+          .h5
+            = "販売サイトURL"
+            = " : "
+            = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
           %br
-          .h4 買付先URL
+          .h5
+            買付先URL
+            %span.badge.badge-success マスター
+          %p.help-block 買付先が登録されていない注文や今後インポートする注文に適応されるフォームです。
           .item_units
             - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
               .row.mx-2.item-row

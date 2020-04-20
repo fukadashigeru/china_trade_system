@@ -14,12 +14,10 @@
             注文No
           %th.align-middle{style: "width: 250px;"} 注文商品画像
           %th.align-middle{style: "width: 160px;"}
-            カテゴリー - 商品ID
-            %br
-            販売サイト
-            %br
-            買付先情報（マスター）
-          %th.align-middle{style: "width: 200px"} 買付先情報（今回の注文）
+            販売サイト/商品ID
+            %br/
+            販売サイトURL
+          %th.align-middle{style:"width: 200px"} 買付先URL
           %th.align-middle{style:"width: 160px;"} 色・サイズ・数量
           %th.align-middle{style:"width: 160px;"} お届け先
           %th.align-middle{style:"width: 100px;"} 予定費用
@@ -51,33 +49,30 @@
             %td.text-break
               - if order.item_set
                 = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
-                = "-"
+                = "/"
                 = order.item_set&.item_no
                 %hr/
                 = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
-                -# %hr/
-                -# - if order.item_set.item_units.any?
-                -#   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-light" do
-                -#     マスター買付け先 登録済
-                -#     %i.fas.fa-external-link-alt.ml-2
-                -# - else
-                -#   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
-                -#     マスター買付け先 未登録
-                -#     %i.fas.fa-external-link-square-alt.ml-2
             %td
               .mb-2
                 - if order.item_set.item_units.any?
                   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-light" do
-                    マスター買付け先 登録済
+                    マスター買付先 登録済
                     %i.fas.fa-external-link-alt.ml-2
                 - else
                   = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
-                    マスター買付け先 未登録
+                    マスター買付先 未登録
                     %i.fas.fa-external-link-square-alt.ml-2
               .mb-2
-                = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
-                  今回の買付け先
-                  %i.fas.fa-external-link-alt.ml-2
+                - if order.actual_item_units.any?
+                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
+                    今回の注文の買付先 登録済
+                    %i.fas.fa-external-link-alt.ml-2
+                - elsif order.item_set.item_units.any?
+                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-outline-danger" do
+                    今回の注文の買付先 未登録
+                    %i.fas.fa-external-link-alt.ml-2
+              %p 今回の注文の買付先URL
               - actual_item_units = order.actual_item_units.order(:id).includes(:taobao_urls)
               - actual_item_units.each_with_index do |actual_item_unit, i|
                 .mb-2
@@ -87,21 +82,11 @@
                     %tbody
                       - actual_item_unit.taobao_urls.each do |taobao_url|
                         %tr
-                          %td.w-25.text-center
+                          %td.text-center
                             - if taobao_url.id == actual_item_unit.first_candidate_id
                               %i.fas.fa-check
-                          %td.w-75{style: "max-width: 110px"}
+                          %td{style: "max-width: 175px"}
                             %p.text-truncate= link_to taobao_url.url, taobao_url.url, :target=>["_blank"]
-                -# .d-table
-                -#   .d-table-row
-                -#     .d-table-cell 優先
-                -#     .d-table-cell URL
-                -#   .d-table-row
-                -#     .d-table-cell 優先
-                -#     .d-table-cell URL
-                -#   .d-table-row
-                -#     .d-table-cell 優先
-                -#     .d-table-cell URL
             %td
               .d-inline-block
                 色・サイズ：
