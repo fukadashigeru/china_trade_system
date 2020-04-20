@@ -55,38 +55,42 @@
                 = link_to order.item_set.shop_url, order.item_set.shop_url, :target=>["_blank"]
             %td
               .mb-2
-                - if order.item_set.item_units.any?
-                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-light" do
-                    マスター買付先 登録済
-                    %i.fas.fa-external-link-alt.ml-2
-                - else
-                  = link_to edit_item_set_path(order.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
-                    マスター買付先 未登録
-                    %i.fas.fa-external-link-square-alt.ml-2
+                - if order&.item_set
+                  - if order&.item_set&.item_units&.any?
+                    = link_to edit_item_set_path(order&.item_set), remote: true, class: "btn btn-sm btn-light" do
+                      マスター買付先 登録済
+                      %i.fas.fa-external-link-alt.ml-2
+                  - else
+                    = link_to edit_item_set_path(order&.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
+                      マスター買付先 未登録
+                      %i.fas.fa-external-link-square-alt.ml-2
               .mb-2
                 - if order.actual_item_units.any?
                   = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
                     今回の注文の買付先 登録済
                     %i.fas.fa-external-link-alt.ml-2
-                - elsif order.item_set.item_units.any?
+                - elsif order&.item_set&.item_units&.any?
                   = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-outline-danger" do
                     今回の注文の買付先 未登録
                     %i.fas.fa-external-link-alt.ml-2
-              %p 今回の注文の買付先URL
-              - actual_item_units = order.actual_item_units.order(:id).includes(:taobao_urls)
-              - actual_item_units.each_with_index do |actual_item_unit, i|
-                .mb-2
-                  - if actual_item_units.length > 1
-                    %p= "商品 #{i + 1}"
-                  %table
-                    %tbody
-                      - actual_item_unit.taobao_urls.each do |taobao_url|
-                        %tr
-                          %td.text-center
-                            - if taobao_url.id == actual_item_unit.first_candidate_id
-                              %i.fas.fa-check
-                          %td{style: "max-width: 175px"}
-                            %p.text-truncate= link_to taobao_url.url, taobao_url.url, :target=>["_blank"]
+              - actual_item_units = order&.actual_item_units&.order(:id).includes(:taobao_urls)
+              - if actual_item_units.present?
+                %p 今回の注文の買付先URL
+                - actual_item_units.each_with_index do |actual_item_unit, i|
+                  .mb-2
+                    - if actual_item_units.length > 1
+                      %p= "商品 #{i + 1}"
+                    %table
+                      %tbody
+                        - actual_item_unit.taobao_urls.each do |taobao_url|
+                          %tr
+                            %td.text-center
+                              - if taobao_url.id == actual_item_unit.first_candidate_id
+                                %i.fas.fa-check
+                            %td{style: "max-width: 175px"}
+                              %p.text-truncate= link_to taobao_url.url, taobao_url.url, :target=>["_blank"]
+              - else
+                %p 買付先が登録されていません。
             %td
               .d-inline-block
                 色・サイズ：

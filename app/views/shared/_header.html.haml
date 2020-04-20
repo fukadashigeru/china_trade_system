@@ -1,4 +1,12 @@
 %nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom.nav-header
+  - if current_page?(japanese_retailer_orders_path)
+    %ul
+      %li.dropdown
+        %button.btn.btn-sm.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+          注文入力
+        .dropdown-menu.dropdown-menu-left.px-2{"aria-labelledby" => "dropdownMenuButton"}
+          = link_to "注文インポート", order_csv_imports_path, class: "btn bg-success text-white dropdown-item", remote: true
+          = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary dropdown-item mt-1", remote: true
   %ul.ml-auto
     %li.dropdown
       %button.btn.btn-sm.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
