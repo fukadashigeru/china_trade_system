@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_165226) do
+ActiveRecord::Schema.define(version: 2020_04_21_150748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,7 +186,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_165226) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "is_have_stock", default: 0, null: false
+    t.integer "is_have_stock", default: 1, null: false
     t.bigint "company_id"
     t.index ["company_id"], name: "index_taobao_urls_on_company_id"
   end

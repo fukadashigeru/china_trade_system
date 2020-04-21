@@ -40,8 +40,8 @@ ja:
           amazon: "AMAZON"
       taobao_url:
         is_have_stock:
-          have_stock: "在庫有り"
           not_have_stock: "在庫無し"
+          have_stock: "在庫有り"
   devise:
     confirmations:
       confirmed: "メールアドレスの認証が完了しました。"

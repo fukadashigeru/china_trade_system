@@ -235,8 +235,8 @@
       </div>
       </td>
       <td class="text-center align-middle">
-      <select name="have_stock[${this_item_unit_id}][${new_tr_id}]" id="have_stock_${this_item_unit_id}_${new_tr_id}" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
-      <option value="1">在庫無し</option></select>
+      <select name="have_stock[${this_item_unit_id}][${new_tr_id}]" id="have_stock_${this_item_unit_id}_${new_tr_id}" class="have_stock form-control"><option selected="selected" value="1">在庫有り</option>
+      <option value="0">在庫無し</option></select>
       </td>
       <td class="text-center align-middle">
       <div class="btn btn-sm btn-outline-danger tr_remove_btn">
@@ -292,8 +292,8 @@
       </div>
       </td>
       <td class="text-center align-middle">
-      <select name="have_stock[${next_item_unit_id}][0]" id="have_stock_[${next_item_unit_id}]_0" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
-      <option value="1">在庫無し</option></select>
+      <select name="have_stock[${next_item_unit_id}][0]" id="have_stock_[${next_item_unit_id}]_0" class="have_stock form-control"><option selected="selected" value="1">在庫有り</option>
+      <option value="0">在庫無し</option></select>
       </td>
       <td class="text-center align-middle">
       <div class="btn btn-sm btn-outline-danger tr_remove_btn">
@@ -316,8 +316,8 @@
       </div>
       </td>
       <td class="text-center align-middle">
-      <select name="have_stock[${next_item_unit_id}][1]" id="have_stock_[${next_item_unit_id}]_1" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
-      <option value="1">在庫無し</option></select>
+      <select name="have_stock[${next_item_unit_id}][1]" id="have_stock_[${next_item_unit_id}]_1" class="have_stock form-control"><option selected="selected" value="1">在庫有り</option>
+      <option value="0">在庫無し</option></select>
       </td>
       <td class="text-center align-middle">
       <div class="btn btn-sm btn-outline-danger tr_remove_btn">
@@ -340,8 +340,8 @@
       </div>
       </td>
       <td class="text-center align-middle">
-      <select name="have_stock[${next_item_unit_id}][2]" id="have_stock_[${next_item_unit_id}]_2" class="have_stock form-control"><option selected="selected" value="0">在庫有り</option>
-      <option value="1">在庫無し</option></select>
+      <select name="have_stock[${next_item_unit_id}][2]" id="have_stock_[${next_item_unit_id}]_2" class="have_stock form-control"><option selected="selected" value="1">在庫有り</option>
+      <option value="0">在庫無し</option></select>
       </td>
       <td class="text-center align-middle">
       <div class="btn btn-sm btn-outline-danger tr_remove_btn">
@@ -385,22 +385,22 @@
     if ($this_taobao_url_input == ""){
       switch (n) {
         case '0':
-          $this_select_tag.removeClass('bg-secondary text-white');
+          $this_select_tag.addClass('bg-secondary text-white');
           break;
         case '1':
-          $this_select_tag.addClass('bg-secondary text-white');
+          $this_select_tag.removeClass('bg-secondary text-white');
           break;
       }
     } else {
       switch (n) {
         case '0':
-          $this_select_tag.removeClass('bg-secondary text-white');
-          $this_submit_check_box.prop('disabled', false);
-          break;
-        case '1':
           $this_select_tag.addClass('bg-secondary text-white');
           $this_submit_check_box.prop('checked', false);
           $this_submit_check_box.prop('disabled', true);
+          break;
+        case '1':
+          $this_select_tag.removeClass('bg-secondary text-white');
+          $this_submit_check_box.prop('disabled', false);
           break; 
       }
     }
@@ -412,7 +412,7 @@
     var $this_select_tag = $this_tr.find('.have_stock');
     var n = $this_select_tag.children('option:selected').val();
     var $this_submit_check_box = $this_tr.find('.submit_check_box');
-    if (n == '0'){
+    if (n == '1'){
       if (this_taobao_url_input_val == ""){
         $this_submit_check_box.prop('checked', false);
         $this_submit_check_box.prop('disabled', true);
@@ -439,7 +439,7 @@
         var $this_select_tag = $this_tr.find('.have_stock');
         var n = $this_select_tag.children('option:selected').val();
         var $this_submit_check_box = $this_tr.find('.submit_check_box');
-        if ($this_taobao_url_input_val != "" && n == '0'){
+        if ($this_taobao_url_input_val != "" && n == '1'){
           $this_submit_check_box.prop('checked', true);
           return false;
         }

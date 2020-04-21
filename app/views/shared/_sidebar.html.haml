@@ -27,7 +27,8 @@
             - japanese_retailers = current_company.chinese_buyer_orders.map(&:japanese_retailer).flatten.uniq
             - japanese_retailers.each do |japanese_retailer|
               = link_to japanese_retailer.name, chinese_buyer_orders_path(japanese_retailer_id: japanese_retailer.id), class: "list-group-item list-group-item-action bg-light"
-    = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light" do
-      取引先一覧
+    %li
+      = link_to company_connects_path, class: "list-group-item list-group-item-action bg-light" do
+        取引先一覧
 
 
