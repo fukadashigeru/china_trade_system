@@ -9,7 +9,7 @@
       %i.fas.fa-pen-alt
     
 %div.mt-2.taobao_color_size_name.text-break
-  = @order&.taobao_color_size&.name
+  = simple_format(@order&.taobao_color_size&.name)
 
 :javascript
   $(function(){
