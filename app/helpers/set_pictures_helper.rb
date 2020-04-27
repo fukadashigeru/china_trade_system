@@ -1,0 +1,2 @@
+module SetPicturesHelper
+end

@@ -32,6 +32,8 @@
               = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-primary btn-sm edit-btn", remote: true do
                 %i.fas.fa-edit
             %td.ks-1.align-middle{id: "order-id-#{order.id}_pictures"}
+              - if order&.item_set&.color_size_price_images.present?
+                = link_to "登録画像から選択", new_set_picture_path, class: 'btn btn-outline-warning mb-1', remote: true
               - if order.pictures.empty?
                 .ks-2.d-inline-block{id: "order-id-#{order.id}_picture-1"}
                   = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
@@ -136,23 +138,21 @@
               = ""
             %td.align-middle
               = ""
-
-
 - else
   .row.mt-4
     .col
       .h6.pt-2 注文がありません。注文インポートか注文手入力を行ってください。
 :javascript
-  $(document).on('change', ':file', function() {
-    var input = $(this),
-    numFiles = input.get(0).files ? input.get(0).files.length : 1,
-    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    input.parent().parent().next(':text').val(label);
-  });
-  function file_selected(file_field){
-    var filename = $(file_field)[0].files[0].name;
-    $("#filename").val(filename);
-  }
+  //$(document).on('change', ':file', function() {
+  //  var input = $(this),
+  //  numFiles = input.get(0).files ? input.get(0).files.length : 1,
+  //  label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+  //  input.parent().parent().next(':text').val(label);
+  //});
+  //function file_selected(file_field){
+  //  var filename = $(file_field)[0].files[0].name;
+  //  $("#filename").val(filename);
+  //}
   $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
       $('#sidebar-wrapper').toggleClass('active');

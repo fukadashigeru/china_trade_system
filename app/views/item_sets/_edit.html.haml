@@ -11,7 +11,7 @@
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      = form_tag item_set_path(@item_set), method: :put do 
+      = form_tag item_set_path(@item_set), method: :put, multipart: true do 
         / モーダルの本文
         .modal-body
           .h5
@@ -24,17 +24,18 @@
             = "販売サイトURL"
             = " : "
             = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
-          %br
+          %hr
           .h5
             買付先URL
             %span.badge.badge-success マスター
+            %span.badge.badge-danger 必須
           %p.help-block 買付先が登録されていない注文や今後インポートする注文に適応されるフォームです。
           .item_units
             - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
               .row.mx-2.item-row
                 - if item_unit.id.to_i != 0
                   = hidden_field_tag "not_remove_item_unit[#{i}][#{item_unit.id.to_i}]", "must_remove"
-                .col.mb-5
+                .col.mb-3
                   .h5.item_uint_and_trash
                     .d-inline.item_unit_title
                       = ""
@@ -81,12 +82,129 @@
             .btn.btn-sm.btn-outline-warning.text-center.add-item-unit-btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
               商品追加
               %i.fas.fa-long-arrow-alt-right
+          %hr
+          .mt-3
+            .h5
+              バリエーション別の画像と買付価格
+              %span.badge.badge-secondary 任意
+            .color_size_price_images
+              .row.mx-2
+                .col.mb-3
+                  %table.table.table-bordered.w-75
+                    %thead.thead-light
+                      %tr
+                        %th 画像
+                        %th バリエーション
+                        %th 価格
+                        -# %th 削除
+                    %tbody.color_size_price_images_tbody
+                      - @color_size_price_images.each_with_index do |color_size_price_image, i|
+                        - color_size_price_image_id = color_size_price_image.persisted? ? "color_size_price_image_#{color_size_price_image.id}" : nil
+                        %tr{id: color_size_price_image_id}
+                          - if color_size_price_image.id.to_i != 0
+                            = hidden_field_tag "not_remove_color_size_price_image[#{i}][#{color_size_price_image.id.to_i}]"
+                          %td
+                            .picture_input_preview_group.text-center
+                              - if color_size_price_image.image.url
+                                .picture_input_group.d-none
+                                  %label
+                                    .btn.btn-primary.picture_import_btn
+                                      Choose Picture File
+                                    = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
+                                .picture_preview_group
+                                  .d-inline-block.mr-1.mt-1.picture-block
+                                    = image_tag color_size_price_image.image.url, style:"height: 150px;", class: "img-thumbnail"
+                                    .btn.btn-danger.delete-btn.remove_picture_preveiw_btn
+                                      %i.far.fa-trash-alt
+                              - else
+                                .picture_input_group
+                                  %label
+                                    .btn.btn-primary.picture_import_btn
+                                      Choose Picture File
+                                    = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
 
-        %br
+                          %td.text-center
+                            = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control", placeholder: "ブラック"
+                          %td
+                            .input-group
+                              = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control", placeholder: "60"
+                              .input-group-append
+                                %span.input-group-text 元
+                          -# %td.text-center
+                          -#   .btn.btn-sm.btn-outline-danger.color_size_price_images_tr_remove_btn
+                          -#     %i.fas.fa-trash-alt
+                            
+            -# = hidden_field "[color_size_price_image][item_set_id]", @color_size_price_image.item_set_id
+            -# = file_field_tag "[color_size_price_image][image]", accept: 'image/jpg,image/jpeg,image/png'
         .modal-footer
           = submit_tag "保存", class: "btn btn-primary pull-right w-25"
 
 :javascript
+  $(function() {
+    $('.custom-file-input').on('change', handleFileSelect);
+    removePicturePreview();
+    removeColorSizePriceImageTr();
+  })
+  function handleFileSelect(evt) {
+    $this_picture_input_group = $(evt.target).parents('.picture_input_group');
+    $this_picture_input_group.after('<div class="picture_preview_group"></div>');
+    var file_list = evt.target.files;
+    var reader = new FileReader();
+    reader.onload = (function(theFile) {
+      return function(e) {
+        if (theFile.type.match('image.*')) {
+          var $html = ['<div class="d-inline-block mr-1 mt-1 picture-block"><img class="img-thumbnail" src="', e.target.result,'" title="', escape(theFile.name), '" style="height:150px;" /><div class="btn btn-danger delete-btn remove_picture_preveiw_btn"><i class="far fa-trash-alt"></i></div></div>'].join('');// 画像では画像のプレビューとファイル名の表示
+        } else {
+          var $html = ['<div class="d-inline-block mr-1"><span class="small">', escape(theFile.name),'</span></div>'].join('');//画像以外はファイル名のみの表示
+        }
+
+        $this_picture_input_group.next('.picture_preview_group').append($html);
+        return removePicturePreview();
+      };
+    })(file_list[0]);
+
+    reader.readAsDataURL(file_list[0]);
+    $this_picture_input_group.addClass('d-none');
+  }
+  // 画像を削除する
+  function removePicturePreview(){
+    $('.remove_picture_preveiw_btn').on('click', function(e){
+      $remove_picture_preveiw_btn = $(e.target);
+      $picture_preview_group = $remove_picture_preveiw_btn.parents('.picture_preview_group');
+      $picture_input_group = $picture_preview_group.prev('.picture_input_group');
+      $picture_input_group.removeClass('d-none');
+      $picture_preview_group.remove();
+    })
+  }
+  // removeColorSizePriceImageTr()
+  function removeColorSizePriceImageTr() {
+    $('.color_size_price_images_tr_remove_btn').on('click', function(e){
+      var $this_tr_remove_btn = $(e.target);
+      var $this_tr = $this_tr_remove_btn.closest('tr');
+      var $this_tbody = $this_tr.parent();
+      var $this_table = $this_tbody.parent();
+      $this_tr.fadeOut('fast').queue(function(e) {
+        var $hidden_input = $this_tr.children('input:first');
+        var temp_name = $hidden_input.attr('name');
+        if (temp_name) {
+          var revision_name = temp_name.slice(4);
+          $hidden_input.attr('name', revision_name);
+          $this_tr.before($hidden_input);
+        }
+        $this_tr.remove();
+        var $tbody_tr = $this_tbody.children('tr');
+        if ($tbody_tr.length == 2) {
+          addColorSizePriceImageTrFunction($this_table);
+        }
+        //return recursiveAllFunction()
+      });
+    })
+  }
+  // ColorSizePriceImageTr()追加
+  function addColorSizePriceImageTrFunction($this_table) {
+
+  }
+
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()
     $('.add-input-btn').on('click', function(e){

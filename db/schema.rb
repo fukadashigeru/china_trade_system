@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_21_150748) do
+ActiveRecord::Schema.define(version: 2020_04_22_160703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2020_04_21_150748) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["actual_item_variety_id"], name: "index_actual_taobao_urls_on_actual_item_variety_id"
+  end
+
+  create_table "color_size_price_images", force: :cascade do |t|
+    t.bigint "item_set_id"
+    t.string "image"
+    t.string "color_size"
+    t.integer "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_set_id"], name: "index_color_size_price_images_on_item_set_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -239,6 +249,7 @@ ActiveRecord::Schema.define(version: 2020_04_21_150748) do
   add_foreign_key "actual_item_units", "taobao_urls", column: "first_candidate_id"
   add_foreign_key "actual_item_varieties", "orders"
   add_foreign_key "actual_taobao_urls", "actual_item_varieties"
+  add_foreign_key "color_size_price_images", "item_sets"
   add_foreign_key "companies", "users", column: "owner_user_id"
   add_foreign_key "company_connects", "companies"
   add_foreign_key "company_connects", "connects"

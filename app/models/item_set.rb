@@ -2,6 +2,7 @@ class ItemSet < ApplicationRecord
   belongs_to :company
   has_many :orders
   has_many :item_units
+  has_many :color_size_price_images
 
   enum item_no_category: { unspecified: 0, buyma: 1, amazon: 2 }
 
@@ -21,6 +22,23 @@ class ItemSet < ApplicationRecord
         [item_unit, taobao_urls_array]
       end.to_h
     end
+  end
+
+  def build_color_size_price_images
+    color_size_price_images_array = Array.new
+    color_size_price_images_persisted = color_size_price_images.order(:id)
+    n = 5
+    if color_size_price_images_persisted.present?
+      color_size_price_images_array << color_size_price_images_persisted
+      # binding.pry
+      n -= color_size_price_images_persisted.length
+    end
+    if n > 0
+      n.times{ color_size_price_images_array << color_size_price_images.build }
+    else
+      2.times{ color_size_price_images_array << color_size_price_images.build }
+    end
+    color_size_price_images_array.flatten
   end
 
   def processing_item_units_and_taobao_urls(taobao_url_params, first_candidate_params, have_stock_params, current_company, remove_taobao_url_params, remove_item_unit_params)
@@ -119,6 +137,34 @@ class ItemSet < ApplicationRecord
         remove_item_unit_params[o].keys.each do |p|
           item_unit = item_units.find(p.to_i)
           item_unit.destroy
+        end
+      end
+    end
+  end
+
+  def create_and_update_color_size_price_images(color_size_price_image_params)
+    color_size_price_image_params.keys.each do |i|
+      color_size_price_image_params[i].keys.each do |j|
+        this_color_size_price_image_param = color_size_price_image_params[i][j]
+        this_color_size = this_color_size_price_image_param[:color_size]
+        this_price = this_color_size_price_image_param[:price]
+        this_image = this_color_size_price_image_param[:image]
+        next if this_color_size == "" && this_price == "" && this_image.nil?
+        if j.to_i == 0
+          color_size_price_images.create(
+            image: this_color_size_price_image_param[:image],
+            color_size: this_color_size_price_image_param[:color_size],
+            price: this_color_size_price_image_param[:price]
+          )
+        else
+          this_color_size_price_image = color_size_price_images.find(j.to_i)
+          this_color_size_price_image.update(
+            color_size: this_color_size,
+            price: this_price
+          )
+          if !this_image.nil?
+            this_color_size_price_image.update(image: this_image)
+          end
         end
       end
     end
