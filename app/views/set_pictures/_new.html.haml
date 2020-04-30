@@ -5,9 +5,52 @@
     .container
       .modal-header
         / モーダルのタイトル
-        %h5#exampleModalLabel.modal-title 登録画像から選択
+        .h5#exampleModalLabel.modal-title 登録画像から選択
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      / モーダルの本文
-      .modal-body
+      = form_tag set_pictures_path, method: :post do
+        / モーダルの本文
+        .modal-body
+          .row.mx-3
+            .col
+              %table.table.table-bordered.w-75
+                %thead.thead-light
+                  %tr
+                    %th.text-center 選択
+                    %th.text-center 画像
+                    %th.text-center バリエーション
+                    %th.text-center 価格
+                    -# %th 削除
+                %tbody.color_size_price_images_tbody
+                  = hidden_field_tag "order_id", @order.id
+                  = hidden_field_tag "item_set_id", @item_set.id
+                  - @color_size_price_images.each do |color_size_price_image|
+                    %tr
+                      %td.text-center.align-middle
+                        .form-check
+                          - already_selected_color_size_price_image_id_array = @order.pictures.map(&:color_size_price_image_id)
+                          - check_box_boolean = already_selected_color_size_price_image_id_array.include?(color_size_price_image.id) ? true : false
+                          - disabled_boolean = already_selected_color_size_price_image_id_array.include?(color_size_price_image.id) ? true : false
+                          = check_box_tag "color_size_price_image[#{color_size_price_image.id}]", true, check_box_boolean, class: "form-check-input", id: "check_#{color_size_price_image.id}", disabled: disabled_boolean
+                      %td
+                        .picture_input_preview_group.text-center
+                          - if color_size_price_image.image.url
+                            .picture_preview_group
+                              .d-inline-block.mr-1.mt-1.picture-block
+                                %label.form-check-label{for: "check_#{color_size_price_image.id}"}
+                                  = image_tag color_size_price_image.image.url, style:"height: 80px;", class: "img-thumbnail"
+                          -# - else
+                          -#   .picture_input_group
+                          -#     %label
+                          -#       .btn.btn-primary.picture_import_btn
+                          -#         Choose Picture File
+                          -#       = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
+                      %td.text-center
+                        = color_size_price_image.color_size
+                      %td
+                        = color_size_price_image.price
+                        元
+        .modal-footer
+          = submit_tag "注文商品画像として保存する", class: "btn btn-primary pull-right w-25"
+-# %label.form-check-label{for: "exampleCheck#{color_size_price_image.id}" }
