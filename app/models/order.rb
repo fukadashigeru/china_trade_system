@@ -142,7 +142,7 @@ class Order < ApplicationRecord
             end
             ## 第一候補をactual_item_unitのfirst_candidate_idに登録する
             if first_candidate_params
-              if k == first_candidate_params[i]&.keys&.first
+              if k == first_candidate_params[i]
                 actual_item_unit.update(first_candidate_id: new_taobao_url.id)
               end
             end

@@ -57,7 +57,6 @@
                             = hidden_field_tag "not_remove_taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
                           - radio_button_boolean = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
                           %td.text-center.align-middle
-                            -# = check_box_tag "first_candidate_select[#{i}][#{k}]", true, false, class: "submit_check_box"
                             = radio_button_tag "first_candidate_select[#{i}]", k, checked = radio_button_boolean, class: "submit_check_box"
                           %td.text-center.align-middle
                             .input-group
@@ -326,6 +325,7 @@
     var last_tr_id = $this_table_radio_button_name_split_array[4];
     var new_tr_id = String(Number(last_tr_id) + 1);
     var this_item_unit_id = $this_table_radio_button_name_split_array[3];
+    // 最後のinputのnameから追加のinputのnameを作る
     var last_taobao_url_input_name = $last_taobao_url_input.attr('name');
     var last_taobao_url_input_name_split_array = last_taobao_url_input_name.split('][');
     var new_taobao_url_input_name_split_array = last_taobao_url_input_name_split_array;
@@ -399,7 +399,7 @@
       <tbody class="item_unit_tbody">
       <tr>
       <td class="text-center align-middle">
-      <input type="checkbox" name="first_candidate_select[${next_item_unit_id}][0]" id="first_candidate_select_[${next_item_unit_id}]_0" value="true" class="submit_check_box">
+      <input type="radio" name="first_candidate_select[${next_item_unit_id}]" id="first_candidate_select_${next_item_unit_id}_0" value="0" class="submit_check_box">
       </td>
       <td class="text-center align-middle">
       <div class="input-group">
@@ -423,7 +423,7 @@
       </tr>
       <tr>
       <td class="text-center align-middle">
-      <input type="checkbox" name="first_candidate_select[${next_item_unit_id}][1]" id="first_candidate_select_${next_item_unit_id}_1" value="true" class="submit_check_box">
+      <input type="radio" name="first_candidate_select[${next_item_unit_id}]" id="first_candidate_select_${next_item_unit_id}_1" value="1" class="submit_check_box">
       </td>
       <td class="text-center align-middle">
       <div class="input-group">
@@ -447,7 +447,7 @@
       </tr>
       <tr>
       <td class="text-center align-middle">
-      <input type="checkbox" name="first_candidate_select[${next_item_unit_id}][2]" id="first_candidate_select_${next_item_unit_id}_2" value="true" class="submit_check_box">
+      <input type="radio" name="first_candidate_select[${next_item_unit_id}]" id="first_candidate_select_${next_item_unit_id}_2" value="2" class="submit_check_box">
       </td>
       <td class="text-center align-middle">
       <div class="input-group">
