@@ -11,17 +11,6 @@ class JapaneseRetailerOrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    # order = current_company.japanese_retailer_orders.first
-    # company = current_company
-    # render :xml => order
-    # render :xml => company
-    personal = {'name' => 'Yamada', 'old' => 28}
-    render :xml => personal
-    # respond_to do |format|
-    #   format.html
-    #   format.json {render :json => personal}
-    #   format.xml  {render :xml => personal}
-    # end
   end
 
   # GET /orders/new
