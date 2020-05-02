@@ -57,7 +57,7 @@
                             = hidden_field_tag "not_remove_taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
                           - radio_button_boolean = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
                           %td.text-center.align-middle
-                            -# = check_box_tag "first_candidate_select[#{i}][#{k}]", true, check_box_true_or_false, class: "submit_check_box"
+                            -# = check_box_tag "first_candidate_select[#{i}][#{k}]", true, false, class: "submit_check_box"
                             = radio_button_tag "first_candidate_select[#{i}]", k, checked = radio_button_boolean, class: "submit_check_box"
                           %td.text-center.align-middle
                             .input-group
@@ -227,18 +227,19 @@
     $('.taobao_url_input').change(function(e){
       resetTaobaoUrlLink();
       var $this_taobao_url_input = $(e.target);
+      //在庫の有無でradio_button_tagのチェックを外したり、disabledしたりする。
       arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
       applyAlwaysOneCheckInAllItemRowFunction()
     })
-    $('.submit_check_box').on('click', function(e){
-      var $this_form_check = $(e.target);
-      var $this_item_unit_tbody = $(e.target).closest('.item_unit_tbody');
-      var $all_form_checks = $this_item_unit_tbody.find('.submit_check_box');
-      // すべてのチェックボックスのチェックを外す
-      $all_form_checks.prop('checked', false);
-      // 今回のチェックボックスのチェックを入れる
-      $this_form_check.prop('checked', true); 
-    })
+    // $('.submit_check_box').on('click', function(e){
+    //   var $this_form_check = $(e.target);
+    //   var $this_item_unit_tbody = $(e.target).closest('.item_unit_tbody');
+    //   var $all_form_checks = $this_item_unit_tbody.find('.submit_check_box');
+    //   // すべてのチェックボックスのチェックを外す
+    //   $all_form_checks.prop('checked', false);
+    //   // 今回のチェックボックスのチェックを入れる
+    //   $this_form_check.prop('checked', true); 
+    // })
     $('.have_stock').change(function(e) {
       var $this_select_tag = $(e.target);
       arrangeCheckBoxByHavingStockSelectTag($this_select_tag);
@@ -299,6 +300,7 @@
     // taobao_url_inputが空なら、第一候補のチェックボックスをdisabledにしたり、チェック外したりする
     $('.taobao_url_input').each(function(index, this_taobao_url_input) {
       var $this_taobao_url_input = $(this_taobao_url_input);
+      //在庫の有無でradio_button_tagのチェックを外したり、disabledしたりする。
       arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
     })
     applyAlwaysOneCheckInAllItemRowFunction()
@@ -315,16 +317,15 @@
   function addTrFunction($this_table) {
     $this_tbody = $this_table.children('.item_unit_tbody');
     $this_table_last_tr = $this_table.find('tr:last');
-    $this_table_submit_check_box = $this_table_last_tr.find('.submit_check_box');
+    $this_table_radio_button = $this_table_last_tr.find('.submit_check_box');
     $last_taobao_url_input = $this_table_last_tr.find('.taobao_url_input');
     // 最後のcheckboxのnameから追加のcheckboxのnameを作る
-    var $this_table_submit_check_box_name = $this_table_submit_check_box.attr('name');
-    var $this_table_submit_check_box_name_slice = $this_table_submit_check_box_name.slice(0, -1);
-    var $this_table_submit_check_box_name_split_array = $this_table_submit_check_box_name_slice.split('[');
-    var last_check_box_id = $this_table_submit_check_box_name_split_array[2];
-    var new_tr_id = String(Number(last_check_box_id) + 1);
-    var this_item_unit_id = $this_table_submit_check_box_name_split_array[1].slice(0, -1)
-    // 最後のinputのnameから追加のinputのnameを作る
+    var $this_table_radio_button_name = $this_table_radio_button.attr('name');
+    var $last_radio_button_id = $this_table_radio_button.attr('id');
+    var $this_table_radio_button_name_split_array = $last_radio_button_id.split('_');
+    var last_tr_id = $this_table_radio_button_name_split_array[4];
+    var new_tr_id = String(Number(last_tr_id) + 1);
+    var this_item_unit_id = $this_table_radio_button_name_split_array[3];
     var last_taobao_url_input_name = $last_taobao_url_input.attr('name');
     var last_taobao_url_input_name_split_array = last_taobao_url_input_name.split('][');
     var new_taobao_url_input_name_split_array = last_taobao_url_input_name_split_array;
@@ -341,7 +342,7 @@
     var add_new_input_html =`
       <tr>
       <td class="text-center align-middle">
-      <input type="checkbox" name="first_candidate_select[${this_item_unit_id}][${new_tr_id}]" id="first_candidate_select_${this_item_unit_id}_${new_tr_id}" value="true" class="submit_check_box">
+      <input type="radio" name="${$this_table_radio_button_name}" id="first_candidate_select_${this_item_unit_id}_${new_tr_id}" value="${new_tr_id}" class="submit_check_box">
       </td>
       <td class="text-center align-middle">
       <div class="input-group">
@@ -525,6 +526,7 @@
     }
     applyAlwaysOneCheckInAllItemRowFunction()
   }
+  //在庫の有無でradio_button_tagのチェックを外したり、disabledしたりする。
   function arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input){
     var this_taobao_url_input_val = $this_taobao_url_input.val();
     var $this_tr = $this_taobao_url_input.closest('tr');
