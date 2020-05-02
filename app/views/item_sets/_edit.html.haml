@@ -55,9 +55,10 @@
                         %tr
                           - if taobao_url.id.to_i != 0
                             = hidden_field_tag "not_remove_taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
-                          - check_box_true_or_false = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
+                          - radio_button_boolean = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
                           %td.text-center.align-middle
-                            = check_box_tag "first_candidate_select[#{i}][#{k}]", true, check_box_true_or_false, class: "submit_check_box"
+                            -# = check_box_tag "first_candidate_select[#{i}][#{k}]", true, check_box_true_or_false, class: "submit_check_box"
+                            = radio_button_tag "first_candidate_select[#{i}]", k, checked = radio_button_boolean, class: "submit_check_box"
                           %td.text-center.align-middle
                             .input-group
                               = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
