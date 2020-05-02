@@ -31,23 +31,26 @@
               = order.trade_no
               = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-primary btn-sm edit-btn", remote: true do
                 %i.fas.fa-edit
-            %td.ks-1.align-middle{id: "order-id-#{order.id}_pictures"}
+            %td.align-middle
               - if order&.item_set&.color_size_price_images.present?
-                = link_to "登録画像から選択", new_set_picture_path(item_set_id: order.item_set.id, order_id: order.id), class: 'btn btn-sm btn-outline-warning mb-1', remote: true
-              - if order.pictures.empty?
-                .ks-2.d-inline-block{id: "order-id-#{order.id}_picture-1"}
-                  = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
-              - else
-                - order.pictures.order(:id).each_with_index do |picture, i|
-                  .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 70px;"}
-                    %img.ks-3{:src => picture.url, :class => "w-100"}/
-                    .ks-3.d-block.text-right
-                      = link_to picture_path(picture.id, order_id: order.id), class: "btn delete-btn btn-danger", remote: true, method: :delete,data: { confirm: '本当に削除しますか？' } do
-                        %i.far.fa-trash-alt
-                    .d-block.text-right
-                      = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
-                .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
-                  = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1 ks-3"
+                = link_to new_set_picture_path(item_set_id: order.item_set.id, order_id: order.id), class: 'btn btn-sm btn-outline-warning mb-3', remote: true do
+                  登録画像から選択
+                  %i.fas.fa-external-link-alt.ml-2
+              .ks-1{id: "order-id-#{order.id}_pictures"}
+                - if order.pictures.empty?
+                  .ks-2.d-inline-block.w-100{id: "order-id-#{order.id}_picture-1"}
+                    = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
+                - else
+                  - order.pictures.order(:id).each_with_index do |picture, i|
+                    .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 70px;"}
+                      %img.ks-3{:src => picture.url, :class => "w-100"}/
+                      .ks-3.d-block.text-right
+                        = link_to picture_path(picture.id, order_id: order.id), class: "btn delete-btn btn-danger", remote: true, method: :delete,data: { confirm: '本当に削除しますか？' } do
+                          %i.far.fa-trash-alt
+                      .d-block.text-right
+                        = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
+                  .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
+                    = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1 ks-3"
             %td.text-break
               - if order.item_set
                 = I18n.t("activerecord.attributes.item_set.item_no_category.#{order.item_set.item_no_category}", locale: :ja)
