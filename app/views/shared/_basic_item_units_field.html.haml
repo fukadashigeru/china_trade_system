@@ -1,6 +1,6 @@
 .basic_item_units
   - basic_item_units_and_taobao_urls_hash.keys.each_with_index do |basic_item_unit, i|
-    .row.mx-2.basic_item-row
+    .row.mx-2.basic_item_row
       - if basic_item_unit.id.to_i != 0
         = hidden_field_tag "not_remove_item_unit[#{i}][#{basic_item_unit.id.to_i}]", "must_remove"
       .col.mb-3
@@ -43,23 +43,23 @@
                     %i.fas.fa-trash-alt
 
         .d-block{style: 'margin-left: 80px; margin-right: 250px;'}
-          .btn.btn-sm.btn-outline-success.btn-block.text-center.add-input-btn
+          .btn.btn-sm.btn-outline-success.btn-block.text-center.add_input_btn
             %i.fas.fa-arrow-alt-circle-up.fa-lg
             買付先URL追加
 .d-block
-  .btn.btn-sm.btn-outline-warning.text-center.add-item-unit-btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+  .btn.btn-sm.btn-outline-warning.text-center.add_item_unit_btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
     商品追加
     %i.fas.fa-long-arrow-alt-right
 
 :javascript
   $(function() {
     $('[data-toggle="tooltip"]').tooltip()
-    $('.add-input-btn').on('click', function(e){
+    $('.add_input_btn').on('click', function(e){
       $add_btn = $(e.target);
       $this_table = $add_btn.closest('.d-block').prev('.table');
       addTrFunction($this_table);
     })
-    $('.add-item-unit-btn').on('click',function(e){
+    $('.add_item_unit_btn').on('click',function(e){
       $add_item_unit_btn = $(e.target);
       $d_block = $add_item_unit_btn.closest('.d-block');
       $item_units = $d_block.prev('.basic_item_units');
@@ -104,7 +104,7 @@
     })
     $('.basic_item_unit_remove_btn').on('click', function(e){
       $item_unit_remove_btn = $(e.target)
-      $item_row =  $item_unit_remove_btn.closest('.basic_item-row');
+      $item_row =  $item_unit_remove_btn.closest('.basic_item_row');
       var $hidden_input = $item_row.children('input:first');
       var temp_name = $hidden_input.attr('name');
       if (temp_name) {
@@ -117,7 +117,7 @@
     // 商品1,商品2..を整理
     $(function() {
       $item_units = $('.basic_item_units');
-      $item_rows = $item_units.children('.basic_item-row') ;
+      $item_rows = $item_units.children('.basic_item_row') ;
       $item_rows.each(function(index, item_row){
         $item_unit_title = $(item_row).find('.basic_item_unit_title');
         $item_unit_title.html(`商品 ${index + 1}`)
@@ -142,8 +142,6 @@
     })
     applyAlwaysOneCheckInAllItemRowFunction()
   }
-  
-  
   function resetTaobaoUrlLink() {
     $('.basic_item_unit_tbody tr').each(function(index, tr_element) {
       var taobao_url = $(tr_element).find('.taobao_url_input').val();
@@ -207,14 +205,14 @@
     return recursiveAllFunction();
   }
   function addItemUnitFunction($item_units){
-    var $last_item_unit = $item_units.children('.basic_item-row:last');
+    var $last_item_unit = $item_units.children('.basic_item_row:last');
     var $a_url_input_of_last_item_unit = $last_item_unit .find('.taobao_url_input:first');
     var $name_of_a_url_input = $a_url_input_of_last_item_unit.attr('name');
     var $name_of_a_url_input_array = $name_of_a_url_input.split('][');
     var last_item_unit_id = $name_of_a_url_input_array[0].slice(-1);
     var next_item_unit_id = String(Number(last_item_unit_id) + 1);
     var new_item_unit_html = `
-      <div class="row mx-2 basic_item-row">
+      <div class="row mx-2 basic_item_row">
       <div class="col mb-5">
       <div class="h5 basic_item_unit_and_trash">
       <div class="d-inline basic_item_unit_title">商品 ${next_item_unit_id + 1}</div>
@@ -310,7 +308,7 @@
       </tbody>
       </table>
       <div class="d-block" style="margin-left: 80px; margin-right: 250px;">
-      <div class="btn btn-sm btn-outline-success btn-block text-center add-input-btn add-input-btn-${next_item_unit_id}">
+      <div class="btn btn-sm btn-outline-success btn-block text-center add_input_btn add_input_btn_${next_item_unit_id}">
       <i class="fas fa-arrow-alt-circle-up fa-lg"></i>
       買付先URL追加
       </div>
@@ -319,7 +317,7 @@
       </div>
     `
     $item_units.append(new_item_unit_html);
-    afterPushButtonToAddTrFunction(`.add-input-btn-${next_item_unit_id}`)
+    afterPushButtonToAddTrFunction(`.add_input_btn_${next_item_unit_id}`)
     $('[data-toggle="tooltip"]').tooltip()
   }
   function removeItemUnitFunction($item_row){
@@ -406,7 +404,7 @@
     }
   }
   function applyAlwaysOneCheckInAllItemRowFunction(){
-    $('.basic_item-row').each(function(index, item_row){
+    $('.basic_item_row').each(function(index, item_row){
       $item_row = $(item_row);
       applyAlwaysOneCheckInItemRowFunction($item_row);
     })
