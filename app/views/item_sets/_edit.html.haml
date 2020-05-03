@@ -31,58 +31,6 @@
             %span.badge.badge-danger 必須
           %p.help-block 買付先が登録されていない注文や今後インポートする注文に適応されるフォームです。
           = render partial: '/shared/basic_item_units_field', locals: { basic_item_units_and_taobao_urls_hash: @item_units_and_taobao_urls_hash }
-          -# .item_units
-          -#   - @item_units_and_taobao_urls_hash.keys.each_with_index do |item_unit, i|
-          -#     .row.mx-2.item-row
-          -#       - if item_unit.id.to_i != 0
-          -#         = hidden_field_tag "not_remove_item_unit[#{i}][#{item_unit.id.to_i}]", "must_remove"
-          -#       .col.mb-3
-          -#         .h5.item_uint_and_trash
-          -#           .d-inline.item_unit_title
-          -#             = ""
-          -#           .btn.btn-sm.btn-outline-danger.item_unit_remove_btn
-          -#             %i.fas.fa-trash-alt
-          -#         %table.table.table-bordered
-          -#           %thead.thead-light
-          -#             %tr
-          -#               %th.first_candidate_select.text-center
-          -#                 優先
-          -#                 %i.fas.fa-question-circle{title: '優先的に購入してほしい店舗に、1つだけチェックをいれてください。', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
-          -#               %th URL
-          -#               %th 在庫
-          -#               %th 削除
-          -#           %tbody.item_unit_tbody
-          -#             - @item_units_and_taobao_urls_hash[item_unit].each_with_index do |taobao_url, k|
-          -#               %tr
-          -#                 - if taobao_url.id.to_i != 0
-          -#                   = hidden_field_tag "not_remove_taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
-          -#                 - radio_button_boolean = item_unit.first_candidate_id == taobao_url.id && item_unit.first_candidate_id.present? ? true : false
-          -#                 %td.text-center.align-middle
-          -#                   = radio_button_tag "first_candidate_select[#{i}]", k, checked = radio_button_boolean, class: "submit_check_box"
-          -#                 %td.text-center.align-middle
-          -#                   .input-group
-          -#                     = text_field_tag "taobao_url[#{i}][#{item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
-          -#                     .input-group-append
-          -#                       %span#basic-addon2.input-group-text
-          -#                         - taobao_url_url = taobao_url.url.nil? ? '' : taobao_url.url
-          -#                         = link_to taobao_url_url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
-          -#                           %i.fas.fa-external-link-alt
-          -#                 %td.text-center.align-middle
-          -#                   - have_stock_options = TaobaoUrl.is_have_stocks.map {|key, value| [ I18n.t("activerecord.attributes.taobao_url.is_have_stock.#{key}", locale: :ja), value]}
-          -#                   - have_stock_class = taobao_url.is_have_stock == "have_stock" ? "have_stock form-control" : "have_stock form-control bg-secondary text-white"
-          -#                   = select_tag "have_stock[#{i}][#{k}]", options_for_select(have_stock_options, selected: taobao_url.is_have_stock_before_type_cast), class: have_stock_class
-          -#                 %td.text-center.align-middle
-          -#                   .btn.btn-sm.btn-outline-danger.tr_remove_btn
-          -#                     %i.fas.fa-trash-alt
-
-          -#         .d-block{style: 'margin-left: 80px; margin-right: 250px;'}
-          -#           .btn.btn-sm.btn-outline-success.btn-block.text-center.add-input-btn
-          -#             %i.fas.fa-arrow-alt-circle-up.fa-lg
-          -#             買付先URL追加
-          -# .d-block
-          -#   .btn.btn-sm.btn-outline-warning.text-center.add-item-unit-btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
-          -#     商品追加
-          -#     %i.fas.fa-long-arrow-alt-right
           %hr
           .mt-3
             .h5
