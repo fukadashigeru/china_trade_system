@@ -77,15 +77,6 @@
       arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
       applyAlwaysOneCheckInAllItemRowFunction()
     })
-    // $('.submit_check_box').on('click', function(e){
-    //   var $this_form_check = $(e.target);
-    //   var $this_item_unit_tbody = $(e.target).closest('.basic_item_unit_tbody');
-    //   var $all_form_checks = $this_item_unit_tbody.find('.submit_check_box');
-    //   // すべてのチェックボックスのチェックを外す
-    //   $all_form_checks.prop('checked', false);
-    //   // 今回のチェックボックスのチェックを入れる
-    //   $this_form_check.prop('checked', true); 
-    // })
     $('.have_stock').change(function(e) {
       var $this_select_tag = $(e.target);
       arrangeCheckBoxByHavingStockSelectTag($this_select_tag);

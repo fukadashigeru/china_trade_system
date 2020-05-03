@@ -45,8 +45,8 @@ class OrderActualItemUnitsController < ApplicationController
     end
 
     def remove_actual_item_unit_params
-      if params[:"remove_actual_item_unit"]
-        params.require(:"remove_actual_item_unit")
+      if params[:"remove_item_unit"]
+        params.require(:"remove_item_unit")
       end
     end
 end
