@@ -59,10 +59,10 @@ class JapaneseRetailerOrdersController < ApplicationController
     @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
       flash[:success] = "保存できました"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: @order.id)
     else
       flash[:alert] = '保存できませんでした。'
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: @order.id)
     end
   end
 

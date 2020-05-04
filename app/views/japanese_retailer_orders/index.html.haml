@@ -26,7 +26,7 @@
 
       %tbody
         - @orders.each do |order|
-          %tr
+          %tr{id: "order_#{order.id}"}
             %td.align-middle.text-break.text-center
               = order.trade_no
               = link_to edit_japanese_retailer_order_path(order.id), class: "btn btn-primary btn-sm edit-btn", remote: true do
@@ -62,11 +62,11 @@
               .mb-2
                 - if order&.item_set
                   - if order&.item_set&.item_units&.any?
-                    = link_to edit_item_set_path(order&.item_set), remote: true, class: "btn btn-sm btn-light" do
+                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-light" do
                       マスター買付先 登録済
                       %i.fas.fa-external-link-alt.ml-2
                   - else
-                    = link_to edit_item_set_path(order&.item_set), remote: true, class: "btn btn-sm btn-outline-danger" do
+                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-outline-danger" do
                       マスター買付先 未登録
                       %i.fas.fa-external-link-square-alt.ml-2
               .mb-2
@@ -194,3 +194,19 @@
       $('#page-content-wrapper').css('transition','all 0.6s'); 
     }
   });
+  $(function(){
+    var location_search = $(location).attr('search');
+    var params = location_search.slice(1);
+    var params_array = params.split('&')
+    var order_id = null
+    $.each(params_array, function(index, this_param) {
+      this_param_like_hash = this_param.split('=')
+      if (this_param_like_hash[0] === "order_id"){
+        order_id = this_param_like_hash[1]
+      }
+    })
+    if (order_id !== null){
+      var this_order_position = $(`#order_${order_id}`).offset().top;
+      $(window).scrollTop( this_order_position - 37);
+    }
+  })

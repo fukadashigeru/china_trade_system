@@ -20,10 +20,10 @@ class SetPicturesController < ApplicationController
         end
       end
       flash[:success] = "画像を選択できました。"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     rescue
       flash[:danger] = "画像を選択できませんでした。"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     end
   end
 

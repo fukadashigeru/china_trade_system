@@ -1,11 +1,13 @@
 class ItemSetsController < ApplicationController
   def edit
+    @order = current_company.japanese_retailer_orders.find(params[:order_id])
     @item_set = current_company.item_sets.find(params[:id])
     @item_units_and_taobao_urls_hash = @item_set.build_item_units_and_taobao_urls
     @color_size_price_images = @item_set.build_color_size_price_images
   end
 
   def update
+    order = current_company.japanese_retailer_orders.find(params[:order_id])
     item_set = current_company.item_sets.find(params[:id])
     begin
       ActiveRecord::Base.transaction do
@@ -34,10 +36,11 @@ class ItemSetsController < ApplicationController
         item_set.create_and_update_color_size_price_images(color_size_price_image_params)
       end
       flash[:success] = "更新できました"
-      redirect_to japanese_retailer_orders_path
+      # redirect_back
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     rescue
       flash[:danger] = "更新に失敗しました"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     end
   end
 

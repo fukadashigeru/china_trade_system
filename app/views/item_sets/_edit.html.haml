@@ -11,7 +11,8 @@
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      = form_tag item_set_path(@item_set), method: :put, multipart: true do 
+      = form_tag item_set_path(@item_set), method: :put, multipart: true do
+        = hidden_field_tag :order_id, @order.id
         / モーダルの本文
         .modal-body
           .h5

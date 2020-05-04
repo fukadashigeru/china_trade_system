@@ -18,10 +18,10 @@ class OrderActualItemUnitsController < ApplicationController
         )
       end
       flash[:success] = "更新できました"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     rescue
       flash[:danger] = "更新に失敗しました"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: order.id)
     end
   end
 
