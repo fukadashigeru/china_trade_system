@@ -2,7 +2,7 @@
   / モーダルのコンテンツ部分
   .modal-content
     / モーダルのヘッダー
-    .container
+    .container.bg-white{style: "position: fixed; width: 798px; top: 0; z-index: 2;"}
       .modal-header
         / モーダルのタイトル
         .h4#exampleModalLabel.modal-title
@@ -11,84 +11,85 @@
         / 閉じるアイコン
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
-      = form_tag item_set_path(@item_set), method: :put, multipart: true do
-        = hidden_field_tag :order_id, @order.id
-        / モーダルの本文
-        .modal-body
+    = form_tag item_set_path(@item_set), method: :put, multipart: true do
+      = hidden_field_tag :order_id, @order.id
+      / モーダルの本文
+      .modal-body{style:"top:50px; margin-bottom: 50px;"}
+        .h5
+          = "販売サイト/商品ID"
+          = " : "
+          = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
+          = "/"
+          = @item_set.item_no 
+        .h5
+          = "販売サイトURL"
+          = " : "
+          = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
+        %hr
+        .h5
+          買付先URL
+          %span.badge.badge-success マスター
+          %span.badge.badge-danger 必須
+        %p.help-block 買付先が登録されていない注文や今後インポートする注文に適応されるフォームです。
+        = render partial: '/shared/basic_item_units_field', locals: { basic_item_units_and_taobao_urls_hash: @item_units_and_taobao_urls_hash }
+        %hr
+        .mt-3
           .h5
-            = "販売サイト/商品ID"
-            = " : "
-            = I18n.t("activerecord.attributes.item_set.item_no_category.#{@item_set.item_no_category}", locale: :ja)
-            = "/"
-            = @item_set.item_no 
-          .h5
-            = "販売サイトURL"
-            = " : "
-            = link_to @item_set.shop_url, @item_set.shop_url, :target=>["_blank"]
-          %hr
-          .h5
-            買付先URL
-            %span.badge.badge-success マスター
-            %span.badge.badge-danger 必須
-          %p.help-block 買付先が登録されていない注文や今後インポートする注文に適応されるフォームです。
-          = render partial: '/shared/basic_item_units_field', locals: { basic_item_units_and_taobao_urls_hash: @item_units_and_taobao_urls_hash }
-          %hr
-          .mt-3
-            .h5
-              バリエーション別の画像と買付価格
-              %span.badge.badge-secondary 任意
-            .color_size_price_images
-              .row.mx-2
-                .col.mb-3
-                  %table.table.table-bordered.w-75
-                    %thead.thead-light
-                      %tr
-                        %th 画像
-                        %th バリエーション
-                        %th 価格
-                        -# %th 削除
-                    %tbody.color_size_price_images_tbody
-                      - @color_size_price_images.each_with_index do |color_size_price_image, i|
-                        - color_size_price_image_id = color_size_price_image.persisted? ? "color_size_price_image_#{color_size_price_image.id}" : nil
-                        %tr{id: color_size_price_image_id}
-                          - if color_size_price_image.id.to_i != 0
-                            = hidden_field_tag "not_remove_color_size_price_image[#{i}][#{color_size_price_image.id.to_i}]"
-                          %td
-                            .picture_input_preview_group.text-center
-                              - if color_size_price_image.image.url
-                                .picture_input_group.d-none
-                                  %label
-                                    .btn.btn-primary.picture_import_btn
-                                      Choose Picture File
-                                    = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
-                                .picture_preview_group
-                                  .d-inline-block.mr-1.mt-1.picture-block
-                                    = image_tag color_size_price_image.image.url, style:"height: 150px;", class: "img-thumbnail"
-                                    .btn.btn-danger.delete-btn.remove_picture_preveiw_btn
-                                      %i.far.fa-trash-alt
-                              - else
-                                .picture_input_group
-                                  %label
-                                    .btn.btn-primary.picture_import_btn
-                                      Choose Picture File
-                                    = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
+            バリエーション別の画像と買付価格
+            %span.badge.badge-secondary 任意
+          .color_size_price_images
+            .row.mx-2
+              .col.mb-3
+                %table.table.table-bordered.w-75
+                  %thead.thead-light
+                    %tr
+                      %th 画像
+                      %th バリエーション
+                      %th 価格
+                      -# %th 削除
+                  %tbody.color_size_price_images_tbody
+                    - @color_size_price_images.each_with_index do |color_size_price_image, i|
+                      - color_size_price_image_id = color_size_price_image.persisted? ? "color_size_price_image_#{color_size_price_image.id}" : nil
+                      %tr{id: color_size_price_image_id}
+                        - if color_size_price_image.id.to_i != 0
+                          = hidden_field_tag "not_remove_color_size_price_image[#{i}][#{color_size_price_image.id.to_i}]"
+                        %td
+                          .picture_input_preview_group.text-center
+                            - if color_size_price_image.image.url
+                              .picture_input_group.d-none
+                                %label
+                                  .btn.btn-primary.picture_import_btn
+                                    Choose Picture File
+                                  = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
+                              .picture_preview_group
+                                .d-inline-block.mr-1.mt-1.picture-block
+                                  = image_tag color_size_price_image.image.url, style:"height: 150px;", class: "img-thumbnail"
+                                  .btn.btn-danger.delete-btn.remove_picture_preveiw_btn
+                                    %i.far.fa-trash-alt
+                            - else
+                              .picture_input_group
+                                %label
+                                  .btn.btn-primary.picture_import_btn
+                                    Choose Picture File
+                                  = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
 
-                          %td.text-center
-                            = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control", placeholder: "ブラック"
-                          %td
-                            .input-group
-                              = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control", placeholder: "60"
-                              .input-group-append
-                                %span.input-group-text 元
-                          -# %td.text-center
-                          -#   .btn.btn-sm.btn-outline-danger.color_size_price_images_tr_remove_btn
-                          -#     %i.fas.fa-trash-alt
-                            
-            -# = hidden_field "[color_size_price_image][item_set_id]", @color_size_price_image.item_set_id
-            -# = file_field_tag "[color_size_price_image][image]", accept: 'image/jpg,image/jpeg,image/png'
-        .modal-footer
-          = submit_tag "保存", class: "btn btn-primary pull-right w-25"
-
+                        %td.text-center
+                          = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control", placeholder: "ブラック"
+                        %td
+                          .input-group
+                            = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control", placeholder: "60"
+                            .input-group-append
+                              %span.input-group-text 元
+                        -# %td.text-center
+                        -#   .btn.btn-sm.btn-outline-danger.color_size_price_images_tr_remove_btn
+                        -#     %i.fas.fa-trash-alt
+                          
+          -# = hidden_field "[color_size_price_image][item_set_id]", @color_size_price_image.item_set_id
+          -# = file_field_tag "[color_size_price_image][image]", accept: 'image/jpg,image/jpeg,image/png'
+          
+      .modal-footer.bg-white{style: "position: fixed; width: 798px; bottom: 0;"}
+        = submit_tag "保存", class: "btn btn-primary pull-right w-25"
+          
 :javascript
   $(function() {
     $('.custom-file-input').on('change', handleFileSelect);
