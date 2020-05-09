@@ -26,6 +26,7 @@
           / Container
           .container-fluid#container
             = yield
+          .mt-5
     - elsif user_signed_in? && !current_company
       #companies_wrapper
         = render 'shared/header'

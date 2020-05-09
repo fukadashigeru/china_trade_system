@@ -6,6 +6,8 @@
 -# %br
 .pt-1
 - if @orders.present?
+  .pt-3
+    = paginate @orders
   .table-responsive.mt-4
     %table.table.table-bordered{style:"table-layout:fixed;"}
       %thead.thead-light
@@ -141,6 +143,7 @@
               = ""
             %td.align-middle
               = ""
+  = paginate @orders
 - else
   .row.mt-4
     .col
