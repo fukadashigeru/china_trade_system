@@ -7,22 +7,22 @@
 .pt-1
 - if @orders.present?
   .table-responsive.mt-4
-    %table.table.table-bordered
+    %table.table.table-bordered{style:"table-layout:fixed;"}
       %thead.thead-light
         %tr
-          %th.align-middle{style:"width: 80px;"}
+          %th.align-middle{style:"width:90px;"}
             注文No
-          %th.align-middle{style: "width: 250px;"} 注文商品画像
-          %th.align-middle{style: "width: 160px;"}
+          %th.align-middle 注文商品画像
+          %th.align-middle
             販売サイト/商品ID
             %br/
             販売サイトURL
-          %th.align-middle{style:"width: 200px"} 買付先URL
-          %th.align-middle{style:"width: 160px;"} 色・サイズ・数量
-          %th.align-middle{style:"width: 160px;"} お届け先
-          %th.align-middle{style:"width: 100px;"} 予定費用
-          %th.align-middle{style:"width: 100px;"} 実績費用
-          %th.align-middle{style:"width: 100px;"} 発注状況
+          %th.align-middle 買付先URL
+          %th.align-middle 色・サイズ・数量
+          %th.align-middle お届け先
+          %th.align-middle 予定費用
+          %th.align-middle 実績費用
+          %th.align-middle 発注状況
 
       %tbody
         - @orders.each do |order|
@@ -92,7 +92,7 @@
                             %td.text-center
                               - if taobao_url.id == actual_item_unit.first_candidate_id
                                 %i.fas.fa-check
-                            %td{style: "max-width: 175px"}
+                            %td{style: "max-width: 100px;"}
                               %p.text-truncate= link_to taobao_url.url, taobao_url.url, :target=>["_blank"]
               - else
                 %p 買付先が登録されていません。
