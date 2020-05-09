@@ -33,7 +33,7 @@
                 %i.fas.fa-edit
             %td.align-middle
               - if order&.item_set&.color_size_price_images.present?
-                = link_to new_set_picture_path(item_set_id: order.item_set.id, order_id: order.id), class: 'btn btn-sm btn-outline-warning mb-3', remote: true do
+                = link_to new_set_picture_path(item_set_id: order.item_set.id, order_id: order.id), class: 'btn btn-sm btn-outline-warning mb-3 edit-btn', remote: true do
                   登録画像から選択
                   %i.fas.fa-external-link-alt.ml-2
               .ks-1{id: "order-id-#{order.id}_pictures"}
@@ -62,20 +62,20 @@
               .mb-2
                 - if order&.item_set
                   - if order&.item_set&.item_units&.any?
-                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-light" do
+                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-light edit-btn" do
                       マスター買付先 登録済
                       %i.fas.fa-external-link-alt.ml-2
                   - else
-                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-outline-danger" do
+                    = link_to edit_item_set_path(order&.item_set, order_id: order.id), remote: true, class: "btn btn-sm btn-outline-danger edit-btn" do
                       マスター買付先 未登録
                       %i.fas.fa-external-link-square-alt.ml-2
               .mb-2
                 - if order.actual_item_units.any?
-                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light" do
+                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-light edit-btn" do
                     今回の注文の買付先 登録済
                     %i.fas.fa-external-link-alt.ml-2
                 - elsif order&.item_set&.item_units&.any?
-                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-outline-danger" do
+                  = link_to edit_order_actual_item_unit_path(order), remote: true, class: "btn btn-sm btn-outline-danger edit-btn" do
                     今回の注文の買付先 未登録
                     %i.fas.fa-external-link-alt.ml-2
               - actual_item_units = order&.actual_item_units&.order(:id).includes(:taobao_urls)
