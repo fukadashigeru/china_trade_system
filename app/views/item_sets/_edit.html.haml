@@ -64,7 +64,7 @@
                               .picture_preview_group
                                 .d-inline-block.mr-1.mt-1.picture-block
                                   = image_tag color_size_price_image.image.url, style:"height: 150px;", class: "img-thumbnail"
-                                  .btn.btn-danger.delete-btn.remove_picture_preveiw_btn
+                                  .btn.btn-danger.delete-btn.remove_picture_preview_btn
                                     %i.far.fa-trash-alt
                             - else
                               .picture_input_group
@@ -104,7 +104,7 @@
     reader.onload = (function(theFile) {
       return function(e) {
         if (theFile.type.match('image.*')) {
-          var $html = ['<div class="d-inline-block mr-1 mt-1 picture-block"><img class="img-thumbnail" src="', e.target.result,'" title="', escape(theFile.name), '" style="height:150px;" /><div class="btn btn-danger delete-btn remove_picture_preveiw_btn"><i class="far fa-trash-alt"></i></div></div>'].join('');// 画像では画像のプレビューとファイル名の表示
+          var $html = ['<div class="d-inline-block mr-1 mt-1 picture-block"><img class="img-thumbnail" src="', e.target.result,'" title="', escape(theFile.name), '" style="height:150px;" /><div class="btn btn-danger delete-btn remove_picture_preview_btn"><i class="far fa-trash-alt"></i></div></div>'].join('');// 画像では画像のプレビューとファイル名の表示
         } else {
           var $html = ['<div class="d-inline-block mr-1"><span class="small">', escape(theFile.name),'</span></div>'].join('');//画像以外はファイル名のみの表示
         }
@@ -119,9 +119,9 @@
   }
   // 画像を削除する
   function removePicturePreview(){
-    $('.remove_picture_preveiw_btn').on('click', function(e){
-      $remove_picture_preveiw_btn = $(e.target);
-      $picture_preview_group = $remove_picture_preveiw_btn.parents('.picture_preview_group');
+    $('.remove_picture_preview_btn').on('click', function(e){
+      $remove_picture_preview_btn = $(e.target);
+      $picture_preview_group = $remove_picture_preview_btn.parents('.picture_preview_group');
       $picture_input_group = $picture_preview_group.prev('.picture_input_group');
       $picture_input_group.removeClass('d-none');
       $picture_preview_group.remove();
