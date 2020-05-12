@@ -47,10 +47,10 @@
                     .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 70px;"}
                       %img.ks-3{:src => picture.url, :class => "w-100"}/
                       .ks-3.d-block.text-right
-                        = link_to picture_path(picture.id, order_id: order.id), class: "btn delete-btn btn-danger", remote: true, method: :delete,data: { confirm: '本当に削除しますか？' } do
+                        = link_to picture_path(picture.id, order_id: order.id), class: "btn btn-sm delete-btn btn-danger", remote: true, method: :delete,data: { confirm: '本当に削除しますか？' } do
                           %i.far.fa-trash-alt
                       .d-block.text-right
-                        = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-primary edit-btn mt-1"
+                        = link_to "編集", edit_picture_path(picture.id, order_id: order.id, button: i + 1), remote: true, class: "btn btn-sm btn-primary edit-btn mt-1"
                   .ks-2.d-block.bg-light.text-center.picture-addition-block{id: "order-id-#{order.id}_picture-#{order.pictures.length + 1}"}
                     = link_to "追加", new_picture_path(order_id: order.id, button: order.pictures.length + 1), remote: true, class: "btn btn-sm btn-success add-btn m-1 ks-3"
             %td.text-break
