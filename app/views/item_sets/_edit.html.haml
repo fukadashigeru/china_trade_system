@@ -55,8 +55,10 @@
                           = hidden_field_tag "not_remove_color_size_price_image[#{i}][#{color_size_price_image.id.to_i}]"
                         %td
                           .picture_input_preview_group.text-center
+                            -# 画像が既に登録されている場合
                             - if color_size_price_image.image.url
                               .picture_input_group.d-none
+                                = hidden_field_tag "not[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", nil
                                 %label
                                   .btn.btn-primary.picture_import_btn
                                     Choose Picture File
@@ -67,17 +69,21 @@
                                   .btn.btn-danger.delete-btn.remove_picture_preview_btn
                                     %i.far.fa-trash-alt
                             - else
+                              -# 画像がまだ登録されていない場合
                               .picture_input_group
                                 %label
                                   .btn.btn-primary.picture_import_btn
                                     Choose Picture File
                                   = file_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][image]", accept: 'image/jpg,image/jpeg,image/png', class: "custom-file-input", style: "display:none;", id: "file_photo"
+                              -#.picture_preview_group
 
                         %td.text-center
-                          = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control", placeholder: "ブラック"
+                          -# = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control", placeholder: "ブラック"
+                          = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][color_size]", color_size_price_image.color_size, class: "form-control"
                         %td
                           .input-group
-                            = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control", placeholder: "60"
+                            -# = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control", placeholder: "60"
+                            = text_field_tag "[color_size_price_image][#{i}][#{color_size_price_image.id.to_i}][price]", color_size_price_image.price, class: "form-control"
                             .input-group-append
                               %span.input-group-text 元
                         -# %td.text-center
@@ -97,7 +103,7 @@
     removeColorSizePriceImageTr();
   })
   function handleFileSelect(evt) {
-    $this_picture_input_group = $(evt.target).parents('.picture_input_group');
+    var $this_picture_input_group = $(evt.target).parents('.picture_input_group');
     $this_picture_input_group.after('<div class="picture_preview_group"></div>');
     var file_list = evt.target.files;
     var reader = new FileReader();
@@ -120,11 +126,16 @@
   // 画像を削除する
   function removePicturePreview(){
     $('.remove_picture_preview_btn').on('click', function(e){
-      $remove_picture_preview_btn = $(e.target);
-      $picture_preview_group = $remove_picture_preview_btn.parents('.picture_preview_group');
-      $picture_input_group = $picture_preview_group.prev('.picture_input_group');
+      const $remove_picture_preview_btn = $(e.target);
+      const $picture_preview_group = $remove_picture_preview_btn.parents('.picture_preview_group');
+      const $picture_input_group = $picture_preview_group.prev('.picture_input_group');
       $picture_input_group.removeClass('d-none');
+      //$picture_input_group
       $picture_preview_group.remove();
+      const $hidden_field = $picture_input_group.children('input:first');
+      const hidden_field_id = $hidden_field.attr('name');
+      const update_hidden_field_id = hidden_field_id.slice(3);
+      $hidden_field.attr('name', update_hidden_field_id);
     })
   }
   // removeColorSizePriceImageTr()

@@ -149,8 +149,8 @@ class ItemSet < ApplicationRecord
         this_color_size = this_color_size_price_image_param[:color_size]
         this_price = this_color_size_price_image_param[:price]
         this_image = this_color_size_price_image_param[:image]
-        next if this_color_size == "" && this_price == "" && this_image.nil?
         if j.to_i == 0
+          next if this_color_size == "" && this_price == "" && this_image.nil?
           color_size_price_images.create(
             image: this_color_size_price_image_param[:image],
             color_size: this_color_size_price_image_param[:color_size],
@@ -162,9 +162,14 @@ class ItemSet < ApplicationRecord
             color_size: this_color_size,
             price: this_price
           )
-          if !this_image.nil?
+          if this_image.present?
             this_color_size_price_image.update(image: this_image)
+          elsif this_image == ''
+            this_color_size_price_image.update(image: nil)
           end
+          # if this_color_size_price_image.color_size == "" && this_color_size_price_image.price.nil? && !this_color_size_price_image.image.present?
+          #   this_color_size_price_image.destroy
+          # end
         end
       end
     end
