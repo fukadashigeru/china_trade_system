@@ -41,7 +41,7 @@
               .ks-1{id: "order-id-#{order.id}_pictures"}
                 - if order.pictures.empty?
                   .ks-2.d-inline-block.w-100{id: "order-id-#{order.id}_picture-1"}
-                    = link_to "画像リンクを入力してください", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-light pull-right btn-block add-btn", style: "color: gray;", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
+                    = link_to "画像URL直接入力", new_picture_path(order_id: order.id, button: 1), remote: true, class: "btn btn-success pull-right btn-block add-btn", title: 'クリックして入力', data: { toggle: "tooltip", placement: "right", delay: { "show": 200, "hide": 100 }}
                 - else
                   - order.pictures.order(:id).each_with_index do |picture, i|
                     .ks-2.d-inline-block.p-1.mb-2.bg-light.picture-block.w-100{id: "order-id-#{order.id}_picture-#{i + 1}", style: "min-height: 70px;"}
@@ -208,8 +208,8 @@
         order_id = this_param_like_hash[1]
       }
     })
-    if (order_id !== null){
-      var this_order_position = $(`#order_${order_id}`).offset().top;
-      $(window).scrollTop( this_order_position - 37);
-    }
+    //if (order_id !== null){
+    //  var this_order_position = $(`#order_${order_id}`).offset().top;
+    //  $(window).scrollTop( this_order_position - 37);
+    //}
   })
