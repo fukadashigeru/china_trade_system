@@ -67,6 +67,6 @@ class CompaniesController < ApplicationController
 
   private
     def company_params
-      params.require(:company).permit(:name, :owner_user_id, :is_japanese_retailer_account, :is_chinese_buyer_account)
+      params.require(:company).permit(:name, :owner_user_id, :account_type)
     end 
 end
