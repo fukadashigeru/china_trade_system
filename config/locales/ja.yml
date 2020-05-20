@@ -19,9 +19,8 @@ ja:
               confirmation: "とPasswordの入力が一致しません。"
     attributes:
       company:
-        is_japanese_retailer_account:
+        account_type:
           japanese_retailer: "買付依頼"
-        is_chinese_buyer_account:
           chinese_buyer: "買付代行"
       user:
         account_type:
