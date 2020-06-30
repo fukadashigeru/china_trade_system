@@ -44,10 +44,11 @@
                                   %i.fas.fa-check-circle.fa-lg.text-success
                                 - else
                                   %i.fas.fa-minus-circle.fa-lg.text-danger
-                    .mt-2
-                      = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
-                        招待
-                        %i.fas.fa-address-card
+                        %tr
+                          %td{colspan: 3}
+                            = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-outline-primary btn-block btn-sm" do
+                              招待
+                              %i.fas.fa-address-card
                   %td.align-middle.text-center
                     = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
                       編集
