@@ -21,12 +21,12 @@
             = f.text_field :name, class: 'form-control'
           .p.mt-2 アカウントタイプ
           .form-check
-            - is_japanese_retailer_account = f.object.account_type == "japanese_retailer" ? true : false
+            - account_type = f.object.account_type == "japanese_retailer" ? true : false
             %label
               = f.radio_button :account_type, 'japanese_retailer'
               = I18n.t("activerecord.attributes.company.account_type.japanese_retailer", locale: :ja)
           .form-check
-            - is_chinese_buyer_account = f.object.account_type == "chinese_buyer" ? true : false
+            - account_type = f.object.account_type == "chinese_buyer" ? true : false
             %label
               = f.radio_button :account_type, 'chinese_buyer'
               = I18n.t("activerecord.attributes.company.account_type.chinese_buyer", locale: :ja)

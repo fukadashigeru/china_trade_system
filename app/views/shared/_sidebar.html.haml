@@ -5,7 +5,7 @@
     %li
       = link_to root_path, class: "list-group-item list-group-item-action bg-light" do
         Home
-    - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.japanese_retailer_orders.present?
+    - if current_company.account_type == "japanese_retailer" || current_company.japanese_retailer_orders.present?
       %li.top-category
         = link_to japanese_retailer_orders_path, class: "list-group-item list-group-item-action bg-light" do
           発注案件一覧
@@ -14,11 +14,11 @@
         -#     = link_to "注文インポート", order_csv_imports_path, class: "btn bg-success text-white list-group-item w-100", remote: true
         -#   %li.m-1.bg-light
         -#     = link_to "注文手入力", new_order_manual_input_path, class: "btn btn-light border-secondary w-100 list-group-item", remote: true
-    - if current_company.is_japanese_retailer_account == "japanese_retailer" || current_company.item_sets.present?
+    - if current_company.account_type == "japanese_retailer" || current_company.item_sets.present?
       %li
         = link_to item_sets_path, class: "list-group-item list-group-item-action bg-light" do
           発注案件用買付先
-    - if current_company.is_chinese_buyer_account == "chinese_buyer" || current_company.chinese_buyer_orders.present?
+    - if current_company.account_type == "chinese_buyer" || current_company.chinese_buyer_orders.present?
       %li.top-category
         = link_to chinese_buyer_orders_path, class: "list-group-item list-group-item-action bg-light" do
           受注案件一覧

@@ -18,10 +18,10 @@
             %tr
               %td= company.name
               %td
-                - if company.is_japanese_retailer_account == "japanese_retailer"
-                  %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                - if company.is_chinese_buyer_account == "chinese_buyer"
-                  %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                - if company.account_type == "japanese_retailer"
+                  %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
+                - if company.account_type == "chinese_buyer"
+                  %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
               %td.text-center
                 - if !@trade_companies.include?(company)
                   = link_to new_connect_path(company_id: company.id, before_page_type: "search_companies"), class: 'btn btn-primary' do
