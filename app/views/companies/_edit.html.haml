@@ -20,12 +20,12 @@
             -#既に注文があった場合に、radioボタンをdisabledにする変数
             - disabled_true_or_false = @company.japanese_retailer_orders.present? || @company.chinese_buyer_orders.present?
             .form-check.py-1
-              - is_japanese_retailer_account = f.object.account_type == "japanese_retailer" ? true : false
+              -# - is_japanese_retailer_account = f.object.account_type == "japanese_retailer" ? true : false
               %label
                 = f.radio_button :account_type, "japanese_retailer", disabled: disabled_true_or_false
                 = I18n.t("activerecord.attributes.company.account_type.japanese_retailer", locale: :ja)
             .form-check.py-1
-              - is_chinese_buyer_account = f.object.account_type == "chinese_buyer" ? true : false
+              -# - is_chinese_buyer_account = f.object.account_type == "chinese_buyer" ? true : false
               %label
                 = f.radio_button :account_type, "chinese_buyer", disabled: disabled_true_or_false
                 = I18n.t("activerecord.attributes.company.account_type.chinese_buyer", locale: :ja)
