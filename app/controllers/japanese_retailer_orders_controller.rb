@@ -1,11 +1,11 @@
 class JapaneseRetailerOrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :ensure_current_cumpany
+  before_action :ensure_current_company
   
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_company.japanese_retailer_orders.order(id: "ASC")
+    @orders = current_company.japanese_retailer_orders.includes(:item_set).order(id: "ASC").page(params[:page]).per(10)
   end
 
   # GET /orders/1
@@ -59,10 +59,10 @@ class JapaneseRetailerOrdersController < ApplicationController
     @order.remove_pictures_of_not_included_in_params(order_params)
     if @order.update(order_params)
       flash[:success] = "保存できました"
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: @order.id)
     else
       flash[:alert] = '保存できませんでした。'
-      redirect_to japanese_retailer_orders_path
+      redirect_to japanese_retailer_orders_path(order_id: @order.id)
     end
   end
 
@@ -78,8 +78,16 @@ class JapaneseRetailerOrdersController < ApplicationController
 
   def import
     chinese_buyer = Company.find(params[:chinese_buyer_id])
-    @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
-    redirect_to japanese_retailer_orders_path
+    begin
+      ActiveRecord::Base.transaction do
+        @orders = Order.import(params[:csv_file], current_company, chinese_buyer)
+      end
+      flash[:success] = "インポートに成功しました。"
+      redirect_to japanese_retailer_orders_path
+    rescue
+      flash[:danger] = "インポートに失敗しました。"
+      redirect_to japanese_retailer_orders_path
+    end
   end
 
   private

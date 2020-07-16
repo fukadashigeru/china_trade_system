@@ -1,0 +1,151 @@
+.basic_item_units
+  - basic_item_units_and_taobao_urls_hash.keys.each_with_index do |basic_item_unit, i|
+    .row.mx-2.basic_item_row
+      - if basic_item_unit.id.to_i != 0
+        = hidden_field_tag "not_remove_item_unit[#{i}][#{basic_item_unit.id.to_i}]", "must_remove"
+      .col.mb-3
+        .h5.basic_item_unit_and_trash
+          .d-inline.basic_item_unit_title
+            = ""
+          .btn.btn-sm.btn-outline-danger.basic_item_unit_remove_btn
+            %i.fas.fa-trash-alt
+        %table.table.table-bordered
+          %thead.thead-light
+            %tr
+              %th.first_candidate_select.text-center
+                優先
+                %i.fas.fa-question-circle{title: '優先的に購入してほしい店舗に、1つだけチェックをいれてください。', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+              %th URL
+              %th 在庫
+              %th 削除
+          %tbody.basic_item_unit_tbody
+            - basic_item_units_and_taobao_urls_hash[basic_item_unit].each_with_index do |taobao_url, k|
+              %tr
+                - if taobao_url.id.to_i != 0
+                  = hidden_field_tag "not_remove_taobao_url[#{i}][#{basic_item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", "must_remove"
+                - radio_button_boolean = basic_item_unit.first_candidate_id == taobao_url.id && basic_item_unit.first_candidate_id.present? ? true : false
+                %td.text-center.align-middle
+                  = radio_button_tag "first_candidate_select[#{i}]", k, checked = radio_button_boolean, class: "submit_check_box"
+                %td.text-center.align-middle
+                  .input-group
+                    = text_field_tag "taobao_url[#{i}][#{basic_item_unit.id.to_i}][#{k}][#{taobao_url.id.to_i}]", taobao_url.url, class: "form-control taobao_url_input"
+                    .input-group-append
+                      %span#basic-addon2.input-group-text
+                        - taobao_url_url = taobao_url.url.nil? ? '' : taobao_url.url
+                        = link_to taobao_url_url, :target=>["_blank"], class: "fontawsome_taobao_url_link" do
+                          %i.fas.fa-external-link-alt
+                %td.text-center.align-middle
+                  - have_stock_options = TaobaoUrl.is_have_stocks.map {|key, value| [ I18n.t("activerecord.attributes.taobao_url.is_have_stock.#{key}", locale: :ja), value]}
+                  - have_stock_class = taobao_url.is_have_stock == "have_stock" ? "have_stock form-control" : "have_stock form-control bg-secondary text-white"
+                  = select_tag "have_stock[#{i}][#{k}]", options_for_select(have_stock_options, selected: taobao_url.is_have_stock_before_type_cast), class: have_stock_class
+                %td.text-center.align-middle
+                  .btn.btn-sm.btn-outline-danger.tr_remove_btn
+                    %i.fas.fa-trash-alt
+
+        .d-block{style: 'margin-left: 80px; margin-right: 250px;'}
+          .btn.btn-sm.btn-outline-success.btn-block.text-center.add_input_btn
+            %i.fas.fa-arrow-alt-circle-up.fa-lg
+            買付先URL追加
+.d-block
+  .btn.btn-sm.btn-outline-warning.text-center.add_item_unit_btn{title: 'セット商品の場合などで複数商品を登録したい時に、商品を追加してください', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
+    商品追加
+    %i.fas.fa-long-arrow-alt-right
+
+//= javascript_include_tag 'origin/apply_always_one_check_in_all_item_row'
+//= javascript_include_tag 'origin/arrange_check_box'
+
+:javascript
+  $(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+    $('.add_input_btn').on('click', function(e){
+      $add_btn = $(e.target);
+      $this_table = $add_btn.closest('.d-block').prev('.table');
+      addTrFunction($this_table);
+      return recursiveAllFunction();
+    })
+    $('.add_item_unit_btn').on('click',function(e){
+      $add_item_unit_btn = $(e.target);
+      $d_block = $add_item_unit_btn.closest('.d-block');
+      $item_units = $d_block.prev('.basic_item_units');
+      addItemUnitFunction($item_units);
+      return recursiveAllFunction();
+    })
+    recursiveAllFunction();
+  });
+  // 再起をする必要がある関数群
+  function recursiveAllFunction() {
+    $('.taobao_url_input').change(function(e){
+      resetTaobaoUrlLink();
+      var $this_taobao_url_input = $(e.target);
+      //在庫の有無でradio_button_tagのチェックを外したり、disabledしたりする。
+      arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
+      applyAlwaysOneCheckInAllItemRowFunction()
+    })
+    $('.have_stock').change(function(e) {
+      var $this_select_tag = $(e.target);
+      arrangeCheckBoxByHavingStockSelectTag($this_select_tag);
+      applyAlwaysOneCheckInAllItemRowFunction()
+    })
+    $('.tr_remove_btn').on('click', function(e){
+      var $this_tr_remove_btn = $(e.target);
+      var $this_tr = $this_tr_remove_btn.closest('tr');
+      var $this_tbody = $this_tr.parent();
+      var $this_table = $this_tbody.parent();
+      $this_tr.fadeOut('fast').queue(function(e) {
+        var $hidden_input = $this_tr.children('input:first');
+        var temp_name = $hidden_input.attr('name');
+        if (temp_name) {
+          var revision_name = temp_name.slice(4);
+          $hidden_input.attr('name', revision_name);
+          $this_tr.before($hidden_input);
+        }
+        $this_tr.remove();
+        var $tbody_tr = $this_tbody.children('tr');
+        if ($tbody_tr.length == 2) {
+          addTrFunction($this_table);
+        }
+        return recursiveAllFunction()
+      });
+    })
+    $('.basic_item_unit_remove_btn').on('click', function(e){
+      $item_unit_remove_btn = $(e.target)
+      $item_row =  $item_unit_remove_btn.closest('.basic_item_row');
+      var $hidden_input = $item_row.children('input:first');
+      var temp_name = $hidden_input.attr('name');
+      if (temp_name) {
+          var revision_name = temp_name.slice(4);
+          $hidden_input.attr('name', revision_name);
+          $item_row.before($hidden_input);
+      }
+      $item_row.remove();
+      return recursiveAllFunction()
+    })
+    // 商品1,商品2..を整理
+    $(function() {
+      $item_units = $('.basic_item_units');
+      $item_rows = $item_units.children('.basic_item_row') ;
+      $item_rows.each(function(index, item_row){
+        $item_unit_title = $(item_row).find('.basic_item_unit_title');
+        $item_unit_title.html(`商品 ${index + 1}`)
+      })
+      var item_rows_length = $item_rows.length;
+      if (item_rows_length > 1) {
+        $('.basic_item_unit_and_trash').removeClass('d-none');
+      } else {
+        $('.basic_item_unit_and_trash').addClass('d-none');
+      }
+    })
+    //在庫有り・無しの内容を取ってっ来て、第一候補のチェックボックスをdisabledにしたり、チェック外したりする
+    $('.have_stock').each(function(index, this_select_tag) {
+      var $this_select_tag = $(this_select_tag);
+      arrangeCheckBoxByHavingStockSelectTag($this_select_tag)
+      applyAlwaysOneCheckInAllItemRowFunction()
+    })
+    // taobao_url_inputが空なら、第一候補のチェックボックスをdisabledにしたり、チェック外したりする
+    $('.taobao_url_input').each(function(index, this_taobao_url_input) {
+      var $this_taobao_url_input = $(this_taobao_url_input);
+      //在庫の有無でradio_button_tagのチェックを外したり、disabledしたりする。
+      arrangeCheckBoxByTaobaoUrlInput($this_taobao_url_input)
+    })
+    applyAlwaysOneCheckInAllItemRowFunction()
+  }

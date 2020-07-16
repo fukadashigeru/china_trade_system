@@ -21,13 +21,15 @@
             = f.text_field :name, class: 'form-control'
           .p.mt-2 アカウントタイプ
           .form-check
-            - is_japanese_retailer_account = f.object.is_japanese_retailer_account == "japanese_retailer" ? true : false
-            = f.check_box :is_japanese_retailer_account, {class: 'form-check-input', id: "japaneseRetailerInput", checked: is_japanese_retailer_account }, 'japanese_retailer', 'not_japanese_retailer'
-            %label.form-check-label{for: "japaneseRetailerInput"}= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.japanese_retailer", locale: :ja)
+            - account_type = f.object.account_type == "japanese_retailer" ? true : false
+            %label
+              = f.radio_button :account_type, 'japanese_retailer'
+              = I18n.t("activerecord.attributes.company.account_type.japanese_retailer", locale: :ja)
           .form-check
-            - is_chinese_buyer_account = f.object.is_chinese_buyer_account == "chinese_buyer" ? true : false
-            = f.check_box :is_chinese_buyer_account, {class: 'form-check-input', id: "chineseBuyerInput", checked: is_chinese_buyer_account }, 'chinese_buyer', 'not_chinese_buyer'
-            %label.form-check-label{for: "chineseBuyerInput"}= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.chinese_buyer", locale: :ja)
+            - account_type = f.object.account_type == "chinese_buyer" ? true : false
+            %label
+              = f.radio_button :account_type, 'chinese_buyer'
+              = I18n.t("activerecord.attributes.company.account_type.chinese_buyer", locale: :ja)
           .modal-footer.mt-3
             = submit_tag "保存", class: "btn btn-primary form-control"
 

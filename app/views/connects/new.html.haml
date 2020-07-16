@@ -1,0 +1,25 @@
+#topics_show
+  .row.pt-2
+    .col
+      = link_to search_companies_path, class: 'btn btn-sm btn-link' do
+        %i.fas.fa-arrow-left
+        その他の事業者
+  .row.pt-2
+    .col.ml-3
+      .h5= @target_company.name + " / " + @topic.title
+  .row.pt-2
+    .col.text-right
+      .btn.btn-primary.disabled 取引開始申請
+
+  .fixed-bottom.ml_side_width.p-2.bg-light
+    = form_tag connects_path, method: :post do
+      = hidden_field_tag '[company_id]', @target_company.id
+      = hidden_field_tag '[connect][contact_status]', @connect.contact_status
+      = hidden_field_tag '[topic][title]', @topic.title
+      = hidden_field_tag '[topic][topic_variety]',@topic.topic_variety
+      = hidden_field_tag 'before_page_type', params[:before_page_type]
+      .row
+        .col-10
+          = text_field_tag "[message][content]", "",class: "form-control"
+        .col-2
+          = submit_tag "送信", class: "btn btn-primary form-control"

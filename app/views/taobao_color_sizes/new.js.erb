@@ -1,2 +1,2 @@
 var order_id = <%= @order.id %>
-$("#taobao_color_size-order_id-<%= @order.id %>").html("<%= escape_javascript(render 'new') %>");
+$("#taobao_color_size-order_id-<%= @order.id %>").find(".taobao_color_size_name").html("<%= escape_javascript(render 'new') %>");

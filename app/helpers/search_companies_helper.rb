@@ -1,0 +1,2 @@
+module SearchCompaniesHelper
+end

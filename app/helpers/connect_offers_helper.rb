@@ -1,0 +1,2 @@
+module ConnectOffersHelper
+end

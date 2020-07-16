@@ -1,5 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_params, if: :devise_controller?
+  before_action :require_no_authentication, only: :thanks
 
   def new
     @user = User.new

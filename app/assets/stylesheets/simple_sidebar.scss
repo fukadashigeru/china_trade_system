@@ -1,22 +1,17 @@
-/*!
- * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
- * Copyright 2013-2019 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
- */
+ @import "variable";
+
  body {
   overflow-x: hidden;
 }
 
 #sidebar-wrapper {
   height: 100%;
-  width: 160px;
+  width: $side_bar_width;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   background-color: #111;
-  overflow-x: hidden;
-  /* transition: all 0.6s; */
 }
 
 #sidebar-wrapper.active {
@@ -66,11 +61,11 @@
 }
 
 #sidebar-wrapper .list-group {
-  width: 15rem;
+  width: $side_bar_width;
 }
 
 #sidebar-wrapper .list-group .list-group-item {
-  width: 15rem;
+  width: $side_bar_width;
   height: 38px;
 }
 

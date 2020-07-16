@@ -44,6 +44,17 @@ Rails.application.routes.draw do
     end
   end
   resources :company_users
+  resources :search_companies
+  resources :messages
+  resources :company_connects
+  resources :topics
+  resources :connects
+  resources :connect_offers
+  resources :connect_authorizations
+  resources :connect_deletes
+  resources :chinese_buyer_orders
+  resources :order_actual_item_units
+  resources :set_pictures
   # root to: 'pages#index' # root toはroutes.rbの末尾に記載する。
   root to: 'users#index' # root toはroutes.rbの末尾に記載する。
 

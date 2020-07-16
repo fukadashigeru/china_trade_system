@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   # add_flash_types :success, :info, :warning, :danger
 
-  def ensure_current_cumpany
+  def ensure_current_company
     return if @current_company
 
     # flash[:danger] = '会社にログインしてください'
@@ -22,5 +22,6 @@ class ApplicationController < ActionController::Base
 
   def set_current
     @current_company = current_company
+    @current_company_user = current_company_user
   end
 end

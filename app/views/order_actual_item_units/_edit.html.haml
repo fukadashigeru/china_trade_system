@@ -1,0 +1,39 @@
+.modal-dialog.modal-lg#item_sets_modal
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h4#exampleModalLabel.modal-title
+          買付け先
+          %span.badge.badge-primary 今回の注文限定
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      = form_tag order_actual_item_unit_path(@order), method: :put do 
+        / モーダルの本文
+        .modal-body
+          .h5
+            = "販売サイト/商品ID"
+            = " : "
+            = I18n.t("activerecord.attributes.item_set.item_no_category.#{@order.item_set.item_no_category}", locale: :ja)
+            = "/"
+            = @order.item_set.item_no 
+          .h5
+            = "販売サイトURL"
+            = " : "
+            = link_to @order.item_set.shop_url, @order.item_set.shop_url, :target=>["_blank"]
+          .h5
+            = "注文No"
+            = " : "
+            = @order.trade_no
+          %br
+          .h4
+            買付先URL
+            %span.badge.badge-primary 今回の注文限定
+          %p.help-block 今回の注文にだけ適応される入力フォームです。
+          = render partial: '/shared/basic_item_units_field', locals: { basic_item_units_and_taobao_urls_hash: @actual_item_units_and_taobao_urls_hash }
+        %br
+        .modal-footer
+          = submit_tag "保存", class: "btn btn-primary pull-right w-25"

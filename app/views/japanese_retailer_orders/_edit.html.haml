@@ -21,7 +21,7 @@
                 = "-"
                 = @order.item_set&.item_no
             %br/
-        = form_for(@order, url: japanese_retailer_order_path(id: @order.id)) do |f|
+        = form_for(@order, url: japanese_retailer_order_path(@order)) do |f|
           .row.justify-content-center
             .col-4.border-right
               %h6.mr-5 商品写真
@@ -89,10 +89,10 @@
       <div class="form-inline ks-3">
         <input class="form-control w-100 ks-4" onfocus="this.select();" type="text" name="picture[url]" id="picture_url">
         <div class="d-inline-block p-1 ks-4" style="width: 60%;">
-          <button class="btn btn-primary save-btn btn-block btn-sm ks-5" type="button">保存</button>
+          <button class="btn btn-primary save-btn btn-block btn-sm ks-5" type="button">Save</button>
         </div>
         <div class="d-inline-block p-1 ks-4" style="width: 40%;">
-          <button class="btn btn-default border-primary text-primary btn-cancel btn-block btn-sm ks-5" type="button">キャンセル</button>
+          <button class="btn btn-default border-primary text-primary btn-cancel btn-block btn-sm ks-5" type="button">Cancel</button>
         </div>
       </div>`;
       $(e.target).parent().html(form_html);

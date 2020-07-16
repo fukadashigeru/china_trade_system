@@ -10,7 +10,6 @@
                 %th 会社名
                 %th 会社タイプ
                 %th.th_member メンバー
-                %th メンバー招待
                 %th 編集
                 %th ログイン
             %tbody
@@ -20,10 +19,10 @@
                 %tr
                   %td.align-middle= company&.name
                   %td.align-middle
-                    - if company.is_japanese_retailer_account == "japanese_retailer"
-                      %p= I18n.t("activerecord.attributes.company.is_japanese_retailer_account.#{company.is_japanese_retailer_account}", locale: :ja)
-                    - if company.is_chinese_buyer_account == "chinese_buyer"
-                      %p= I18n.t("activerecord.attributes.company.is_chinese_buyer_account.#{company.is_chinese_buyer_account}", locale: :ja)
+                    - if company.account_type == "japanese_retailer"
+                      %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
+                    - if company.account_type == "chinese_buyer"
+                      %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
                   %td.align-middle
                     %table.w-100
                       %thead
@@ -45,15 +44,16 @@
                                   %i.fas.fa-check-circle.fa-lg.text-success
                                 - else
                                   %i.fas.fa-minus-circle.fa-lg.text-danger
-                  %td.align-middle
-                    = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-primary" do
-                      招待
-                      %i.fas.fa-address-card
-                  %td.align-middle
+                        %tr
+                          %td{colspan: 3}
+                            = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-outline-primary btn-block btn-sm" do
+                              招待
+                              %i.fas.fa-address-card
+                  %td.align-middle.text-center
                     = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
                       編集
                       %i.fas.fa-edit.fa-lg
-                  %td.align-middle
+                  %td.align-middle.text-center
                     = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                       ログイン
                       %i.fas.fa-sign-in-alt.fa-lg

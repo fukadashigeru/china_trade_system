@@ -2,9 +2,9 @@
   .form-inline
     = f.text_field :url, class: "form-control w-100", onfocus: "this.select();"
     .d-inline-block.p-1{style: "width: 60%;"}
-      = f.submit "保存", class: "btn btn-primary save-btn btn-block btn-sm"
+      = f.submit "Save", class: "btn btn-primary save-btn btn-block btn-sm"
     .d-inline-block.p-1{style: "width: 40%;"}
-      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} キャンセル
+      %button.btn.btn-default.border-primary.text-primary.btn-cancel.btn-block.btn-sm{:type => "button"} Cancel
 
 :javascript
   $('.btn-cancel').click(function() {
