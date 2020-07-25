@@ -1,19 +1,21 @@
 #companies_index
   .row.mt-4
+    .col-2.offset-10
+      = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-primary"
+  .row.mt-4
     .col
-      .h5.font-weight-bold 自分がオーナーの会社
       .owner_company_block.ml-4
-        - if @owner_company_users_accepted.present?
+        - if @company_users_accepted.present?
           %table.table.table-bordered.mt-1#owner_company_table
             %thead.thead-light
               %tr
                 %th 会社名
                 %th 会社タイプ
-                %th.th_member メンバー
-                %th 編集
+                %th オーナー
+                %th 詳細
                 %th ログイン
             %tbody
-              - @owner_company_users_accepted.each do |company_user|
+              - @company_users_accepted.each do |company_user|
                 - company = company_user.company
                 - user = company_user.user
                 %tr
@@ -23,68 +25,13 @@
                       %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
                     - if company.account_type == "chinese_buyer"
                       %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
-                  %td.align-middle
-                    %table.w-100
-                      %thead
-                        %tr
-                          %th 名前 or Eメール
-                          %th メンバータイプ
-                          %th　招待承認
-                      %tbody
-                        - company_users = company.company_users.order(invited_accepted: "DESC")
-                        - company_users.each do |company_user|
-                          - user = company_user.user
-                          - role = I18n.t("activerecord.attributes.company_user.role.#{company_user.role}", locale: :ja)
-                          %tr
-                            %td.text-break= user.name ? user.name : user.email
-                            %td.text-break= role
-                            %td.text-break.text-center
-                              - if company_user.role != "owner"
-                                - if company_user.invited_accepted
-                                  %i.fas.fa-check-circle.fa-lg.text-success
-                                - else
-                                  %i.fas.fa-minus-circle.fa-lg.text-danger
-                        %tr
-                          %td{colspan: 3}
-                            = link_to new_user_invitation_path(company_id: company.id), remote: true, class: "btn btn-outline-primary btn-block btn-sm" do
-                              招待
-                              %i.fas.fa-address-card
+                  %td.align-middle= company_user.company.owner_user.name
                   %td.align-middle.text-center
-                    = link_to edit_company_path(company), remote: true, class: "btn btn-primary" do
-                      編集
+                    = link_to company_path(company), class: "btn btn-light" do
+                      詳細
                       %i.fas.fa-edit.fa-lg
                   %td.align-middle.text-center
                     = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
-                      ログイン
-                      %i.fas.fa-sign-in-alt.fa-lg
-        - else
-          .h6 自分がオーナーの会社はありません。
-        = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-success"
-        
-  .row.mt-5
-    .col
-      .h5.font-weight-bold 所属会社
-      .belong_company_block.ml-4
-        - if  @belong_company_users_accepted.present?
-          %table.table.table-bordered#belong_company_table
-            %thead.thead-light
-              %tr
-                %th 会社名
-                %th アカウントタイプ
-                %th オーナー
-                %th 編集
-                %th ログイン
-            %tbody
-              - @belong_company_users_accepted.each do |company_user|
-                %tr
-                  %td.align-middle= company_user.company&.name
-                  %td.align-middle
-                  %td.align-middle
-                    - company_user.company.owner.each do |user|
-                      .p= user.name
-                  %td.align-middle
-                  %td.align-middle
-                    = link_to login_companies_path(company_id: company_user.company.id), class: "btn btn-success" do
                       ログイン
                       %i.fas.fa-sign-in-alt.fa-lg
         - else

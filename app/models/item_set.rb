@@ -30,7 +30,6 @@ class ItemSet < ApplicationRecord
     n = 5
     if color_size_price_images_persisted.present?
       color_size_price_images_array << color_size_price_images_persisted
-      # binding.pry
       n -= color_size_price_images_persisted.length
     end
     if n > 0
