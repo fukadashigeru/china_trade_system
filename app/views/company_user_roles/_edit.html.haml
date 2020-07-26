@@ -27,37 +27,3 @@
                   = select_tag "[company_user][role]", options_for_select(company_users_roles, selected: @company_user.role), class: "form-control w-75", id: "SelectRole"
         .modal-footer.actions
           = submit_tag "保存", class: "form-control btn btn-primary w-25"
-
-      -#%table.table.table-bordered.mt-3.ml-3
-      -#  %thead.thead-light
-      -#    %tr
-      -#      %th 名前
-      -#      %th Eメール
-      -#      %th メンバータイプ
-      -#      %th 招待承認
-      -#      - if @company.owner_user == @current_user
-      -#        %th 除名
-      -#  %tbody
-      -#    - @company_users.each do |company_user|
-      -#      - user = company_user.user
-      -#      %tr
-      -#        %td.align-middle= user.name
-      -#        %td.align-middle= user.email
-      -#        %td.align-middle
-      -#          - company_user_role = I18n.t("activerecord.attributes.company_user.role.#{company_user.role}", locale: :ja)
-      -#          - if user == @current_user
-      -#            = company_user_role
-      -#          - else
-      -#            = link_to company_user_role, edit_company_user_role_path(company_user), remote: true, class: "btn btn-light"
-      -#        %td.align-middle.text-center
-      -#          - if company_user.role != "owner"
-      -#            - if company_user.invited_accepted
-      -#              %i.fas.fa-check-circle.fa-lg.text-success
-      -#            - else
-      -#              %i.fas.fa-minus-circle.fa-lg.text-danger
-      -#        - if @company.owner_user == @current_user
-      -#          %td.align-middle.text-center
-      -#            - if user != @current_user
-      -#              = link_to company_user_path(company_user, company_id: @company.id), method: :delete, class: "btn btn-danger" do
-      -#                除名
-      -#                %i.fas.fa-trash-alt
