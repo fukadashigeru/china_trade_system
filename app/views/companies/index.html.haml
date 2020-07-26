@@ -44,14 +44,14 @@
             %thead.thead-light
               %tr
                 %th 会社名
-                %th 招待認証
+                %th 招待承認
             %tbody
               -@company_users_unaccepted.each do |company_user|
                 %tr
                   %td.align-middle.pl-5
                     = "会社：" + company_user.company.name
                   %td.align-middle.text-center
-                    = link_to "招待認証", company_user_path(company_user), method: :put, class: "btn btn-success"
+                    = link_to "招待承認", company_user_path(company_user), method: :put, class: "btn btn-success"
 
 
 
