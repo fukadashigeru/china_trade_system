@@ -5,7 +5,7 @@
   .row.mt-4
     .col-8.offset-2
       .h5.font-weight-bold 所属している会社一覧
-      .owner_company_block.ml-4
+      .owner_company_block.ml-4.mt-3
         - if @company_users_accepted.present?
           %table.table.table-bordered.mt-1#owner_company_table
             %thead.thead-light
@@ -39,7 +39,7 @@
     .row.mt-4
       .col-8.offset-2
         .h5.font-weight-bold 招待されている会社一覧
-        .belong_company_block.ml-4
+        .belong_company_block.ml-4.mt-3
           %table.table.table-bordered.mt-1#belong_company_table
             %thead.thead-light
               %tr
