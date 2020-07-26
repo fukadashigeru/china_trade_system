@@ -3,33 +3,32 @@
     .col-2.offset-10
       = link_to "会社新規作成", new_company_path, remote: true, class: "btn btn-outline-primary"
   .row.mt-4
-    .col
+    .col-8.offset-2
+      .h5.font-weight-bold 所属している会社一覧
       .owner_company_block.ml-4
         - if @company_users_accepted.present?
           %table.table.table-bordered.mt-1#owner_company_table
             %thead.thead-light
               %tr
-                %th 会社名
-                %th 会社タイプ
-                %th オーナー
-                %th 詳細
+                %th 所属会社
                 %th ログイン
             %tbody
               - @company_users_accepted.each do |company_user|
                 - company = company_user.company
                 - user = company_user.user
                 %tr
-                  %td.align-middle= company&.name
                   %td.align-middle
-                    - if company.account_type == "japanese_retailer"
-                      %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
-                    - if company.account_type == "chinese_buyer"
-                      %p= I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
-                  %td.align-middle= company_user.company.owner_user.name
-                  %td.align-middle.text-center
-                    = link_to company_path(company), class: "btn btn-light" do
-                      詳細
-                      %i.fas.fa-edit.fa-lg
+                    %div.pl-5
+                      = "会社：" + company&.name
+                      - if company.account_type == "japanese_retailer"
+                        %p= "会社タイプ：" + I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
+                      - if company.account_type == "chinese_buyer"
+                        %p= "会社タイプ：" + I18n.t("activerecord.attributes.company.account_type.#{company.account_type}", locale: :ja)
+                      = "オーナー：" + company_user.company.owner_user.name
+                    %div.text-center
+                      = link_to company_path(company), class: "btn btn-light" do
+                        詳細
+                        %i.fas.fa-edit.fa-lg
                   %td.align-middle.text-center
                     = link_to login_companies_path(company_id: company.id), class: "btn btn-success" do
                       ログイン
@@ -37,11 +36,11 @@
         - else
           .h6 所属会社はありません。
   -if @company_users_unaccepted.present?
-    .row.mt-5
-      .col-3
-        .h5.font-weight-bold 所属が招待されている会社
+    .row.mt-4
+      .col-8.offset-2
+        .h5.font-weight-bold 招待されている会社一覧
         .belong_company_block.ml-4
-          %table.table.table-bordered#belong_company_table
+          %table.table.table-bordered.mt-1#belong_company_table
             %thead.thead-light
               %tr
                 %th 会社名
@@ -49,8 +48,10 @@
             %tbody
               -@company_users_unaccepted.each do |company_user|
                 %tr
-                  %td= company_user.company.name
-                  %td= link_to "招待認証", company_user_path(company_user), method: :put, class: "btn btn-success"
+                  %td.align-middle.pl-5
+                    = "会社：" + company_user.company.name
+                  %td.align-middle.text-center
+                    = link_to "招待認証", company_user_path(company_user), method: :put, class: "btn btn-success"
 
 
 
