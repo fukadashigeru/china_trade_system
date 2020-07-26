@@ -17,6 +17,7 @@ class Company < ApplicationRecord
   has_many :connects , through: :company_connects
   has_many :connects_from_self, class_name: 'Connect', :foreign_key => 'from_company_id'
   has_many :connects_to_self, class_name: 'Connect', :foreign_key => 'to_company_id'
+  belongs_to :owner_user, class_name: 'User', :foreign_key => 'owner_user_id'
   
   def owner
     owner_company_users = company_users.select{|x| x.role == "owner"}

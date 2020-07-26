@@ -1,9 +1,15 @@
 class CompaniesController < ApplicationController
   def index
     session[:current_company_id] = nil
-    @owner_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role == "owner"}
-    @belong_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user).select{|x| x.role != "owner"}
+    owner_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user, :company).select{|x| x.role == "owner"}
+    belong_company_users_accepted = current_user.company_users.where(invited_accepted: true).includes(:user, :company).select{|x| x.role != "owner"}
+    @company_users_accepted = owner_company_users_accepted + belong_company_users_accepted
     @company_users_unaccepted = current_user.company_users.where(invited_accepted: false)
+  end
+
+  def show
+    @company = current_user.companies.find(params[:id])
+    @company_users = @company.company_users
   end
 
   def new
@@ -44,10 +50,10 @@ class CompaniesController < ApplicationController
         end
       end
       flash[:success] = "会社を更新しました"
-      redirect_to companies_path
+      redirect_to company_path(company)
     rescue
       flash[:danger] = "会社を更新できませんでした"
-      redirect_to companies_path
+      redirect_to company_path(company)
     end
   end
 

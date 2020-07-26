@@ -17,15 +17,20 @@ class Users::InvitationsController < Devise::InvitationsController
           end
           if @company_user.save
             flash[:success] = "招待しました"
-            redirect_to companies_path
+            redirect_to company_path(@company)
+          else
+            flash[:danger] = "招待済みです"
+            redirect_to company_path(@company)
           end
         else
           super do |user|
             @company_user = user.company_users.build(company_user_params).tap do |company_user|
               company_user.company = @company
             end
-            if user.errors.empty?
-              @company_user.save
+            if user.errors.empty? && @company_user.save
+              set_flash_message :notice, :send_instructions, email: self.resource.email
+              redirect_to company_path(@company)
+              return
             else
               render :new
               raise ActiveRecord::Rollback
@@ -34,8 +39,7 @@ class Users::InvitationsController < Devise::InvitationsController
         end
       end
     rescue
-      flash[:danger] = "既に招待済みのため処理を完了できませんでした。"
-      redirect_to companies_path
+      flash[:danger] = "処理を完了できませんでした。"
     end
   end
 

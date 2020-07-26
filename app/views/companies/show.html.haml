@@ -1,0 +1,68 @@
+#companies_show
+  .row.mt-4
+    .col
+      = link_to companies_path, class: "btn btn-success" do
+        %i.fas.fa-caret-left
+        所属会社一覧
+  .row.mt-4
+    .col-6.offset-2
+      %i.fas.fa-square
+      会社名・会社タイプ管理
+      %table.table.table-bordered.mt-3.ml-3{style: "table-layout:fixed"}
+        %thead.thead-light
+          %tr
+            %th 会社名
+            %th 会社タイプ
+            - if @company.owner_user == @current_user
+              %th 編集
+        %tbody
+          %tr
+            %td.align-middle= @company.name
+            %td.align-middle= I18n.t("activerecord.attributes.company.account_type.#{@company.account_type}", locale: :ja)
+            - if @company.owner_user == @current_user
+              %td.align-middle.text-center
+                = link_to edit_company_path(@company), remote: true, class: "btn btn-primary" do
+                  編集
+                  %i.fas.fa-edit.fa-lg
+  .row.mt-5
+    .col-8.offset-2
+      %i.fas.fa-square
+      メンバー管理
+      .text-right
+        = link_to new_user_invitation_path(company_id: @company.id), remote: true, class: "btn btn-primary" do
+          メンバー招待
+          %i.fas.fa-address-card
+      %table.table.table-bordered.mt-3.ml-3
+        %thead.thead-light
+          %tr
+            %th 名前
+            %th Eメール
+            %th メンバータイプ
+            %th 招待承認
+            - if @company.owner_user == @current_user
+              %th 除名
+        %tbody
+          - @company_users.each do |company_user|
+            - user = company_user.user
+            %tr
+              %td.align-middle= user.name
+              %td.align-middle= user.email
+              %td.align-middle
+                - company_user_role = I18n.t("activerecord.attributes.company_user.role.#{company_user.role}", locale: :ja)
+                - if user == @current_user || @company.owner_user != @current_user
+                  = company_user_role
+                - else
+                  = link_to company_user_role, edit_company_user_role_path(company_user), remote: true, class: "btn btn-light"
+              %td.align-middle.text-center
+                - if company_user.role != "owner"
+                  - if company_user.invited_accepted
+                    %i.fas.fa-check-circle.fa-lg.text-success
+                  - else
+                    %i.fas.fa-minus-circle.fa-lg.text-danger
+              - if @company.owner_user == @current_user
+                %td.align-middle.text-center
+                  - if user != @current_user
+                    - user_name = user.name ? user.name : "名無し"
+                    = link_to company_user_path(company_user, company_id: @company.id), method: :delete, class: "btn btn-danger", data: {confirm: "#{@company.name} から#{user_name}さんを除名します。よろしいですか?"} do
+                      除名
+                      %i.fas.fa-trash-alt

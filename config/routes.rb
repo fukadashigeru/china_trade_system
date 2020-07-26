@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     end
   end
   resources :company_users
+  resources :company_user_roles
   resources :search_companies
   resources :messages
   resources :company_connects

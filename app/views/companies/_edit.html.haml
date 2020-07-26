@@ -1,4 +1,4 @@
-.modal-dialog.modal-lg#companies_edit
+.modal-dialog#companies_edit
   / モーダルのコンテンツ部分
   .modal-content
     / モーダルのヘッダー
@@ -11,53 +11,28 @@
           %span{"aria-hidden" => "true"} ×
       .modal-body
         = form_for @company do |f|
-          .form-group.pt-3
-            %label.h5#InputName 会社名
-            .mx-3
-              = f.text_field :name, class: 'form-control w-50'
-          .h5.mt-2 会社タイプ
-          .mx-3
-            -#既に注文があった場合に、radioボタンをdisabledにする変数
-            - disabled_true_or_false = @company.japanese_retailer_orders.present? || @company.chinese_buyer_orders.present?
-            .form-check.py-1
-              -# - is_japanese_retailer_account = f.object.account_type == "japanese_retailer" ? true : false
-              %label
-                = f.radio_button :account_type, "japanese_retailer", disabled: disabled_true_or_false
-                = I18n.t("activerecord.attributes.company.account_type.japanese_retailer", locale: :ja)
-            .form-check.py-1
-              -# - is_chinese_buyer_account = f.object.account_type == "chinese_buyer" ? true : false
-              %label
-                = f.radio_button :account_type, "chinese_buyer", disabled: disabled_true_or_false
-                = I18n.t("activerecord.attributes.company.account_type.chinese_buyer", locale: :ja)
-          .h5.mt-2 メンバー
-          .mx-3
-            %table.table.table-sm.table_700.table-bordered.table-hover
-              %thead.thead-light
-                %tr
-                  %th.text-center.align-middle.th_80
-                    %i.fas.fa-question-circle{title: '退社させる場合、チェックをはずしてください。', data: { toggle: "tooltip", placement: "top", delay: { "show": 200, "hide": 100 }}}
-                  %th.text-center.align-middle.th_120 名前
-                  %th.text-center.align-middle.th_120 メンバーアカウントタイプ
-                  %th.text-center.align-middle Eメール
-                  %th.text-center.align-middle.th_80 招待承認
-              %tbody
-                - company_users = f.object.company_users.order(invited_accepted: "DESC")
-                - company_users.each do |company_user|
-                  - user = company_user.user
-                  %tr
-                    %td.align-middle.text-center
-                      - if company_user.role != 'owner'
-                        = hidden_field_tag "[company_user][#{company_user.id}]", false
-                        = check_box_tag "[company_user][#{company_user.id}]", true, class: "form-check-input"
-                    %td.align-middle.pl-3= user&.name
-                    %td.align-middle.text-center
-                    %td.align-middle.pl-3.text-break= user.email
-                    %td.align-middle.text-center
-                      - if company_user.role != "owner"
-                        - if company_user.invited_accepted
-                          %i.fas.fa-check-circle.fa-lg.text-success
-                        - else
-                          %i.fas.fa-minus-circle.fa-lg.text-danger
+          %table.table.table-bordered{style: "table-layout:fixed"}
+            %thead.thead-light
+              %tr
+                %th 会社名
+                %th 会社タイプ
+            %tbody
+              %tr
+                %td.align-middle
+                  = f.text_field :name, class: 'form-control'
+                %td.align-middle
+                  -#既に注文があった場合に、radioボタンをdisabledにする変数
+                  - disabled_true_or_false = @company.japanese_retailer_orders.present? || @company.chinese_buyer_orders.present?
+                  .form-check.py-1
+                    -# - is_japanese_retailer_account = f.object.account_type == "japanese_retailer" ? true : false
+                    %label
+                      = f.radio_button :account_type, "japanese_retailer", disabled: disabled_true_or_false
+                      = I18n.t("activerecord.attributes.company.account_type.japanese_retailer", locale: :ja)
+                  .form-check.py-1
+                    -# - is_chinese_buyer_account = f.object.account_type == "chinese_buyer" ? true : false
+                    %label
+                      = f.radio_button :account_type, "chinese_buyer", disabled: disabled_true_or_false
+                      = I18n.t("activerecord.attributes.company.account_type.chinese_buyer", locale: :ja)
           .modal-footer.mt-3
             = submit_tag "保存", class: "btn btn-primary form-control w-25"
 

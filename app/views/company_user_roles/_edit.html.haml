@@ -1,0 +1,29 @@
+.modal-dialog#company_user_roles_edit
+  / モーダルのコンテンツ部分
+  .modal-content
+    / モーダルのヘッダー
+    .container
+      .modal-header
+        / モーダルのタイトル
+        .h3#exampleModalLabel.modal-title アカウントタイプを編集
+        / 閉じるアイコン
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      - user = @company_user.user
+      = form_tag company_user_role_path, method: :put do
+        .modal-body
+          %table.table.table-bordered.mt-3.ml-3
+            %thead.thead-light
+              %tr
+                %th 名前
+                %th Eメール
+                %th メンバータイプ
+            %tbody
+              %tr
+                %td.align-middle= user.name
+                %td.align-middle= user.email
+                %td.align-middle
+                  - company_users_roles = CompanyUser.roles.map{|k,v|[I18n.t("activerecord.attributes.company_user.role.#{k}", locale: :ja),k] if k != "owner"}.compact
+                  = select_tag "[company_user][role]", options_for_select(company_users_roles, selected: @company_user.role), class: "form-control w-75", id: "SelectRole"
+        .modal-footer.actions
+          = submit_tag "保存", class: "form-control btn btn-primary w-25"
