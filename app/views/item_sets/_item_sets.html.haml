@@ -1,0 +1,36 @@
+.d-inline
+  %table.table.table-bordered
+    %thead.thead-light
+      %tr
+        %th 商品ID
+        %th{colspan: 2} 買付先
+        %th{colspan: 2} 画像
+    %tbody
+      - item_sets.each do |item_set|
+        - item_units = item_set.item_units
+        - color_size_price_images = item_set.color_size_price_images
+        %tr
+          %td.align-middle
+            = I18n.t("activerecord.attributes.item_set.item_no_category.#{item_set.item_no_category}", locale: :ja)
+            = "-"
+            = item_set&.item_no
+          %td.align-middle
+            - item_units.each do |item_unit|
+              = link_to "商品の買付先URL", item_unit.first_candidate.url, class: "btn-block"
+          %td.align-middle
+            - if item_units.present?
+              = link_to root_path, class: "btn btn-light" do
+                %i.fas.fa-edit
+            - else
+              = link_to "買付先登録", root_path, class: "btn btn-sm btn-success"
+
+          %td.align-middle
+            - color_size_price_images.each do |color_size_price_image|
+              - if color_size_price_image.image.url
+                = image_tag color_size_price_image.image.url, style:"width: 40px;", class: "img-thumbnail"
+          %td.align-middle
+            - if color_size_price_images.present?
+              = link_to root_path, class: "btn btn-light" do
+                %i.fas.fa-edit
+            - else
+              = link_to "画像登録", root_path, class: "btn btn-sm btn-success"
