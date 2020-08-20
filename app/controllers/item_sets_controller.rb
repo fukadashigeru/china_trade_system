@@ -1,4 +1,8 @@
 class ItemSetsController < ApplicationController
+  def index
+    @item_sets = @current_company.item_sets.order(id: "DESC")
+  end
+
   def edit
     @order = current_company.japanese_retailer_orders.find(params[:order_id])
     @item_set = current_company.item_sets.find(params[:id])
